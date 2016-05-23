@@ -1,4 +1,4 @@
-package Anzeige.Werkzeug;
+package GUI.Werkzeug;
 
 /**
  * Created by Martin on 16.05.2016.

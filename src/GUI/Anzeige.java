@@ -1,4 +1,4 @@
-package Anzeige;
+package GUI;
 
 /**
  * Created by Martin on 16.05.2016.
