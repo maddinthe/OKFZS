@@ -122,7 +122,7 @@ public class KFZ {
         this.sonderausstattung = sonderausstattung;
     }
 
-    public void addAktion(Aktion a){
+    public void addAktion(){
 
     }
 
