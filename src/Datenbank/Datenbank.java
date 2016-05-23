@@ -8,7 +8,7 @@ import java.sql.Connection;
 //todo: stub
 public class Datenbank {
     private Datenbank datenbank;
-    private Connection connection;
+    private Connection conn;
 
     public Datenbank getInstance(){
         return datenbank;
