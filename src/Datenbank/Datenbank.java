@@ -37,7 +37,7 @@ public class Datenbank {
         if (renew) {
             String host = "localhost";
             int port = 5432;
-            String database = "db_OKFZ";
+            String database = "db_okfzs";
 
             try {
                 Socket socket = new Socket(host, port);
@@ -94,7 +94,7 @@ public class Datenbank {
     }
 
     private static void einlesenScript() throws SQLException{
-        try(BufferedReader br = new BufferedReader(new FileReader( Datenbank.class.getResource("init.sql").getFile()))){
+        try(BufferedReader br = new BufferedReader(new FileReader( Datenbank.class.getResource("dblaeuft.sql").getFile()))){
             String sqlInstruction = "";
             String zeile;
             while ((zeile=br.readLine())!=null){
@@ -110,10 +110,6 @@ public class Datenbank {
 
         }catch (IOException e){ }
 
-    }
-    public void createTable(String tableName) throws SQLException {
-        Statement stmt = conn.createStatement();
-        stmt.executeUpdate("CREATE TABLE " + tableName + " (" + " name VARCHAR," + " number INT," + " PRIMARY KEY (name)" + ")");
     }
 
     /**
@@ -134,12 +130,21 @@ public class Datenbank {
 
     }
 
-    public void insertOrUpdate(String name, int number) throws SQLException {
+    public void insertOrUpdatePerson(String anrede, String name) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO test VALUES ('" + name + "', " + number + ")");
+            stmt.executeUpdate("INSERT  INTO t_Person(anrede,name) VALUES ('" + anrede + "', '" + name + "')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE test SET number=" + number + "WHERE name='" + name + "'");
+           stmt.executeUpdate("UPDATE t_person SET anrede='" + anrede + "'WHERE name='" + name + "'");
+        }
+
+    }
+    public void insertOrUpdatePersonAlles(String anrede, String name, String vorname) throws SQLException {
+        Statement stmt = conn.createStatement();
+        try {
+            stmt.executeUpdate("INSERT  INTO t_Person(anrede,name) VALUES ('" + anrede + "', '" + name + "')");
+        } catch (SQLException e) {
+            stmt.executeUpdate("UPDATE t_person SET anrede='" + anrede + "'WHERE name='" + name + "'");
         }
 
     }
@@ -180,38 +185,6 @@ public class Datenbank {
         }
     }
 
-    public void createTableMitBlob(String tableName) throws SQLException {
-        Statement stmt = conn.createStatement();
-        stmt.executeUpdate("CREATE TABLE " + tableName + " (" +
-                " name VARCHAR," + " blob BYTEA," + " PRIMARY KEY (name)," + "FOREIGN KEY (name) REFERENCES test(name))");
-    }
-
-    public void insertOrUpdateBlob(String name, InputStream is) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT name FROM blob WHERE name ='" + name + "'");
-
-        if (r.next()) {
-            PreparedStatement ps = conn.prepareStatement("UPDATE blob SET blob = ? WHERE name='" + name + "'");
-            ps.setBinaryStream(1, is);
-            ps.executeUpdate();
-        } else {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO blob VALUES (?, ?)");
-
-            ps.setString(1, name);
-            ps.setBinaryStream(2, is);
-            ps.executeUpdate();
-
-        }
-    }
-
-
-    public InputStream getBlob(String name) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT blob FROM blob WHERE NAME ='" + name + "'");
-        if (r.next())
-            return r.getBinaryStream(1);
-        return null;
-    }
 
 
 }
