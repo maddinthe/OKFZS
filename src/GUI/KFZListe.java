@@ -5,9 +5,14 @@ import Datenhaltung.Vorgang;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.event.RowSorterListener;
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by mtheilen on 23.05.2016.
@@ -17,43 +22,38 @@ public class KFZListe extends Ansicht {
 
     //todo:doku und weiter bauen
     public KFZListe(OKFZS okfzsInstanz,List<Vorgang> vorgaenge){
-        super(okfzsInstanz);
+        super(new BorderLayout(),okfzsInstanz);
+        Map<String, Vorgang> finVorgaenge=new TreeMap<>();
+        String[] thead={"FIN","Hersteller","Modell", "Geplanter Verkaufspreis","Einkaufsdatum"};
 
-        String[] thead={"Hersteller","Modell", "Verkaufspreis","Einkaufsdatum"};
+        String[][] data=new String[vorgaenge.size()][5];
+        for (int i = 0; i < vorgaenge.size(); i++) {
+            Vorgang v=vorgaenge.get(i);
+            finVorgaenge.put(v.getKfz().getFin(),v);
+            data[i][0]=v.getKfz().getFin();
+            data[i][1]=v.getKfz().getHersteller();
+            data[i][2]=v.getKfz().getModell();
+            data[i][3]=v.getvPreisPlan()+" €";
+            data[i][4]=v.getEinkaufsDatum().toString();
+        }
 
-        String[][] data={
-                {"Nissan", "Micra Cool","9.500,00€","03.04.16"},
-                {"VW","Golf Tour","19.500,00€","02.04.16"},
-                {"Toyota","Aygo Basic","6.800,00€","02.04.16"},
-                {"Skoda","Octavia Elegance","18.520,00€","01.04.16"}
-        };
+
         JTable tabelle= new JTable(data,thead);
-
+        tabelle.setAutoCreateRowSorter(true);
         this.add(new JScrollPane(tabelle));
 
-        JPanel quickInfo=new JPanel();
 
-        JTextArea quickInfoText=new JTextArea(Arrays.toString((tabelle.getSelectedRow()<-1)?data[tabelle.getSelectedRow()]:data[0]));
-        quickInfoText.setPreferredSize(new Dimension(900,50));
-        quickInfo.add(new JScrollPane(quickInfoText));
+        JTextArea quickInfo=new JTextArea(vorgaenge.get(0).toString());
+        quickInfo.setLineWrap(true);
+        quickInfo.setWrapStyleWord(true);
+        tabelle.addRowSelectionInterval(0, 0);
+        this.add(BorderLayout.SOUTH,new JScrollPane(quickInfo));
 
-        this.add(quickInfo);
-
-        //todo: noch an das datenmodell anpassen
         tabelle.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                quickInfoText.setText(Arrays.toString(data[((DefaultListSelectionModel)e.getSource()).getMinSelectionIndex()]));
+                quickInfo.setText(finVorgaenge.get(tabelle.getValueAt(tabelle.getSelectedRow(),0)).toString());
             }
         });
-
-
-
-    }
-
-
-    //todo: noch einbauen
-    private void sortieren(String spalte,String richtung){
-
     }
 }
