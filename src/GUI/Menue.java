@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by mtheilen on 23.05.2016.
  */
-//todo:Stub
+//todo:doku und hinterlegen der listener das die entsprechenden ansichten geladen werden
 public class Menue extends JMenuBar{
     public Menue(List<Ansicht> menueItems){
         JMenu ubersicht=new JMenu("Übersicht");

@@ -2,6 +2,7 @@ package testwiese;
 
 import Datenhaltung.KFZ;
 import Datenhaltung.Vorgang;
+import GUI.KFZListe;
 import GUI.Menue;
 import GUI.OKFZS;
 import GUI.Uebersicht;
@@ -22,7 +23,7 @@ public class MaddinTest {
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         test.setSize(1024, 786);
         test.setJMenuBar(new Menue(null));
-        test.add(new Uebersicht(null,new LinkedList<Vorgang>()));
+        test.add(new KFZListe(null,new LinkedList<Vorgang>()));
 
         test.setVisible(true);
 
