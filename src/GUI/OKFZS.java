@@ -3,16 +3,17 @@ package GUI;
 import Datenbank.Datenbank;
 import Datenhaltung.Verkaeufer;
 import Datenhaltung.Vorgang;
-import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +32,15 @@ public class OKFZS extends JFrame {
     //todo: stub
     public OKFZS(){
         super();
-
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                //todo: schließende sachen tuen;
+                System.exit(0);
+            }
+        });
         //einlesen der OKFZ.cfg
         Map<String,String> config=new HashMap<>();
         try(BufferedReader br=new BufferedReader(new FileReader("OKFZS.cfg"))){
@@ -101,7 +110,13 @@ public class OKFZS extends JFrame {
     public void anzeigen(String ziel){
         switch (ziel){
             case "uebersicht":{
-                anzeige.add(new Uebersicht(this,new LinkedList<Vorgang>()),"uebersicht");
+                List<Vorgang> vorgangList=null;
+                try{vorgangList=datenbank.VorgaengeZuVerkaeufer(datenbank.einVerkaufer(5));}
+                catch (SQLException e){
+
+                }
+                anzeige.add(new Uebersicht(this,vorgangList),"uebersicht");
+                cards.show(anzeige,"uebersicht");
             }
         }
         System.out.println(ziel);

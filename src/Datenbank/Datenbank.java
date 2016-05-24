@@ -296,7 +296,7 @@ public class Datenbank {
         ResultSetMetaData metadata = r.getMetaData();
         int spalten = metadata.getColumnCount();
 
-        while(! r.isAfterLast()) // as long as valid data is in the result set
+        while(r.next()) // as long as valid data is in the result set
         {
             long id = r.getLong("vid");
             String fin = r.getString("fk_t_kfz_fin");
@@ -316,10 +316,10 @@ public class Datenbank {
             double vpreisplan = r.getDouble("vpreisplan");
             Vorgang vorgang = new Vorgang(id,einePerson(pid),einVerkaufer(vk),einVerkaufer(ek),einKfz(fin),vpreis,epreis,vpreisplan,vkdatum,rabattgrund,sonstvereinb,ekdatum,schaeden,tuev,kennz,km);
             vorgaenge.add(vorgang);
-            r.next(); // go to next line in the customer table
+            // go to next line in the customer table
         }
         r.close();
-        conn.close();
+//        conn.close();
         return vorgaenge;
     }
     public Person einePerson(long id) throws SQLException{
@@ -329,7 +329,7 @@ public class Datenbank {
         int spalten = metadata.getColumnCount();
         Person personret=null;
 
-        while(! r.isAfterLast()) // as long as valid data is in the result set
+        while(r.next()) // as long as valid data is in the result set
         {
             long pid = r.getLong("pid");
             String anrede = r.getString("anrede");
@@ -343,10 +343,10 @@ public class Datenbank {
 
 
             personret = new Person(pid, anrede, name,vorname,gebtag,anschrift,plz,ort,ust_id);
-            r.next(); // go to next line in the customer table
+            // go to next line in the customer table
         }
         r.close();
-        conn.close();
+//        conn.close();
         return personret;
     }
     public KFZ einKfz(String fin) throws SQLException{
@@ -356,7 +356,7 @@ public class Datenbank {
         int spalten = metadata.getColumnCount();
         KFZ kfz=null;
 
-        while(! r.isAfterLast()) // as long as valid data is in the result set
+        while(r.next()) // as long as valid data is in the result set
         {
             String id = r.getString("fin");
             String hersteller = r.getString("hersteller");
@@ -370,10 +370,10 @@ public class Datenbank {
 
 
             kfz = new KFZ(fin, hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff);
-            r.next(); // go to next line in the customer table
+            // go to next line in the customer table
         }
         r.close();
-        conn.close();
+//        conn.close();
         return kfz;
     }
     public Verkaeufer einVerkaufer(long id) throws SQLException{
@@ -382,8 +382,7 @@ public class Datenbank {
         ResultSetMetaData metadata = r.getMetaData();
         int spalten = metadata.getColumnCount();
         Verkaeufer verkaeufer=null;
-
-        while(! r.isAfterLast()) // as long as valid data is in the result set
+        while(r.next()) // as long as valid data is in the result set
         {
             long pid = r.getLong("fk_t_person_pid");
             String anmeldename = r.getString("anmeldename");
@@ -393,10 +392,10 @@ public class Datenbank {
 
 
             verkaeufer = new Verkaeufer(anmeldename,passwort,einePerson(id),aktiv,isAdmin(id));
-            r.next(); // go to next line in the customer table
+            // go to next line in the customer table
         }
         r.close();
-        conn.close();
+//        conn.close();
         return verkaeufer;
     }
     public boolean isAdmin(long id) throws SQLException{
@@ -407,16 +406,16 @@ public class Datenbank {
         boolean isAdmin=false;
 
 
-        while(! r.isAfterLast()) // as long as valid data is in the result set
+        while(r.next()) // as long as valid data is in the result set
         {
-            long pid = r.getLong("fk_t_person_pid");
+            long pid = r.getLong("fk_t_verkaeufer_fk_t_person_pid");
             if (pid==id)isAdmin=true;
 
 
-            r.next(); // go to next line in the customer table
+            // go to next line in the customer table
         }
         r.close();
-        conn.close();
+//        conn.close();
         return isAdmin;
     }
     public Notiz eineNotiz(Person person) throws SQLException{
@@ -425,7 +424,7 @@ public class Datenbank {
         ResultSetMetaData metadata = r.getMetaData();
         int spalten = metadata.getColumnCount();
         Notiz notiz =null;
-        while(! r.isAfterLast()) // as long as valid data is in the result set
+        while(r.next()) // as long as valid data is in the result set
         {
             long nid = r.getLong("nid");
             String text = r.getString("text");
@@ -434,10 +433,10 @@ public class Datenbank {
             notiz = new Notiz(nid,person,datum,text);
             person.addNotiz(notiz);
 
-            r.next(); // go to next line in the customer table
+            // go to next line in the customer table
         }
         r.close();
-        conn.close();
+//        conn.close();
         return notiz;
     }
 
