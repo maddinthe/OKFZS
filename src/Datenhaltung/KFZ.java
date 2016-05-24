@@ -7,6 +7,8 @@ import java.util.List;
  * Created by tkertz on 23.05.2016.
  */
 //todo: stub
+
+
 public class KFZ {
     private String fin;
     private String hersteller;
@@ -32,6 +34,11 @@ public class KFZ {
         this.kraftstoff = kraftstoff;
         this.aktionen = aktionen;
         this.sonderausstattung = sonderausstattung;
+    }
+
+    public KFZ(String fin, String hersteller){
+        this.fin = fin;
+        this.hersteller = hersteller;
     }
 
     public String getFin() {
@@ -122,7 +129,7 @@ public class KFZ {
         this.sonderausstattung = sonderausstattung;
     }
 
-    public void addAktion(Aktion a){
+    public void addAktion(){
 
     }
 

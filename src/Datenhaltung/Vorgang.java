@@ -28,6 +28,8 @@ public class Vorgang {
         this.kfz = kfz;
         this.einkauefer = einkauefer;
         this.ePreis = ePreis;
+        this.einkaufsDatum=new Date();
+        this.vPreisPlan=ePreis*1.2; //todo:realistische preisspanne einbauen
     }
 
     public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer, Verkaeufer einkauefer, KFZ kfz, double vPreis, double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen, Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen) {
@@ -122,4 +124,86 @@ public class Vorgang {
         if (verkaeufer.equals(this.einkauefer) || verkaeufer.equals(this.verkaeufer)) return getGewinn() / 2;
         return 0;
     }
+
+    public void setVid(long vid) {
+        this.vid = vid;
+    }
+
+    public void setKauefer(Person kauefer) {
+        this.kauefer = kauefer;
+    }
+
+    public void setVerkaeufer(Verkaeufer verkaeufer) {
+        this.verkaeufer = verkaeufer;
+    }
+
+    public void setEinkauefer(Verkaeufer einkauefer) {
+        this.einkauefer = einkauefer;
+    }
+
+    public void setKfz(KFZ kfz) {
+        this.kfz = kfz;
+    }
+
+    public void setvPreis(double vPreis) {
+        this.vPreis = vPreis;
+    }
+
+    public void setePreis(double ePreis) {
+        this.ePreis = ePreis;
+    }
+
+    public void setvPreisPlan(double vPreisPlan) {
+        this.vPreisPlan = vPreisPlan;
+    }
+
+    public void setVerkaufsDatum(Date verkaufsDatum) {
+        this.verkaufsDatum = verkaufsDatum;
+    }
+
+    public void setRabattGrund(String rabattGrund) {
+        this.rabattGrund = rabattGrund;
+    }
+
+    public void setSonstvereinbarungen(String sonstvereinbarungen) {
+        this.sonstvereinbarungen = sonstvereinbarungen;
+    }
+
+    public void setEinkaufsDatum(Date einkaufsDatum) {
+        this.einkaufsDatum = einkaufsDatum;
+    }
+
+    public void setSchaeden(String schaeden) {
+        this.schaeden = schaeden;
+    }
+
+    public void setTuev(Date tuev) {
+        this.tuev = tuev;
+    }
+
+    public void setKennzeichen(String kennzeichen) {
+        this.kennzeichen = kennzeichen;
+    }
+
+    //todo: schöner machen
+    public String toString() {
+        return "Vorgang{" +
+                "vid=" + vid +
+                ", kauefer=" + kauefer +
+                ", verkaeufer=" + verkaeufer +
+                ", einkauefer=" + einkauefer +
+                ", kfz=" + kfz +
+                ", vPreis=" + vPreis +
+                ", ePreis=" + ePreis +
+                ", vPreisPlan=" + vPreisPlan +
+                ", verkaufsDatum=" + verkaufsDatum +
+                ", rabattGrund='" + rabattGrund + '\'' +
+                ", sonstvereinbarungen='" + sonstvereinbarungen + '\'' +
+                ", einkaufsDatum=" + einkaufsDatum +
+                ", schaeden='" + schaeden + '\'' +
+                ", tuev=" + tuev +
+                ", kennzeichen='" + kennzeichen + '\'' +
+                '}';
+    }
 }
+

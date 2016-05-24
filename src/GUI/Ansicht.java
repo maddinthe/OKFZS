@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created by mtheilen on 23.05.2016.
@@ -19,5 +20,12 @@ public class Ansicht extends JPanel{
         this.instanz=instanz;
     }
 
+    public Ansicht(LayoutManager layout, OKFZS instanz) {
+        super(layout);
+        this.instanz = instanz;
+    }
 
+    public OKFZS getOKFZSInstanz() {
+        return instanz;
+    }
 }
