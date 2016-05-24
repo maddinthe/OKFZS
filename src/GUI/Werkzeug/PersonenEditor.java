@@ -20,138 +20,138 @@ public class PersonenEditor extends Ansicht {
     public PersonenEditor(OKFZS okfzsInstanz, Person person) {
         super(okfzsInstanz);
         Datenbank db = okfzsInstanz.getDatenbank();
-        JFrame jfKfzEdit = new JFrame("KFZ-Editor");
+        JFrame jfPersonEdit = new JFrame("Personen-Editor");
         JPanel jp = new JPanel();
         jp.setLayout(new BoxLayout(jp, BoxLayout.Y_AXIS));
 
-        JPanel jpKfzAngaben = new JPanel();
-        jpKfzAngaben.setBorder(new TitledBorder("KFZ-Angaben"));
-        jpKfzAngaben.setLayout(new BoxLayout(jpKfzAngaben, BoxLayout.Y_AXIS));
+        JPanel jpPersonenAngaben = new JPanel();
+        jpPersonenAngaben.setBorder(new TitledBorder("KFZ-Angaben"));
+        jpPersonenAngaben.setLayout(new BoxLayout(jpPersonenAngaben, BoxLayout.Y_AXIS));
 
-        JPanel jpTypAngaben = new JPanel();
-        jpTypAngaben.setBorder(new TitledBorder("Typ-Angaben"));
-        jpTypAngaben.setLayout(new BoxLayout(jpTypAngaben, BoxLayout.Y_AXIS));
+        JPanel jpErweiterteAngaben = new JPanel();
+        jpErweiterteAngaben.setBorder(new TitledBorder("Typ-Angaben"));
+        jpErweiterteAngaben.setLayout(new BoxLayout(jpErweiterteAngaben, BoxLayout.Y_AXIS));
 
         JPanel jpSonstigeAngaben = new JPanel();
         jpSonstigeAngaben.setBorder(new TitledBorder("Sonstige Angaben"));
         jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
 
-        JPanel jpFin = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlFin = new JLabel("Fin:");
-        JTextField jtFin = new JTextField(20);
-        jtFin.setText(kfz.getFin());
-        jpFin.add(jlFin);
-        jpFin.add(jtFin);
+        JPanel jpPid = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlPid = new JLabel("PID:");
+        JTextField jtPid = new JTextField(20);
+        jtPid.setText(String.valueOf(person.getPid()));
+        jpPid.add(jlPid);
+        jpPid.add(jtPid);
 
-        JPanel jpHersteller = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlHersteller = new JLabel("Hersteller:");
-        JTextField jtHersteller = new JTextField(20);
-        jtHersteller.setText(kfz.getHersteller());
-        jpHersteller.add(jlHersteller);
-        jpHersteller.add(jtHersteller);
+        JPanel jpAnrede = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlAnrede = new JLabel("Anrede:");
+        JTextField jtAnrede = new JTextField(20);
+        jtAnrede.setText(person.getAnrede());
+        jpAnrede.add(jlAnrede);
+        jpAnrede.add(jtAnrede);
 
-        JPanel jpModell = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlModell = new JLabel("Modell:");
-        JTextField jtModell = new JTextField(20);
-        jtModell.setText(kfz.getModell());
-        jpModell.add(jlModell);
-        jpModell.add(jtModell);
+        JPanel jpName = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlName = new JLabel("Name:");
+        JTextField jtName = new JTextField(20);
+        jtName.setText(person.getName());
+        jpName.add(jlName);
+        jpName.add(jtName);
 
-        JPanel jpKfzBriefNr = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlKfzBriefNr = new JLabel("KFZ-Brief-Nr.:");
-        JTextField jtKfzBriefNr = new JTextField(20);
-        jtKfzBriefNr.setText(kfz.getKfzBriefNr());
-        jpKfzBriefNr.add(jlKfzBriefNr);
-        jpKfzBriefNr.add(jtKfzBriefNr);
+        JPanel jpVorname = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlVorname = new JLabel("Vorname:");
+        JTextField jtVorname = new JTextField(20);
+        jtVorname.setText(person.getVorname());
+        jpVorname.add(jlVorname);
+        jpVorname.add(jtVorname);
 
-        JPanel jpLeistungInKw = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlLeistungInKw = new JLabel("Leistung in KW:");
-        JTextField jtLeistungInKw = new JTextField(20);
-        jtLeistungInKw.setText(""+kfz.getLeistungInKw());
-        jpLeistungInKw.add(jlLeistungInKw);
-        jpLeistungInKw.add(jtLeistungInKw);
+        JPanel jpGebTag = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlGebTag = new JLabel("Geburtstag:");
+        JTextField jtGebTag = new JTextField(20);
+        jtGebTag.setText("" + person.getGeburtstag());
+        jpGebTag.add(jlGebTag);
+        jpGebTag.add(jtGebTag);
 
-        JPanel jpFarbe = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlFarbe = new JLabel("Farbe:");
-        JTextField jtFarbe = new JTextField(20);
-        jtFarbe.setText(kfz.getFarbe());
-        jpFarbe.add(jlFarbe);
-        jpFarbe.add(jtFarbe);
+        JPanel jpAnschrift = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlAnschrift = new JLabel("Anschrift:");
+        JTextField jtAnschrift = new JTextField(20);
+        jtAnschrift.setText(person.getAnschrift());
+        jpAnschrift.add(jlAnschrift);
+        jpAnschrift.add(jtAnschrift);
 
-        JPanel jpEZ = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlEZ = new JLabel("Erstzulassung:");
-        JTextField jtEZ = new JTextField(20);
-        jtEZ.setText(""+kfz.getEz());
-        jpEZ.add(jlEZ);
-        jpEZ.add(jtEZ);
+        JPanel jpPlz = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlPlz = new JLabel("Postleitzahl:");
+        JTextField jtPlz = new JTextField(20);
+        jtPlz.setText("" + person.getPostleitzahl());
+        jpPlz.add(jlPlz);
+        jpPlz.add(jtPlz);
 
-        JPanel jpUmweltplakette = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlUmweltplakette = new JLabel("Umweltplakette:");
-        JTextField jtUmweltplakette = new JTextField(20);
-        jtUmweltplakette.setText(""+kfz.getUmweltPlakette());
-        jpUmweltplakette.add(jlUmweltplakette);
-        jpUmweltplakette.add(jtUmweltplakette);
+        JPanel jpOrt = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlOrt = new JLabel("Ort:");
+        JTextField jtOrt = new JTextField(20);
+        jtOrt.setText("" + person.getOrt());
+        jpOrt.add(jlOrt);
+        jpOrt.add(jtOrt);
 
-        JPanel jpKraftstoff = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlKraftstoff = new JLabel("Kraftstoff:");
-        JTextField jtKraftstoff = new JTextField(20);
-        jtKraftstoff.setText(kfz.getKraftstoff());
-        jpKraftstoff.add(jlKraftstoff);
-        jpKraftstoff.add(jtKraftstoff);
+        JPanel jpUst = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlUst = new JLabel("Ust-ID:");
+        JTextField jtUst = new JTextField(20);
+        jtUst.setText(person.getUstID());
+        jpUst.add(jlUst);
+        jpUst.add(jtUst);
 
-        JPanel jpAktionen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlAktionen = new JLabel("Aktionen:");
-        JTextField jtAktionen = new JTextField(20);
-        jtAktionen.setText(""+kfz.getAktionen());
-        jpAktionen.add(jlAktionen);
-        jpAktionen.add(jtAktionen);
+        JPanel jpNotiz = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlNotiz = new JLabel("Notiz:");
+        JTextField jtNotiz = new JTextField(20);
+        jtNotiz.setText("" + person.getNotizen());
+        jpNotiz.add(jlNotiz);
+        jpNotiz.add(jtNotiz);
 
-        JPanel jpSonderausstattungen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlSonderausstattungen = new JLabel("Sonderausstattung:");
+        JPanel jpErreichbarkeit = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlErreichbarkeit = new JLabel("Erreichbarkeiten:");
         JTextField jtSonderausstattungen = new JTextField(20);
-        String[] ausstattung = { "Leder", "Navigation", "PDC", "Xenon", "Tempomat" };
-        JComboBox jcAusstattungListe = new JComboBox(ausstattung);
-        jcAusstattungListe.setSelectedItem(kfz.getSonderausstattung());
-        jcAusstattungListe.setSelectedIndex(4);
-        jcAusstattungListe.setEditable(true);
+        String[] erreichbarkeit = { "Tel", "Handy", "E-Mail", "Datum"};
+        JComboBox jcErreichbarkeitsListe = new JComboBox(erreichbarkeit);
+        jcErreichbarkeitsListe.setSelectedItem(person.getErreichbarkeiten());
+        jcErreichbarkeitsListe.setSelectedIndex(4);
+        jcErreichbarkeitsListe.setEditable(true);
 
-        jpSonderausstattungen.add(jlSonderausstattungen);
-        jpSonderausstattungen.add(jcAusstattungListe);
+        jpErreichbarkeit.add(jlErreichbarkeit);
+        jpErreichbarkeit.add(jcErreichbarkeitsListe);
 
-        jpKfzAngaben.add(jpFin);
-        jpKfzAngaben.add(jpKfzBriefNr);
-        jpKfzAngaben.add(jpEZ);
-        jpKfzAngaben.add(jpLeistungInKw);
+        jpPersonenAngaben.add(jpPid);
+        jpPersonenAngaben.add(jpVorname);
+        jpPersonenAngaben.add(jpPlz);
+        jpPersonenAngaben.add(jpGebTag);
 
-        jpTypAngaben.add(jpHersteller);
-        jpTypAngaben.add(jpModell);
-        jpTypAngaben.add(jpFarbe);
-        jpTypAngaben.add(jpSonderausstattungen);
+        jpErweiterteAngaben.add(jpAnrede);
+        jpErweiterteAngaben.add(jpName);
+        jpErweiterteAngaben.add(jpAnschrift);
+        jpErweiterteAngaben.add(jpErreichbarkeit);
 
-        jpSonstigeAngaben.add(jpKraftstoff);
-        jpSonstigeAngaben.add(jpUmweltplakette);
-        jpSonstigeAngaben.add(jpAktionen);
+        jpSonstigeAngaben.add(jpUst);
+        jpSonstigeAngaben.add(jpOrt);
+        jpSonstigeAngaben.add(jpNotiz);
 
-        jp.add(jpTypAngaben);
-        jp.add(jpKfzAngaben);
+        jp.add(jpErweiterteAngaben);
+        jp.add(jpPersonenAngaben);
         jp.add(jpSonstigeAngaben);
-        jfKfzEdit.add(jp, BorderLayout.WEST);
+        jfPersonEdit.add(jp, BorderLayout.WEST);
 
 
 
         //JFrame jf Größe mitgeben
-        jfKfzEdit.setSize(1024, 768);
+        jfPersonEdit.setSize(1024, 768);
 
 
 
         //JFrame jf auf Bildschirm plazieren
-        jfKfzEdit.setLocation(200, 400);
+        jfPersonEdit.setLocation(200, 400);
 
         //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
-        jfKfzEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jfPersonEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         //JFrame jf anzeigen
-        jfKfzEdit.setVisible(true);
+        jfPersonEdit.setVisible(true);
 
         try {
             if (okfzsInstanz.getBenutzer().istAdmin())
