@@ -15,28 +15,14 @@ public class PersonenEditor extends Ansicht {
 
     public PersonenEditor(OKFZS okfzsInstanz, Person person) {
         super(okfzsInstanz);
+        Datenbank db = okfzsInstanz.getDatenbank();
 
 
     }
     public PersonenEditor(OKFZS okfzsInstanz,String anrede, String name) throws SQLException {
         super(okfzsInstanz);
         System.out.println(new Person(anrede, name));
-        Datenbank db = okfzsInstanz.getDatenbank();
-        try {
-            db = Datenbank.getInstance();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Datenbank-Treiber nicht gefunden");
-        } catch (SQLException e) {
-            if (e.getMessage().startsWith("Datenbank exisitiert nicht"))
-                try {
-                    db = Datenbank.getInstance("db_okfzs");
-                } catch (SQLException e1) {
-                    System.out.println(e1.getMessage());
-                    e1.printStackTrace();
-                }
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+       Datenbank db = okfzsInstanz.getDatenbank();
         try {
             db.insertOrUpdatePerson(anrede, name);
             db.printTable("t_Person");
@@ -49,7 +35,6 @@ public class PersonenEditor extends Ansicht {
         return null;
     }
 
-    public void connection(){
 
-    }
+
 }

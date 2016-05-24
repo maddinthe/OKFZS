@@ -5,7 +5,11 @@ import Datenhaltung.Verkaeufer;
 import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
-import java.util.LinkedList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,6 +26,35 @@ public class OKFZS extends JFrame {
     //todo: stub
     public OKFZS(){
         super();
+
+        //einlesen der OKFZ.cfg
+        Map<String,String> config=new HashMap<>();
+        try(BufferedReader br=new BufferedReader(new FileReader("OKFZS.cfg"))){
+            String read;
+            while ((read=br.readLine())!=null){
+                String[] temp=read.split(":");
+                config.put(temp[0],temp[1]);
+            }
+        }catch (IOException e){/**nichts tun falls nicht da**/}
+        //einlesen der Config beendet
+
+        //holen der DB-Instanz
+        try {
+            String host=config.get("dbhost");
+            String port=config.get("dbport");
+            datenbank=Datenbank.getInstance((host!=null)?host:"localhost",(port!=null)?Integer.parseInt(port):5432);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //db anteil fürs erste ende
+        //nutzer anmelden
+        Anmeldung a=new Anmeldung(this);
+
+
+        //anmeldung ende
+
         setTitle("Ostsee KFZ Service");
         setSize(breite, hoehe);
 
