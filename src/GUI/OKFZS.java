@@ -2,6 +2,7 @@ package GUI;
 
 import Datenbank.Datenbank;
 import Datenhaltung.Verkaeufer;
+import Datenhaltung.Vorgang;
 import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -97,7 +99,12 @@ public class OKFZS extends JFrame {
     }
 
     public void anzeigen(String ziel){
-
+        switch (ziel){
+            case "uebersicht":{
+                anzeige.add(new Uebersicht(this,new LinkedList<Vorgang>()),"uebersicht");
+            }
+        }
+        System.out.println(ziel);
     }
 
     //todo:doku und evtl weitere details

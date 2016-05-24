@@ -9,13 +9,13 @@ import java.util.Date;
 public class Notiz {
     private long nid;
     private Person person;
-    private Date date;
+    private Date datum;
     private String beschreibung;
 
-    public Notiz(long nid, Person person, Date date, String beschreibung) {
+    public Notiz(long nid, Person person, Date datum, String beschreibung) {
         this.nid = nid;
         this.person = person;
-        this.date = date;
+        this.datum = datum;
         this.beschreibung = beschreibung;
     }
     public Notiz(Person person,String beschreibung) {
@@ -31,8 +31,8 @@ public class Notiz {
         return person;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDatum() {
+        return datum;
     }
 
     public String getBeschreibung() {
