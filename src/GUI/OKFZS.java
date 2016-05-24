@@ -5,6 +5,7 @@ import Datenhaltung.Verkaeufer;
 import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -22,6 +23,8 @@ public class OKFZS extends JFrame {
     private Verkaeufer benutzer;
     private int hoehe =786;
     private int breite =1024;
+    private JPanel anzeige;
+    private CardLayout cards;
 
     //todo: stub
     public OKFZS(){
@@ -49,14 +52,21 @@ public class OKFZS extends JFrame {
             e.printStackTrace();
         }
         //db anteil fürs erste ende
+        cards=new CardLayout();
+        anzeige=new JPanel(cards);
+
         //nutzer anmelden
         Anmeldung a=new Anmeldung(this);
 
-
+        String anmeldungID="Anmeldung";
+        anzeige.add(a, anmeldungID);
+        cards.show(anzeige,anmeldungID);
         //anmeldung ende
 
         setTitle("Ostsee KFZ Service");
         setSize(breite, hoehe);
+        setJMenuBar(new Menue(null));
+        add(anzeige);
 
         setVisible(true);
     }
@@ -89,4 +99,7 @@ public class OKFZS extends JFrame {
     }
 
 
+    public void setBenutzer(Verkaeufer benutzer) {
+        this.benutzer = benutzer;
+    }
 }

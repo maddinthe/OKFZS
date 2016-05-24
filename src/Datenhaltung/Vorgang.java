@@ -32,11 +32,11 @@ public class Vorgang {
         this.vPreisPlan=ePreis*1.2; //todo:realistische preisspanne einbauen
     }
 
-    public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer, Verkaeufer einkauefer, KFZ kfz, double vPreis, double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen, Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen) {
+    public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer, Verkaeufer einkaeufer, KFZ kfz, double vPreis, double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen, Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen) {
         this.vid = vid;
         this.kauefer = kauefer;
         this.verkaeufer = verkaeufer;
-        this.einkauefer = einkauefer;
+        this.einkauefer = einkaeufer;
         this.kfz = kfz;
         this.vPreis = vPreis;
         this.ePreis = ePreis;
@@ -62,7 +62,7 @@ public class Vorgang {
         return verkaeufer;
     }
 
-    public Verkaeufer getEinkauefer() {
+    public Verkaeufer getEinkaeufer() {
         return einkauefer;
     }
 
