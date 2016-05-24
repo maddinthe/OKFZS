@@ -53,6 +53,7 @@ CREATE TABLE t_admins(
 	CONSTRAINT PK_t_admins_fk_t_verkaeufer_fk_t_person_pid PRIMARY KEY (fk_t_verkaeufer_fk_t_person_pid),
 	CONSTRAINT FK_t_verkaeufer_fk_t_person_pid FOREIGN KEY (fk_t_verkaeufer_fk_t_person_pid) REFERENCES t_verkaeufer(fk_t_person_pid) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
 CREATE TABLE t_KFZ(
 	FIN			varchar(17) NOT NULL,
 	Hersteller	varchar(30) NOT NULL,
