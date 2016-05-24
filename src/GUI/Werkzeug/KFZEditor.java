@@ -296,7 +296,7 @@ public class KFZEditor {
         JPanel jpEinkaeufer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel jlEinkaeufer = new JLabel("Einkäufer:");
         JTextField jtEinkaeufer = new JTextField(20);
-        jtEinkaeufer.setText(String.valueOf(vorgang.getEinkauefer()));
+        jtEinkaeufer.setText(String.valueOf(vorgang.getEinkaeufer()));
         jpEinkaeufer.add(jlEinkaeufer);
         jpEinkaeufer.add(jtEinkaeufer);
 
