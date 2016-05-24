@@ -14,11 +14,11 @@ import java.util.Date;
 public class TurnerTest {
     public static void main(String[] args) throws SQLException {
         OKFZS okfzs = new OKFZS();
-        PersonenEditor personenEditor =new PersonenEditor(okfzs,"Herr","Dreher",umwandeln("13.01.1987"));
+        PersonenEditor personenEditor =new PersonenEditor(okfzs,"Herr","Schwarz",umwandeln("13.01.1987"));
 
     }
-    public static Date umwandeln(String datum) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    public static java.sql.Date umwandeln(String datum) {
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         Date date = null;
         try {
             date = format.parse(datum);
@@ -27,7 +27,8 @@ public class TurnerTest {
             e.printStackTrace();
 
         }
-        return date;
+        java.sql.Date sDate = new java.sql.Date(date.getTime());
+        return sDate;
     }
 
 
