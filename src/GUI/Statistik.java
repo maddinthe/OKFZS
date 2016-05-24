@@ -11,6 +11,7 @@ import java.util.List;
 public class Statistik {
     public Statistik(List<Vorgang> vorgangList){
 
+
     }
 
     public void einzelVerkaeuferStatistik(Verkaeufer verkaeufer){

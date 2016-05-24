@@ -33,9 +33,6 @@ public class KFZ {
         this.kraftstoff = kraftstoff;
     }
 
-    public KFZ(){
-
-    }
 
     public String getFin() {
         return fin;
@@ -125,11 +122,11 @@ public class KFZ {
         this.sonderausstattung = sonderausstattung;
     }
 
-    public void addAktion(){
-
+    public void addAktion(Aktion a){
+        aktionen.add(a);
     }
 
     public void addSonderstattung(Sonderausstattung s){
-        s.getBeschreibung();
+        sonderausstattung.add(s);
     }
 }

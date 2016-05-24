@@ -2,6 +2,8 @@ package GUI.Werkzeug;
 
 import Datenhaltung.KFZ;
 import Datenhaltung.Vorgang;
+import GUI.Ansicht;
+import GUI.OKFZS;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -10,9 +12,11 @@ import java.awt.*;
 /**
  * Created by tkertz on 23.05.2016.
  */
-public class KFZEditor {
+public class KFZEditor extends Ansicht{
 
-    public KFZEditor(KFZ kfz) {
+    public KFZEditor(KFZ kfz, OKFZS okfzsInstanz) {
+
+        super(okfzsInstanz);
 
 //      KFZ DATEN
 
@@ -219,7 +223,10 @@ public class KFZEditor {
 
     }
 
-    public KFZEditor() {
+    public KFZEditor(OKFZS okfzsInstanz) {
+
+        super(okfzsInstanz);
+
 //      KFZ DATEN
         JFrame jfKfzEdit = new JFrame("KFZ-Editor");
         JPanel jpKFZ = new JPanel();
@@ -414,7 +421,10 @@ public class KFZEditor {
 
     }
 
-    public KFZEditor(Vorgang vorgang) {
+    public KFZEditor(Vorgang vorgang, OKFZS okfzsInstanz) {
+
+        super(okfzsInstanz);
+
         //      KFZ DATEN
 
         JFrame jfKfzEdit = new JFrame("KFZ-Editor");
