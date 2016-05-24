@@ -1,5 +1,7 @@
 package Datenhaltung;
 
+import java.sql.Date;
+
 /**
  * Created by cdreher on 23.05.2016.
  */
@@ -10,6 +12,7 @@ public class Verkaeufer {
     private Person person;
     private boolean istAktiv;
     private boolean istAdmin;
+
 
     public Verkaeufer(String anmeldeName, String passwortHash, Person person, boolean istAktiv, boolean istAdmin) {
         this.anmeldeName = anmeldeName;
