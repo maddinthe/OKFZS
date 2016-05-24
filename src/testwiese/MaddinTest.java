@@ -43,10 +43,16 @@ public class MaddinTest {
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         test.setSize(1024, 786);
         test.setJMenuBar(new Menue(null));
-        test.add(new KFZListe(null, vorgaenge));
+//        test.add(new KFZListe(null, vorgaenge));
 //        test.add(new PersonenListe(null,personen));
 
+        Anmeldung a=new Anmeldung(null);
+        test.add(a);
+
         test.setVisible(true);
+
+
+
 
     }
 }
