@@ -38,11 +38,13 @@ public class ToniTest {
 
         //Spieldaten ende
 
+//        KFZEditor editor = new KFZEditor(vorgaenge.get(0));
+//        KFZEditor editor2 = new KFZEditor(kfzs[0]);
+
+        KFZ k = new KFZ();
+        k.getSonderausstattung();
 
 
-//        KFZEditor editor = new KFZEditor();
-
-        KFZEditor editor2 = new KFZEditor(vorgaenge.get(0));
 
     }
 }
