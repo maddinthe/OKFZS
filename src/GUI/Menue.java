@@ -1,57 +1,70 @@
 package GUI;
 
+import Datenbank.Datenbank;
+import Datenhaltung.Verkaeufer;
+import Datenhaltung.Vorgang;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by mtheilen on 23.05.2016.
  */
 //todo:doku und hinterlegen der listener das die entsprechenden ansichten geladen werden
 public class Menue extends JMenuBar{
+    private OKFZS okfzsInstanz;
+    private JMenu[] alleMenues;
+    private JMenu[] autoMenues;
+    private JMenu[] persMenues;
     public Menue(OKFZS okfzsInstanz){
+        super();
+        this.okfzsInstanz=okfzsInstanz;
         ActionListener al=new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switch (e.getActionCommand()){
                     case "Beenden":{
-                        okfzsInstanz.anzeigen("ende");
+                        anzeigen("ende");
                         break;
                     }
                     case"Übersicht anzeigen":{
-                        okfzsInstanz.anzeigen("uebersicht");
+                        anzeigen("uebersicht");
                         break;
                     }
                     case"Import/Export":{
-                        okfzsInstanz.anzeigen("impexp");
+                        anzeigen("impexp");
                         break;
                     }
                     case"Autos anzeigen":{
-                        okfzsInstanz.anzeigen("autoAnz");
+                        anzeigen("autoAnz");
                         break;
                     }
                     case"Auto anlegen":{
-                        okfzsInstanz.anzeigen("autoAnl");
+                        anzeigen("autoAnl");
                         break;
                     }
                     case"Personen anzeigen":{
-                        okfzsInstanz.anzeigen("personAnz");
+                        anzeigen("personAnz");
                         break;
                     }
                     case"Person anlegen":{
-                        okfzsInstanz.anzeigen("personAnl");
+                        anzeigen("personAnl");
                         break;
                     }
                     case"Statistik Anzeigen":{
-                        okfzsInstanz.anzeigen("statstik");
+                        anzeigen("statstik");
                         break;
                     }
                     case"Über":{
-                        okfzsInstanz.anzeigen("ueber");
+                        anzeigen("ueber");
                         break;
                     }
                     case"Hilfe":{
-                        okfzsInstanz.anzeigen("hilfe");
+                        anzeigen("hilfe");
                         break;
                     }
                 }
@@ -118,10 +131,47 @@ public class Menue extends JMenuBar{
         this.add(pers);
         this.add(stats);
         this.add(frageZeichen);
+        alleMenues=new JMenu[]{ubersicht,autos,pers,stats};
+        autoMenues=new JMenu[]{ubersicht,autos,stats};
+        persMenues=new JMenu[]{ubersicht,pers,stats};
+
+        inaktivSchalten(alleMenues);
 
 
 
 
 
     }
+
+    public void anzeigen(String ziel){
+        Verkaeufer benutzer=okfzsInstanz.getBenutzer();
+        Datenbank datenbank=okfzsInstanz.getDatenbank();
+        JPanel anzeige=okfzsInstanz.getAnzeige();
+        CardLayout cards=okfzsInstanz.getCards();
+
+        switch (ziel){
+            case "uebersicht":{
+                List<Vorgang> vorgangList=null;
+                try{vorgangList=datenbank.VorgaengeZuVerkaeufer(benutzer);}
+                catch (SQLException e){
+                }
+                anzeige.add(new Uebersicht(okfzsInstanz, vorgangList), "uebersicht");
+                cards.show(anzeige, "uebersicht");
+                aktivSchalten(alleMenues);
+            }
+        }
+        System.out.println(ziel);
+    }
+
+    private void inaktivSchalten(JMenu[] menus){
+        for(JMenu jm:menus){
+            jm.setEnabled(false);
+        }
+    }
+    private void aktivSchalten(JMenu[] menus){
+        for(JMenu jm:menus){
+            jm.setEnabled(true);
+        }
+    }
+
 }
