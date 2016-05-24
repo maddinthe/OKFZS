@@ -43,7 +43,7 @@ public class ToniTest {
                 new Verkaeufer("turner","turnerspw",new Person("Herr", "Dreher", new Date()),true,true)
         };
 
-        aktionen.add(new Aktion(new Date(), personen.get(0), "Waschen",kfzs[0]));
+  //      aktionen.add(new Aktion(new Date(), personen.get(0), "Waschen",kfzs[0]));
         //aktionen.add(new Vorgang(kfzs[1],verkaufer[0],19500));
 
 
