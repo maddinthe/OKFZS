@@ -14,7 +14,7 @@ import java.util.Date;
 public class TurnerTest {
     public static void main(String[] args) throws SQLException {
         OKFZS okfzs = new OKFZS();
-
+        PersonenEditor editor = new PersonenEditor(okfzs);
     }
     public static java.sql.Date umwandeln(String datum) {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");

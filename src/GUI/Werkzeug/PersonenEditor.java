@@ -112,7 +112,7 @@ public class PersonenEditor extends Ansicht {
         String[] erreichbarkeit = { "Tel", "Handy", "E-Mail", "Datum"};
         JComboBox jcErreichbarkeitsListe = new JComboBox(erreichbarkeit);
         jcErreichbarkeitsListe.setSelectedItem(person.getErreichbarkeiten());
-        jcErreichbarkeitsListe.setSelectedIndex(4);
+        jcErreichbarkeitsListe.setSelectedIndex(3);
         jcErreichbarkeitsListe.setEditable(true);
 
         jpErreichbarkeit.add(jlErreichbarkeit);
@@ -250,7 +250,7 @@ public class PersonenEditor extends Ansicht {
         JTextField jtErreichbarkeit = new JTextField(20);
         String[] Erreichbarkeit = { "Telefon", "Handy", "E-Mail", "Details"};
         JComboBox jcErreichbarkeitsListe = new JComboBox(Erreichbarkeit);
-        jcErreichbarkeitsListe.setSelectedIndex(4);
+        jcErreichbarkeitsListe.setSelectedIndex(3);
         jcErreichbarkeitsListe.setEditable(true);
 
         jpErreichbarkeit.add(jlErreichbarkeit);
