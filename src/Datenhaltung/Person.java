@@ -1,5 +1,7 @@
 package Datenhaltung;
 
+import Datenbank.Datenbank;
+
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class Person {
     public Person(String anrede, String name) {
         this.anrede = anrede;
         this.name = name;
+
 
     }
 
@@ -85,12 +88,27 @@ public class Person {
     }
 
     public void addErreichbarkeit(Erreichbarkeit erreichbarkeit){
-
+        erreichbarkeiten.add(erreichbarkeit);
     }
 
     public void addNotiz(Notiz notiz){
-
+        notizen.add(notiz);
     }
 
-
+    @Override
+    public String toString() {
+        return "Person{" +
+                "pid=" + pid +
+                ", anrede='" + anrede + '\'' +
+                ", name='" + name + '\'' +
+                ", vorname='" + vorname + '\'' +
+                ", geburtstag=" + geburtstag +
+                ", anschrift='" + anschrift + '\'' +
+                ", postleitzahl=" + postleitzahl +
+                ", ort='" + ort + '\'' +
+                ", ustID='" + ustID + '\'' +
+                ", notizen=" + notizen +
+                ", erreichbarkeiten=" + erreichbarkeiten +
+                '}';
+    }
 }

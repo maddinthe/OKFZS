@@ -2,6 +2,7 @@ package GUI;
 
 import Datenbank.Datenbank;
 import Datenhaltung.Verkaeufer;
+import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
 import java.util.LinkedList;
@@ -51,6 +52,7 @@ public class OKFZS extends JFrame {
     //todo:doku und evtl weitere details
     public static void main(String[] args) {
         new OKFZS();
+
     }
 
 
