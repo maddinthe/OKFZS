@@ -289,9 +289,9 @@ public class Datenbank {
     }
 
     //Abfragen
-    public List<Vorgang> VorgaengeZuVerkaeufer(Person person) throws SQLException{
+    public List<Vorgang> VorgaengeZuVerkaeufer(Verkaeufer verkaeufer) throws SQLException{
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk="+person.getPid()+"");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk="+verkaeufer.getPerson().getPid()+"");
         List<Vorgang> vorgaenge = new ArrayList<>();
         ResultSetMetaData metadata = r.getMetaData();
         int spalten = metadata.getColumnCount();
@@ -300,6 +300,9 @@ public class Datenbank {
         {
             long id = r.getLong("vid");
             String fin = r.getString("fk_t_kfz_fin");
+            long pid=r.getLong("fk_t_person_pid");
+            long ek=r.getLong("fk_t_verkaeufer_pid_ek");
+            long vk=r.getLong("fk_t_verkaeufer_pid_vk");
             double epreis = r.getDouble("epreis");
             double vpreis = r.getDouble("vpreis");
             int km = r.getInt("km");
@@ -311,7 +314,7 @@ public class Datenbank {
             Date tuev = r.getDate("tuev");
             String sonstvereinb = r.getString("sonstvereinb");
             double vpreisplan = r.getDouble("vpreisplan");
-            Vorgang vorgang = new Vorgang(id,einePerson(person.getPid()),einVerkaufer(person.getPid()),einVerkaufer(person.getPid()),einKfz(fin),vpreis,epreis,vpreisplan,vkdatum,rabattgrund,sonstvereinb,ekdatum,schaeden,tuev,kennz,km);
+            Vorgang vorgang = new Vorgang(id,einePerson(pid),einVerkaufer(vk),einVerkaufer(ek),einKfz(fin),vpreis,epreis,vpreisplan,vkdatum,rabattgrund,sonstvereinb,ekdatum,schaeden,tuev,kennz,km);
             vorgaenge.add(vorgang);
             r.next(); // go to next line in the customer table
         }
