@@ -36,9 +36,8 @@ public class KFZ {
         this.sonderausstattung = sonderausstattung;
     }
 
-    public KFZ(String fin, String hersteller){
-        this.fin = fin;
-        this.hersteller = hersteller;
+    public KFZ(){
+
     }
 
     public String getFin() {
@@ -134,6 +133,6 @@ public class KFZ {
     }
 
     public void addSonderstattung(Sonderausstattung s){
-
+        s.getBeschreibung();
     }
 }

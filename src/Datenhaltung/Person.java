@@ -36,10 +36,10 @@ public class Person {
         this.erreichbarkeiten = erreichbarkeiten;
     }
 
-    public Person(String anrede, String name) {
+    public Person(String anrede, String name,Date geburtstag) {
         this.anrede = anrede;
         this.name = name;
-
+        this.geburtstag = geburtstag;
 
     }
 
