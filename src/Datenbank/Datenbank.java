@@ -150,7 +150,7 @@ public class Datenbank {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
                     " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','"+ person.getVorname()+"','"+ person.getGeburtstag()+"','"+person.getAnschrift()+"',"+person.getPostleitzahl()+",'"+person.getOrt()+"','"+person.getUstID()+"')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',vorname='"+person.getVorname()+"',anschrift='"+person.getAnschrift()+"',plz="+person.getPostleitzahl()+",ort='"+person.getOrt()+"', ust_id='"+person.getUstID()+"'WHERE pid=" + person.getPid() + "");
+            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',vorname='" + person.getVorname() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
 
         }
     }
@@ -285,6 +285,16 @@ public class Datenbank {
             for (int j = 0; j < col; j++)
                 s += "|" + String.format("%-" + max[j] + "s", tabelle.get(j).get(i));
             System.out.println(s + "|");
+        }
+    }
+
+    //Abfragen
+    public void VorgaengeZuVerkaeufer(Person person) throws SQLException{
+        Statement stmt = conn.createStatement();
+        try {
+            stmt.executeUpdate("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk="+person.getPid()+"");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 

@@ -14,7 +14,6 @@ import java.util.Date;
 public class TurnerTest {
     public static void main(String[] args) throws SQLException {
         OKFZS okfzs = new OKFZS();
-        PersonenEditor personenEditor =new PersonenEditor(okfzs,"Herr","Schwarz",umwandeln("13.01.1987"));
 
     }
     public static java.sql.Date umwandeln(String datum) {
