@@ -59,8 +59,7 @@ CREATE TABLE t_KFZ(
 	Farbe		varchar(30) NOT NULL,
 	EZ			Date 		NOT NULL,
 	Plakette	varchar(30) NOT NULL,
-	TUEV		Date 		NOT NULL,
-	Krafstoff	varchar(30) NOT NULL,
+	Kraftstoff	varchar(30) NOT NULL,
 	CONSTRAINT PK_t_KFZ_FIN PRIMARY KEY(FIN)
 );
 CREATE TABLE t_Sonderausstattung(
