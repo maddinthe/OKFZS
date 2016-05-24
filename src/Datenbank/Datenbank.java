@@ -22,7 +22,7 @@ public class Datenbank {
     private Datenbank() {
     }
 
-    public static Datenbank getInstance() throws ClassNotFoundException, SQLException {
+    public static Datenbank getInstance(String host, int port) throws ClassNotFoundException, SQLException {
         if (datenbank == null) {
             Class.forName("org.postgresql.Driver");
             datenbank = new Datenbank();
@@ -37,8 +37,7 @@ public class Datenbank {
             }
 
         if (renew) {
-            String host = "localhost";
-            int port = 5432;
+
             String database = "db_okfzs";
 
             try {
@@ -70,9 +69,8 @@ public class Datenbank {
         }
         return datenbank;
     }
-    public static Datenbank getInstance(String database) throws SQLException{
-        String host = "localhost";
-        int port = 5432;
+    public static Datenbank getInstance(String database, String host,int port) throws SQLException{
+
 
         String url = "jdbc:postgresql://"+host+":"+port+"/";
         Properties props = new Properties();
@@ -87,7 +85,7 @@ public class Datenbank {
             throw  new SQLException("Zugriff verweigert", e.getSQLState(), e);
         }
         try{
-            getInstance();
+            getInstance(host,port);
         }catch (ClassNotFoundException e){ }
 
         einlesenScript();
@@ -147,7 +145,7 @@ public class Datenbank {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
                     " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','"+ person.getVorname()+"',"+ person.getGeburtstag()+",'"+person.getAnschrift()+"',"+person.getPostleitzahl()+",'"+person.getOrt()+"','"+person.getUstID()+"')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "'WHERE name='" + person.getName() + "'");
+            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"',WHERE name='" + person.getName() + "'");
 
         }
 
