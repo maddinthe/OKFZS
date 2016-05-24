@@ -22,8 +22,7 @@ public class KFZ {
     private List<Aktion> aktionen;
     private List<Sonderausstattung> sonderausstattung;
 
-    public KFZ(String fin, String hersteller, String modell, String kfzBriefNr, int leistungInKw, String farbe, Date ez, Byte umweltPlakette, String kraftstoff, List<Aktion> aktionen, List<Sonderausstattung> sonderausstattung) {
-        this.fin = fin;
+    public KFZ(String fin, String hersteller, String modell, String kfzBriefNr, int leistungInKw, String farbe, Date ez, Byte umweltPlakette, String kraftstoff){
         this.hersteller = hersteller;
         this.modell = modell;
         this.kfzBriefNr = kfzBriefNr;
@@ -32,8 +31,6 @@ public class KFZ {
         this.ez = ez;
         this.umweltPlakette = umweltPlakette;
         this.kraftstoff = kraftstoff;
-        this.aktionen = aktionen;
-        this.sonderausstattung = sonderausstattung;
     }
 
 

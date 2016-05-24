@@ -150,7 +150,7 @@ public class Datenbank {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
                     " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','"+ person.getVorname()+"','"+ person.getGeburtstag()+"','"+person.getAnschrift()+"',"+person.getPostleitzahl()+",'"+person.getOrt()+"','"+person.getUstID()+"')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',vorname='"+person.getVorname()+"',anschrift='"+person.getAnschrift()+"',plz="+person.getPostleitzahl()+",ort='"+person.getOrt()+"', ust_id='"+person.getUstID()+"'WHERE pid=" + person.getPid() + "");
+            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',vorname='" + person.getVorname() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
 
         }
     }
@@ -286,6 +286,159 @@ public class Datenbank {
                 s += "|" + String.format("%-" + max[j] + "s", tabelle.get(j).get(i));
             System.out.println(s + "|");
         }
+    }
+
+    //Abfragen
+    public List<Vorgang> VorgaengeZuVerkaeufer(Verkaeufer verkaeufer) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk="+verkaeufer.getPerson().getPid()+"");
+        List<Vorgang> vorgaenge = new ArrayList<>();
+        ResultSetMetaData metadata = r.getMetaData();
+        int spalten = metadata.getColumnCount();
+
+        while(! r.isAfterLast()) // as long as valid data is in the result set
+        {
+            long id = r.getLong("vid");
+            String fin = r.getString("fk_t_kfz_fin");
+            long pid=r.getLong("fk_t_person_pid");
+            long ek=r.getLong("fk_t_verkaeufer_pid_ek");
+            long vk=r.getLong("fk_t_verkaeufer_pid_vk");
+            double epreis = r.getDouble("epreis");
+            double vpreis = r.getDouble("vpreis");
+            int km = r.getInt("km");
+            String schaeden =r.getString("Schaeden");
+            Date vkdatum = r.getDate("vkdatum");
+            Date ekdatum = r.getDate("ekdatum");
+            String kennz = r.getString("kennz");
+            String rabattgrund = r.getString("rabattgrund");
+            Date tuev = r.getDate("tuev");
+            String sonstvereinb = r.getString("sonstvereinb");
+            double vpreisplan = r.getDouble("vpreisplan");
+            Vorgang vorgang = new Vorgang(id,einePerson(pid),einVerkaufer(vk),einVerkaufer(ek),einKfz(fin),vpreis,epreis,vpreisplan,vkdatum,rabattgrund,sonstvereinb,ekdatum,schaeden,tuev,kennz,km);
+            vorgaenge.add(vorgang);
+            r.next(); // go to next line in the customer table
+        }
+        r.close();
+        conn.close();
+        return vorgaenge;
+    }
+    public Person einePerson(long id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_person WHERE pid=" + id + "");
+        ResultSetMetaData metadata = r.getMetaData();
+        int spalten = metadata.getColumnCount();
+        Person personret=null;
+
+        while(! r.isAfterLast()) // as long as valid data is in the result set
+        {
+            long pid = r.getLong("pid");
+            String anrede = r.getString("anrede");
+            String name = r.getString("name");
+            String vorname = r.getString("vorname");
+            Date gebtag = r.getDate("gebtag");
+            String anschrift = r.getString("anschrift");
+            int plz = r.getInt("plz");
+            String ort = r.getString("ort");
+            String ust_id = r.getString("ust_id");
+
+
+            personret = new Person(pid, anrede, name,vorname,gebtag,anschrift,plz,ort,ust_id);
+            r.next(); // go to next line in the customer table
+        }
+        r.close();
+        conn.close();
+        return personret;
+    }
+    public KFZ einKfz(String fin) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz WHERE fin='" + fin + "'");
+        ResultSetMetaData metadata = r.getMetaData();
+        int spalten = metadata.getColumnCount();
+        KFZ kfz=null;
+
+        while(! r.isAfterLast()) // as long as valid data is in the result set
+        {
+            String id = r.getString("fin");
+            String hersteller = r.getString("hersteller");
+            String modell = r.getString("modell");
+            String kfz_brief = r.getString("kfz_brief");
+            int leistung = r.getInt("leistung");
+            String farbe = r.getString("farbe");
+            Date ez = r.getDate("ez");
+            byte plakette = r.getByte("plakette");
+            String kraftstoff = r.getString("kraftstoff");
+
+
+            kfz = new KFZ(fin, hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff);
+            r.next(); // go to next line in the customer table
+        }
+        r.close();
+        conn.close();
+        return kfz;
+    }
+    public Verkaeufer einVerkaufer(long id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_verkaeufer WHERE fk_t_person_pid=" + id + "");
+        ResultSetMetaData metadata = r.getMetaData();
+        int spalten = metadata.getColumnCount();
+        Verkaeufer verkaeufer=null;
+
+        while(! r.isAfterLast()) // as long as valid data is in the result set
+        {
+            long pid = r.getLong("fk_t_person_pid");
+            String anmeldename = r.getString("anmeldename");
+            String passwort = r.getString("passwort");
+            Date inaktivseit = r.getDate("inaktivseit");
+            boolean aktiv = (inaktivseit==null);
+
+
+            verkaeufer = new Verkaeufer(anmeldename,passwort,einePerson(id),aktiv,isAdmin(id));
+            r.next(); // go to next line in the customer table
+        }
+        r.close();
+        conn.close();
+        return verkaeufer;
+    }
+    public boolean isAdmin(long id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_admins WHERE fk_t_verkaeufer_fk_t_person_pid=" + id + "");
+        ResultSetMetaData metadata = r.getMetaData();
+        int spalten = metadata.getColumnCount();
+        boolean isAdmin=false;
+
+
+        while(! r.isAfterLast()) // as long as valid data is in the result set
+        {
+            long pid = r.getLong("fk_t_person_pid");
+            if (pid==id)isAdmin=true;
+
+
+            r.next(); // go to next line in the customer table
+        }
+        r.close();
+        conn.close();
+        return isAdmin;
+    }
+    public Notiz eineNotiz(Person person) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_notiz WHERE fk_t_person_pid=" + person.getPid() + "");
+        ResultSetMetaData metadata = r.getMetaData();
+        int spalten = metadata.getColumnCount();
+        Notiz notiz =null;
+        while(! r.isAfterLast()) // as long as valid data is in the result set
+        {
+            long nid = r.getLong("nid");
+            String text = r.getString("text");
+            Date datum = r.getDate("datum");
+
+            notiz = new Notiz(nid,person,datum,text);
+            person.addNotiz(notiz);
+
+            r.next(); // go to next line in the customer table
+        }
+        r.close();
+        conn.close();
+        return notiz;
     }
 
 

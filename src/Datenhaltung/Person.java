@@ -2,6 +2,7 @@ package Datenhaltung;
 
 import Datenbank.Datenbank;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,10 +20,10 @@ public class Person {
     private int postleitzahl;
     private String ort;
     private String ustID;
-    private List<Notiz> notizen;
-    private List<Erreichbarkeit> erreichbarkeiten;
+    private List<Notiz> notizen= new ArrayList<>();
+    private List<Erreichbarkeit> erreichbarkeiten = new ArrayList<>();
 
-    public Person(long pid, String anrede, String name, String vorname, Date geburtstag, String anschrift, int postleitzahl, String ort, String ustID, List<Notiz> notizen, List<Erreichbarkeit> erreichbarkeiten) {
+    public Person(long pid, String anrede, String name, String vorname, Date geburtstag, String anschrift, int postleitzahl, String ort, String ustID ) {
         this.pid = pid;
         this.anrede = anrede;
         this.name = name;
@@ -32,8 +33,7 @@ public class Person {
         this.postleitzahl = postleitzahl;
         this.ort = ort;
         this.ustID = ustID;
-        this.notizen = notizen;
-        this.erreichbarkeiten = erreichbarkeiten;
+
     }
 
     public Person(String anrede, String name,Date geburtstag) {

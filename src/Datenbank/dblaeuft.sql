@@ -48,8 +48,12 @@ CREATE TABLE t_Verkaeufer(
 	CONSTRAINT PK_t_Verkaeufer PRIMARY KEY(fk_t_Person_PID),
 	CONSTRAINT FK_t_Person_PID FOREIGN KEY (fk_t_Person_PID) REFERENCES t_Person(PID) ON UPDATE CASCADE ON DELETE CASCADE
 );
-CREATE TABLE t_Admins(
-)INHERITS(t_Verkaeufer);
+CREATE TABLE t_admins(
+	fk_t_verkaeufer_fk_t_person_pid integer NOT NULL,
+	CONSTRAINT PK_t_admins_fk_t_verkaeufer_fk_t_person_pid PRIMARY KEY (fk_t_verkaeufer_fk_t_person_pid),
+	CONSTRAINT FK_t_verkaeufer_fk_t_person_pid FOREIGN KEY (fk_t_verkaeufer_fk_t_person_pid) REFERENCES t_verkaeufer(fk_t_person_pid) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 CREATE TABLE t_KFZ(
 	FIN			varchar(17) NOT NULL,
 	Hersteller	varchar(30) NOT NULL,
