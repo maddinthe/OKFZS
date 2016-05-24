@@ -1,6 +1,9 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.EventListener;
 import java.util.List;
 
 /**
@@ -8,7 +11,13 @@ import java.util.List;
  */
 //todo:doku und hinterlegen der listener das die entsprechenden ansichten geladen werden
 public class Menue extends JMenuBar{
-    public Menue(List<Ansicht> menueItems){
+    public Menue(OKFZS okfzsInstanz){
+        ActionListener al=new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                okfzsInstanz.anzeigen("");
+            }
+        };
         JMenu ubersicht=new JMenu("Übersicht");
         JMenuItem uebersichAnz=new JMenuItem("Übersicht anzeigen");
         ubersicht.add(uebersichAnz);

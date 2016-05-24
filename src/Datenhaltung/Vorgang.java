@@ -22,6 +22,7 @@ public class Vorgang {
     private String schaeden;
     private Date tuev;
     private String kennzeichen;
+    private int kilometer;
 
     //todo:doku
     public Vorgang(KFZ kfz, Verkaeufer einkauefer, double ePreis) {
@@ -32,7 +33,7 @@ public class Vorgang {
         this.vPreisPlan=ePreis*1.2; //todo:realistische preisspanne einbauen
     }
 
-    public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer, Verkaeufer einkaeufer, KFZ kfz, double vPreis, double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen, Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen) {
+    public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer, Verkaeufer einkaeufer, KFZ kfz, double vPreis, double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen, Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen,int kilometer) {
         this.vid = vid;
         this.kauefer = kauefer;
         this.verkaeufer = verkaeufer;
@@ -48,6 +49,7 @@ public class Vorgang {
         this.schaeden = schaeden;
         this.tuev = tuev;
         this.kennzeichen = kennzeichen;
+        this.kilometer=kilometer;
     }
 
     public long getVid() {
@@ -112,6 +114,10 @@ public class Vorgang {
 
     public double getGewinn() {
         return vPreis - ePreis;
+    }
+
+    public int getKilometer(){
+        return kilometer;
     }
 
     /**
@@ -183,6 +189,10 @@ public class Vorgang {
 
     public void setKennzeichen(String kennzeichen) {
         this.kennzeichen = kennzeichen;
+    }
+
+    public void setKilometer(int kilometer){
+        this.kilometer=kilometer;
     }
 
     //todo: schöner machen

@@ -65,7 +65,7 @@ public class OKFZS extends JFrame {
 
         setTitle("Ostsee KFZ Service");
         setSize(breite, hoehe);
-        setJMenuBar(new Menue(null));
+        setJMenuBar(new Menue(this));
         add(anzeige);
 
         setVisible(true);
@@ -92,14 +92,17 @@ public class OKFZS extends JFrame {
         return breite;
     }
 
+    public void setBenutzer(Verkaeufer benutzer) {
+        this.benutzer = benutzer;
+    }
+
+    public void anzeigen(String ziel){
+
+    }
+
     //todo:doku und evtl weitere details
     public static void main(String[] args) {
         new OKFZS();
 
-    }
-
-
-    public void setBenutzer(Verkaeufer benutzer) {
-        this.benutzer = benutzer;
     }
 }
