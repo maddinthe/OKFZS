@@ -50,5 +50,8 @@ public class Aktion {
     public void setKfz(KFZ kfz) {
         this.kfz = kfz;
     }
+
+
 }
+
 

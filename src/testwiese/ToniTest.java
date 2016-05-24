@@ -1,6 +1,7 @@
 package testwiese;
 
 import Datenhaltung.*;
+import GUI.Werkzeug.AktionEditor;
 import GUI.Werkzeug.KFZEditor;
 
 import javax.swing.*;
@@ -16,9 +17,9 @@ public class ToniTest {
 //Spieldaten
         java.util.List<Vorgang> vorgaenge = new LinkedList<>();
         Verkaeufer[] verkaufer={
-                //new Verkaeufer("maddin","madinspw",new Person("Herr", "Theilen"),true,true),
-                //new Verkaeufer("toni","tonispw",new Person("Herr", "Kertz"),true,true),
-                //new Verkaeufer("turner","turnerspw",new Person("Herr", "Dreher"),true,true)
+                new Verkaeufer("maddin","madinspw",new Person("Herr", "Theilen", new Date()),true,true),
+                new Verkaeufer("toni","tonispw",new Person("Herr", "Kertz", new Date()),true,true),
+                new Verkaeufer("turner","turnerspw",new Person("Herr", "Dreher", new Date()),true,true)
         };
         KFZ[] kfzs = {new KFZ("12345678912345678", "Nissan", "Micra", "J124456", 100, "Rot", new Date(2015, 5, 1), (byte) 4, "Diesel", new LinkedList<Aktion>(), new LinkedList<Sonderausstattung>()),
                 new KFZ("123453478912345678", "Honda", "Civic", "J127856", 101, "Rot", new Date(2014, 5, 1), (byte) 4, "Diesel", new LinkedList<Aktion>(), new LinkedList<Sonderausstattung>()),
@@ -35,16 +36,26 @@ public class ToniTest {
         personen.add(verkaufer[1].getPerson());
         personen.add(verkaufer[2].getPerson());
 
+        java.util.List<Aktion> aktionen = new LinkedList<>();
+        Verkaeufer[] Personen={
+                new Verkaeufer("maddin","madinspw",new Person("Herr", "Theilen", new Date()),true,true),
+                new Verkaeufer("toni","tonispw",new Person("Herr", "Kertz", new Date()),true,true),
+                new Verkaeufer("turner","turnerspw",new Person("Herr", "Dreher", new Date()),true,true)
+        };
+
+        aktionen.add(new Aktion(new Date(), personen.get(0), "Waschen",kfzs[0]));
+        //aktionen.add(new Vorgang(kfzs[1],verkaufer[0],19500));
+
 
         //Spieldaten ende
 
 //        KFZEditor editor = new KFZEditor(vorgaenge.get(0));
 //        KFZEditor editor2 = new KFZEditor(kfzs[0]);
 
-        KFZ k = new KFZ();
-        k.getSonderausstattung();
+//        KFZ k = new KFZ();
+//        k.getSonderausstattung();
 
-
+        AktionEditor ae = new AktionEditor(aktionen.get(0),null);
 
     }
 }
