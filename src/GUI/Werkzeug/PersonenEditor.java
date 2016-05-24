@@ -16,6 +16,7 @@ public class PersonenEditor extends Ansicht {
     public PersonenEditor(OKFZS okfzsInstanz, Person person) {
         super(okfzsInstanz);
 
+
     }
     public PersonenEditor(OKFZS okfzsInstanz,String anrede, String name) throws SQLException {
         super(okfzsInstanz);
@@ -42,10 +43,13 @@ public class PersonenEditor extends Ansicht {
         } catch (SQLException e1) {
             System.out.println(e1.getMessage());
             e1.printStackTrace();
-
         }
     }
     public Person getPerson(){
         return null;
+    }
+
+    public void connection(){
+
     }
 }

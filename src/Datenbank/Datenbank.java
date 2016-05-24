@@ -1,5 +1,7 @@
 package Datenbank;
 
+import Datenhaltung.Person;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -135,16 +137,18 @@ public class Datenbank {
         try {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name) VALUES ('" + anrede + "', '" + name + "')");
         } catch (SQLException e) {
-           stmt.executeUpdate("UPDATE t_person SET anrede='" + anrede + "'WHERE name='" + name + "'");
+           stmt.executeUpdate("UPDATE t_person SET anrede='" + anrede + "',name='"+name+"' WHERE name='" + name + "'");
         }
 
     }
-    public void insertOrUpdatePersonAlles(String anrede, String name, String vorname) throws SQLException {
+    public void insertOrUpdatePersonAlles(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_Person(anrede,name) VALUES ('" + anrede + "', '" + name + "')");
+            stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
+                    " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','"+ person.getVorname()+"',"+ person.getGeburtstag()+",'"+person.getAnschrift()+"',"+person.getPostleitzahl()+",'"+person.getOrt()+"','"+person.getUstID()+"')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_person SET anrede='" + anrede + "'WHERE name='" + name + "'");
+            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "'WHERE name='" + person.getName() + "'");
+
         }
 
     }
