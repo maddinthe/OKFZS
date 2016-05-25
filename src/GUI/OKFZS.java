@@ -159,6 +159,12 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "statstik": {
+                java.util.List<Vorgang> vorgangList=null;
+                try{vorgangList=datenbank.VorgaengeZuVerkaeufer(benutzer);}
+                catch (SQLException e){
+                }
+                anzeige.add(new Statistik(this, vorgangList), "statstik");
+                cards.show(anzeige, "statstik");
                 break;
             }
             case "ueber": {

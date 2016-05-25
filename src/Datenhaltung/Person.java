@@ -111,4 +111,37 @@ public class Person {
                 ", erreichbarkeiten=" + erreichbarkeiten +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (pid != person.pid) return false;
+        if (postleitzahl != person.postleitzahl) return false;
+        if (anrede != null ? !anrede.equals(person.anrede) : person.anrede != null) return false;
+        if (name != null ? !name.equals(person.name) : person.name != null) return false;
+        if (vorname != null ? !vorname.equals(person.vorname) : person.vorname != null) return false;
+        if (geburtstag != null ? !geburtstag.equals(person.geburtstag) : person.geburtstag != null) return false;
+        if (anschrift != null ? !anschrift.equals(person.anschrift) : person.anschrift != null) return false;
+        if (ort != null ? !ort.equals(person.ort) : person.ort != null) return false;
+        return !(ustID != null ? !ustID.equals(person.ustID) : person.ustID != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (pid ^ (pid >>> 32));
+        result = 31 * result + (anrede != null ? anrede.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (vorname != null ? vorname.hashCode() : 0);
+        result = 31 * result + (geburtstag != null ? geburtstag.hashCode() : 0);
+        result = 31 * result + (anschrift != null ? anschrift.hashCode() : 0);
+        result = 31 * result + postleitzahl;
+        result = 31 * result + (ort != null ? ort.hashCode() : 0);
+        result = 31 * result + (ustID != null ? ustID.hashCode() : 0);
+        return result;
+    }
 }
