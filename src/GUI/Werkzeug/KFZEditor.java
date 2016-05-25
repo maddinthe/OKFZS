@@ -19,7 +19,8 @@ public class KFZEditor extends Ansicht{
 
         super(okfzsInstanz);
         try {
-            KFZ kfz =okfzsInstanz.getDatenbank().einKfz(k.getFin());
+            KFZ kfz = okfzsInstanz.getDatenbank().einKfz(k.getFin());
+            System.out.println(kfz.toString());
 
             //      KFZ DATEN
             JFrame jfKfzEdit = new JFrame("KFZ-Editor");
@@ -41,7 +42,7 @@ public class KFZEditor extends Ansicht{
             JPanel jpFin = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlFin = new JLabel("Fin:");
             JTextField jtFin = new JTextField(20);
-//            jtFin.setText(kfz.getFin());
+            jtFin.setText(kfz.getFin());
             jpFin.add(jlFin);
             jpFin.add(jtFin);
 

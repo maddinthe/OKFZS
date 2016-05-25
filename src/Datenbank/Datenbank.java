@@ -359,6 +359,7 @@ public class Datenbank {
 
         while(r.next())
         {
+
             String hersteller = r.getString("hersteller");
             String modell = r.getString("modell");
             String kfz_brief = r.getString("kfz_brief");

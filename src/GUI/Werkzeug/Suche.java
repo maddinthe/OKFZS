@@ -1,12 +1,9 @@
 package GUI.Werkzeug;
 
-
 import Datenhaltung.KFZ;
 import Datenhaltung.Person;
 import GUI.OKFZS;
-
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

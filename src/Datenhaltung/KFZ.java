@@ -23,6 +23,7 @@ public class KFZ {
     private List<Sonderausstattung> sonderausstattung;
 
     public KFZ(String fin, String hersteller, String modell, String kfzBriefNr, int leistungInKw, String farbe, Date ez, Byte umweltPlakette, String kraftstoff){
+        this.fin = fin;
         this.hersteller = hersteller;
         this.modell = modell;
         this.kfzBriefNr = kfzBriefNr;
@@ -128,5 +129,22 @@ public class KFZ {
 
     public void addSonderstattung(Sonderausstattung s){
         sonderausstattung.add(s);
+    }
+
+    @Override
+    public String toString() {
+        return "KFZ{" +
+                "fin='" + fin + '\'' +
+                ", hersteller='" + hersteller + '\'' +
+                ", modell='" + modell + '\'' +
+                ", kfzBriefNr='" + kfzBriefNr + '\'' +
+                ", leistungInKw=" + leistungInKw +
+                ", farbe='" + farbe + '\'' +
+                ", ez=" + ez +
+                ", umweltPlakette=" + umweltPlakette +
+                ", kraftstoff='" + kraftstoff + '\'' +
+                ", aktionen=" + aktionen +
+                ", sonderausstattung=" + sonderausstattung +
+                '}';
     }
 }
