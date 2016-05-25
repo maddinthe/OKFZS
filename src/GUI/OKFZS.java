@@ -1,6 +1,7 @@
 package GUI;
 
 import Datenbank.Datenbank;
+import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import Datenhaltung.Vorgang;
 
@@ -147,12 +148,25 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "autoAnz": {
+                java.util.List<Vorgang> kfzList=null;
+                try{kfzList=datenbank.unverkaufteVorgaenge();
+                    anzeige.add(new KFZListe(this, kfzList), "autoAnz");
+                    cards.show(anzeige, "autoAnz");}
+                catch (SQLException e){
+                }
                 break;
             }
             case "autoAnl": {
                 break;
             }
             case "personAnz": {
+                java.util.List<Person> personList=null;
+                try{personList=datenbank.allePersonen();
+                    anzeige.add(new PersonenListe(this, personList), "personList");
+                    cards.show(anzeige, "personList");}
+                catch (SQLException e){
+                }
+
                 break;
             }
             case "personAnl": {

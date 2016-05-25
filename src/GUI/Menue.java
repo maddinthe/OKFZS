@@ -180,6 +180,9 @@ public class Menue extends JMenuBar{
                 break;
             }
             case "statstik": {
+                for(JMenuItem jmi:menues.get("uebersicht")){
+                    jmi.setEnabled(true);
+                }
                 break;
             }
             case "ueber": {
