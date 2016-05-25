@@ -553,7 +553,7 @@ public class Datenbank {
     }
     public List<Vorgang> unverkaufteVorgaenge() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * from t_kfz INNER JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vkdatum = NULL");
+        ResultSet r = stmt.executeQuery("SELECT * from t_kfz INNER JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE fk_t_verkaeufer_pid_vk IS NULL");
         List<Vorgang> vorgaenge = new ArrayList<>();
 
 
@@ -580,6 +580,26 @@ public class Datenbank {
         }
         r.close();
         return vorgaenge;
+    }
+    public Double statistikGewinnVerkaeufer(Verkaeufer verkaeufer) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk=" + verkaeufer.getPerson().getPid() + "");
+        Double gewinn = 0.0;
+
+
+        while (r.next()) {
+            double epreis = r.getDouble("epreis");
+            double vpreis = r.getDouble("vpreis");
+            long ek = r.getLong("fk_t_verkaeufer_pid_ek");
+            if (ek != verkaeufer.getPerson().getPid())
+                gewinn += (vpreis - epreis) / 2;
+            else
+                gewinn += vpreis - epreis;
+
+
+        }
+        r.close();
+        return gewinn;
     }
 
 
