@@ -146,49 +146,49 @@ public class KFZEditor extends Ansicht{
             JPanel jpEinkaeufer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlEinkaeufer = new JLabel("Einkäufer:");
             JTextField jtEinkaeufer = new JTextField(20);
-            jtEinkaeufer.setText(vorgang.getEinkaeufer().getAnmeldeName());
+//            jtEinkaeufer.setText(vorgang.getEinkaeufer().getAnmeldeName());
             jpEinkaeufer.add(jlEinkaeufer);
             jpEinkaeufer.add(jtEinkaeufer);
 
             JPanel jpEK = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlEK = new JLabel("Einkaufspreis:");
             JTextField jtEK = new JTextField(20);
-            jtEK.setText(String.valueOf(vorgang.getePreis()));
+//            jtEK.setText(String.valueOf(vorgang.getePreis()));
             jpEK.add(jlEK);
             jpEK.add(jtEK);
 
             JPanel jpVKP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlVKP = new JLabel("geplanter Verkaufspreis:");
             JTextField jtVKP = new JTextField(20);
-            jtVKP.setText(String.valueOf(vorgang.getvPreisPlan()));
+//            jtVKP.setText(String.valueOf(vorgang.getvPreisPlan()));
             jpVKP.add(jlVKP);
             jpVKP.add(jtVKP);
 
             JPanel jpEKDat = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlEKDat = new JLabel("Einkaufsdatum:");
             JTextField jtEKDat = new JTextField(20);
-            jtEKDat.setText(vorgang.getEinkaufsDatum().toString());
+//            jtEKDat.setText(vorgang.getEinkaufsDatum().toString());
             jpEKDat.add(jlEKDat);
             jpEKDat.add(jtEKDat);
 
             JPanel jpSchaeden = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlSchaeden = new JLabel("Bekannte Schäden:");
             JTextField jtSchaeden = new JTextField(20);
-            jtSchaeden.setText(vorgang.getSchaeden());
+//            jtSchaeden.setText(vorgang.getSchaeden());
             jpSchaeden.add(jlSchaeden);
             jpSchaeden.add(jtSchaeden);
 
             JPanel jpTuev = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlTuev = new JLabel("TÜV:");
             JTextField jtTuev = new JTextField(20);
-            jtTuev.setText(String.valueOf(vorgang.getTuev()));
+//            jtTuev.setText(String.valueOf(vorgang.getTuev()));
             jpTuev.add(jlTuev);
             jpTuev.add(jtTuev);
 
             JPanel jpKennzeichen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlKennzeichen = new JLabel("Kennzeichen:");
             JTextField jtKennzeichen = new JTextField(20);
-            jtKennzeichen.setText(vorgang.getKennzeichen());
+//            jtKennzeichen.setText(vorgang.getKennzeichen());
             jpKennzeichen.add(jlKennzeichen);
             jpKennzeichen.add(jtKennzeichen);
 
