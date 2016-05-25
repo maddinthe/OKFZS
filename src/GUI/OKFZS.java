@@ -1,6 +1,7 @@
 package GUI;
 
 import Datenbank.Datenbank;
+import Datenhaltung.KFZ;
 import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import Datenhaltung.Vorgang;
