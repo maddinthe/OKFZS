@@ -158,34 +158,28 @@ public class Menue extends JMenuBar{
                 }
                 break;
             }
-            case "impexp": {
-                break;
-            }
+
             case "autoAnz": {
                 for(JMenuItem jmi:menues.get("autolist")){
                     jmi.setEnabled(true);
                 }
                 break;
             }
-            case "autoAnl": {
-                break;
-            }
+
             case "personAnz": {
                 for(JMenuItem jmi:menues.get("perslist")){
                     jmi.setEnabled(true);
                 }
-                break;
-            }
-            case "personAnl": {
-                break;
-            }
-            case "statstik": {
-                break;
-            }
-            case "ueber": {
-                break;
-            }
+                break; }
+            case "impexp":
+            case "autoAnl":
+            case "personAnl":
+            case "statstik":
+            case "ueber":
             case "hilfe":{
+                for(JMenuItem jmi:menues.get("uebersicht")){
+                    jmi.setEnabled(true);
+                }
                 break;
             }
             default:
