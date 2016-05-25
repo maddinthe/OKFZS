@@ -336,7 +336,6 @@ public class Datenbank {
 
         while(r.next())
         {
-            long pid = r.getLong("pid");
             String anrede = r.getString("anrede");
             String name = r.getString("name");
             String vorname = r.getString("vorname");
@@ -347,7 +346,7 @@ public class Datenbank {
             String ust_id = r.getString("ust_id");
 
 
-            personret = new Person(pid, anrede, name,vorname,gebtag,anschrift,plz,ort,ust_id);
+            personret = new Person(id, anrede, name,vorname,gebtag,anschrift,plz,ort,ust_id);
 
         }
         r.close();
@@ -360,7 +359,6 @@ public class Datenbank {
 
         while(r.next())
         {
-            String id = r.getString("fin");
             String hersteller = r.getString("hersteller");
             String modell = r.getString("modell");
             String kfz_brief = r.getString("kfz_brief");
@@ -372,7 +370,7 @@ public class Datenbank {
 
 
             kfz = new KFZ(fin, hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff);
-            // go to next line in the customer table
+
         }
         r.close();
         return kfz;
@@ -383,7 +381,7 @@ public class Datenbank {
         Verkaeufer verkaeufer=null;
         while(r.next())
         {
-            long pid = r.getLong("fk_t_person_pid");
+
             String anmeldename = r.getString("anmeldename");
             String passwort = r.getString("passwort");
             Date inaktivseit = r.getDate("inaktivseit");
@@ -460,6 +458,131 @@ public class Datenbank {
         r.close();
         return erreichbarkeit;
     }
+    public Aktion eineAktion(KFZ kfz, Person person) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_aktion WHERE fk_t_kfz_fin='" + kfz.getFin() + "' AND fk_t_person_pid=" + person.getPid() + "");
+        Aktion aktion = null;
+        while(r.next())
+        {
+            long eid = r.getLong("eid");
+            Date datum = r.getDate("datum");
+            String text = r.getString("text");
+
+            aktion = new Aktion(datum,person,text,kfz);
+            kfz.addAktion(aktion);
+        }
+        r.close();
+        return aktion;
+    }
+    public Sonderausstattung eineSonderausstattung(long id) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_sonderausstattung WHERE sid=" + id + "");
+        Sonderausstattung sonderausstattung =null;
+        while(r.next())
+        {
+            String text = r.getString("art");
+            sonderausstattung = new Sonderausstattung(id,text);
+
+        }
+        r.close();
+        return sonderausstattung;
+    }
+    public List<Sonderausstattung> ausstattungsliste(KFZ kfz) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT sid,art from t_sonderausstattung INNER JOIN t_ausstattungsliste ON t_sonderausstattung.sid = t_ausstattungsliste.fk_t_sonderausstattung_sid INNER JOIN t_kfz ON t_kfz.fin = t_ausstattungsliste.fk_t_kfz_fin WHERE fin='"+kfz.getFin()+"'");
+        List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
+
+
+        while(r.next())
+        {
+            long sid = r.getLong("sid");
+            String art = r.getString("art");
+            Sonderausstattung sonderausstattung = new Sonderausstattung(sid,art);
+            sonderausstattungsListe.add(sonderausstattung);
+
+        }
+        r.close();
+        return sonderausstattungsListe;
+    }
+    public List<KFZ> alleKfz() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz");
+        List<KFZ> kfzListe = new ArrayList<>();
+        KFZ kfz = null;
+
+        while (r.next()) {
+            String fin = r.getString("fin");
+            String hersteller = r.getString("hersteller");
+            String modell = r.getString("modell");
+            String kfz_brief = r.getString("kfz_brief");
+            int leistung = r.getInt("leistung");
+            String farbe = r.getString("farbe");
+            Date ez = r.getDate("ez");
+            byte plakette = r.getByte("plakette");
+            String kraftstoff = r.getString("kraftstoff");
+            kfz = new KFZ(fin, hersteller, modell, kfz_brief, leistung, farbe, ez, plakette, kraftstoff);
+            kfzListe.add(kfz);
+
+        }
+        r.close();
+        return kfzListe;
+    }
+    public List<Person> allePersonen() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_person");
+        Person person = null;
+        List<Person> personenListe = new ArrayList<>();
+
+
+        while (r.next()) {
+            long pid = r.getLong("pid");
+            String anrede = r.getString("anrede");
+            String name = r.getString("name");
+            String vorname = r.getString("vorname");
+            Date gebtag = r.getDate("gebtag");
+            String anschrift = r.getString("anschrift");
+            int plz = r.getInt("plz");
+            String ort = r.getString("ort");
+            String ust_id = r.getString("ust_id");
+            person = new Person(pid, anrede, name, vorname, gebtag, anschrift, plz, ort, ust_id);
+            personenListe.add(person);
+
+        }
+        r.close();
+        return personenListe;
+    }
+    public List<Vorgang> unverkaufteVorgaenge() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * from t_kfz INNER JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vkdatum = NULL");
+        List<Vorgang> vorgaenge = new ArrayList<>();
+
+
+        while (r.next()) {
+            long id = r.getLong("vid");
+            String fin = r.getString("fk_t_kfz_fin");
+            long pid = r.getLong("fk_t_person_pid");
+            long ek = r.getLong("fk_t_verkaeufer_pid_ek");
+            long vk = r.getLong("fk_t_verkaeufer_pid_vk");
+            double epreis = r.getDouble("epreis");
+            double vpreis = r.getDouble("vpreis");
+            int km = r.getInt("km");
+            String schaeden = r.getString("Schaeden");
+            Date vkdatum = r.getDate("vkdatum");
+            Date ekdatum = r.getDate("ekdatum");
+            String kennz = r.getString("kennz");
+            String rabattgrund = r.getString("rabattgrund");
+            Date tuev = r.getDate("tuev");
+            String sonstvereinb = r.getString("sonstvereinb");
+            double vpreisplan = r.getDouble("vpreisplan");
+            Vorgang vorgang = new Vorgang(id, einePerson(pid), einVerkaufer(vk), einVerkaufer(ek), einKfz(fin), vpreis, epreis, vpreisplan, vkdatum, rabattgrund, sonstvereinb, ekdatum, schaeden, tuev, kennz, km);
+            vorgaenge.add(vorgang);
+
+        }
+        r.close();
+        return vorgaenge;
+    }
+
+
 
 
 
