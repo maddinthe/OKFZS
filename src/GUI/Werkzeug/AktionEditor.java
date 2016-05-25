@@ -19,6 +19,7 @@ public class AktionEditor extends Ansicht {
     public AktionEditor(OKFZS okfzsInstanz) {
         super(okfzsInstanz);
 
+
     }
 
     public AktionEditor(KFZ kfz, OKFZS okfzsInstanz) {
@@ -177,9 +178,7 @@ public class AktionEditor extends Ansicht {
         jpAktionen.add(jpDurchfuehrender);
         jpAktionen.add(jpBeschreibung);
 
-
         jpAktion.add(jpAktionen);
-
 
         jfAktionEdit.add(jpKFZ, BorderLayout.WEST);
         jfAktionEdit.add(jpAktion, BorderLayout.EAST);
@@ -360,13 +359,23 @@ public class AktionEditor extends Ansicht {
         jpAktionen.add(jpBeschreibung);
         jpAktion.add(jpAktionen);
 
+        JButton jbNeu = new JButton("Neu");
         JButton jbEdit = new JButton("Editieren");
         JButton jbSave = new JButton("Speichern");
 
         jfAktionEdit.add(jpKFZ, BorderLayout.WEST);
         jfAktionEdit.add(jpAktion, BorderLayout.EAST);
+        jfAktionEdit.add(jbNeu, BorderLayout.NORTH);
         jfAktionEdit.add(jbEdit, BorderLayout.CENTER);
         jfAktionEdit.add(jbSave, BorderLayout.SOUTH);
+
+
+        ActionListener alNeu = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              new AktionEditor(null);
+            }
+        };
 
         ActionListener alEdit = new ActionListener() {
             @Override
@@ -400,6 +409,7 @@ public class AktionEditor extends Ansicht {
             }
         };
 
+        jbNeu.addActionListener(alNeu);
         jbEdit.addActionListener(alEdit);
         jbSave.addActionListener(alSave);
 
@@ -421,8 +431,8 @@ public class AktionEditor extends Ansicht {
 
 
 
-    public void getAktion() {
-
-    }
+//    public Aktion getAktion() {
+//        return Aktion();
+//    }
 
 }
