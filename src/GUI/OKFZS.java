@@ -4,6 +4,8 @@ import Datenbank.Datenbank;
 import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import Datenhaltung.Vorgang;
+import GUI.Werkzeug.KFZEditor;
+import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -157,6 +159,11 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "autoAnl": {
+
+                    anzeige.add(new KFZEditor(this), "autoAnl");
+                    cards.show(anzeige, "autoAnl");
+
+
                 break;
             }
             case "personAnz": {
@@ -170,6 +177,15 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "personAnl": {
+
+                try{
+                    anzeige.add(new PersonenEditor(this), "personAnl");
+                    cards.show(anzeige, "personAnl");
+
+                }catch(SQLException e){
+
+                }
+
                 break;
             }
             case "statstik": {
