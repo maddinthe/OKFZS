@@ -633,6 +633,35 @@ public class Datenbank {
         r.close();
         return vorgaenge;
     }
+    public Vorgang einVorgang(KFZ kfz) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_kfz_fin='"+kfz.getFin()+"'");
+        Vorgang vorgang = null;
+        while(r.next())
+        {
+            long id = r.getLong("vid");
+            String fin = r.getString("fk_t_kfz_fin");
+            long pid=r.getLong("fk_t_person_pid");
+            long ek=r.getLong("fk_t_verkaeufer_pid_ek");
+            long vk=r.getLong("fk_t_verkaeufer_pid_vk");
+            double epreis = r.getDouble("epreis");
+            double vpreis = r.getDouble("vpreis");
+            int km = r.getInt("km");
+            String schaeden =r.getString("Schaeden");
+            Date vkdatum = r.getDate("vkdatum");
+            Date ekdatum = r.getDate("ekdatum");
+            String kennz = r.getString("kennz");
+            String rabattgrund = r.getString("rabattgrund");
+            Date tuev = r.getDate("tuev");
+            String sonstvereinb = r.getString("sonstvereinb");
+            double vpreisplan = r.getDouble("vpreisplan");
+            vorgang = new Vorgang(id,einePerson(pid),einVerkaufer(vk),einVerkaufer(ek),einKfz(fin),vpreis,epreis,vpreisplan,vkdatum,rabattgrund,sonstvereinb,ekdatum,schaeden,tuev,kennz,km);
+
+
+        }
+        r.close();
+        return vorgang;
+    }
 
 
 

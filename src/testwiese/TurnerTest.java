@@ -17,7 +17,7 @@ public class TurnerTest {
     public static void main(String[] args) throws SQLException {
         OKFZS okfzs = new OKFZS();
         //PersonenEditor editor = new PersonenEditor(okfzs,okfzs.getDatenbank().einePerson(1));
-        KFZEditor editor1 = new KFZEditor(okfzs,okfzs.getDatenbank().einKfz("12313"));
+        KFZEditor editor1 = new KFZEditor(okfzs,okfzs.getDatenbank().einKfz("123"));
     }
     public static java.sql.Date umwandeln(String datum) {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
