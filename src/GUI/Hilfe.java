@@ -9,23 +9,27 @@ import java.awt.*;
  */
 public class Hilfe extends Ansicht{
     private String hilfeAnmelden = "Um sich anzumelden nutzen Sie bitte Ihren Nutzernamen und das Passwort";
-    private String hilfeAutos = "Um sich anzumelden nutzen Sie bitte Ihren Nutzernamen und das Passwort";
-    private String hilfetext3;
-    private String hilfetext4;
+    private String hilfeAutos = "Lassen Sie sich alle Fahrzeuge und Daten anzeigen";
+    private String hilfePerson = "Hier legen Sie Personen an, ändern diese oder sehen ihre Daten";
+    private String hilfeStatistik ="Lassen Sie sich verschiedene Statistiken anzeigen";
 
 
     public Hilfe(OKFZS okfzsInstanz){
         super(okfzsInstanz);
+
         JFrame jfHilfe = new JFrame("Ostsee KFZ Hilfe");
-        JPanel jpHilfe = new JPanel();
-        jpHilfe.setLayout(new BoxLayout(jpHilfe, BoxLayout.Y_AXIS));
+        JPanel jpHilfeLinks = new JPanel();
+        jpHilfeLinks.setLayout(new BoxLayout(jpHilfeLinks, BoxLayout.Y_AXIS));
+
+        JPanel jpHilfeRechts = new JPanel();
+        jpHilfeRechts.setLayout(new BoxLayout(jpHilfeRechts, BoxLayout.Y_AXIS));
 
         JPanel jpHilfeAnmeldenUeberschrift = new JPanel();
         jpHilfeAnmeldenUeberschrift.setBorder(new TitledBorder("Anmelden"));
         jpHilfeAnmeldenUeberschrift.setLayout(new BoxLayout(jpHilfeAnmeldenUeberschrift, BoxLayout.Y_AXIS));
 
-        JPanel jpHilfeAnmeldung = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JTextArea jtHilfeAnmeldung = new JTextArea(20,20);
+        JPanel jpHilfeAnmeldung = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        JTextArea jtHilfeAnmeldung = new JTextArea(80,50);
         jtHilfeAnmeldung.setText(hilfeAnmelden);
         jtHilfeAnmeldung.setEditable(false);
         jpHilfeAnmeldung.add(jtHilfeAnmeldung);
@@ -35,20 +39,46 @@ public class Hilfe extends Ansicht{
         jpHilfeAutoUeberschrift.setLayout(new BoxLayout(jpHilfeAutoUeberschrift, BoxLayout.Y_AXIS));
 
         JPanel jpHilfeAutos = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        JTextArea jtHilfeAutos = new JTextArea(20,20);
+        JTextArea jtHilfeAutos = new JTextArea(80,50);
         jtHilfeAutos.setText(hilfeAutos);
         jtHilfeAutos.setEditable(false);
-        jpHilfeAutos.add(jtHilfeAnmeldung);
+        jpHilfeAutos.add(jtHilfeAutos);
+
+        JPanel jpHilfePersonUeberschrift = new JPanel();
+        jpHilfePersonUeberschrift.setBorder(new TitledBorder("Personen"));
+        jpHilfePersonUeberschrift.setLayout(new BoxLayout(jpHilfePersonUeberschrift, BoxLayout.Y_AXIS));
+
+        JPanel jpHilfePerson = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        JTextArea jtHilfePerson = new JTextArea(80,50);
+        jtHilfePerson.setText(hilfePerson);
+        jtHilfePerson.setEditable(false);
+        jpHilfePerson.add(jtHilfePerson);
+
+        JPanel jpHilfeStatistikUeberschrift = new JPanel();
+        jpHilfeStatistikUeberschrift.setBorder(new TitledBorder("Statistik"));
+        jpHilfeStatistikUeberschrift.setLayout(new BoxLayout(jpHilfeStatistikUeberschrift, BoxLayout.Y_AXIS));
+
+        JPanel jpHilfeStatistik = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        JTextArea jtHilfeStatistik = new JTextArea(80,50);
+        jtHilfeStatistik.setText(hilfeStatistik);
+        jtHilfeStatistik.setEditable(false);
+        jpHilfeStatistik.add(jtHilfeStatistik);
 
         jpHilfeAnmeldenUeberschrift.add(jpHilfeAnmeldung);
         jpHilfeAutoUeberschrift.add(jpHilfeAutos);
+        jpHilfePersonUeberschrift.add(jpHilfePerson);
+        jpHilfeStatistikUeberschrift.add(jpHilfeStatistik);
 
-        jfHilfe.add(jpHilfeAnmeldenUeberschrift, BorderLayout.WEST);
-        jfHilfe.add(jpHilfeAutoUeberschrift, BorderLayout.WEST);
+        jpHilfeLinks.add(jpHilfeAnmeldenUeberschrift);
+        jpHilfeLinks.add(jpHilfeAutoUeberschrift);
+        jpHilfeRechts.add(jpHilfePersonUeberschrift);
+        jpHilfeRechts.add(jpHilfeStatistikUeberschrift);
+
+        jfHilfe.add(jpHilfeLinks,BorderLayout.WEST);
+        jfHilfe.add(jpHilfeRechts,BorderLayout.CENTER);
 
         //JFrame jf Größe mitgeben
         jfHilfe.setSize(1024, 768);
-
 
         //JFrame jf auf Bildschirm plazieren
         jfHilfe.setLocation(200, 400);
