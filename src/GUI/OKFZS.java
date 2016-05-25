@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,23 +102,16 @@ public class OKFZS extends JFrame {
         return breite;
     }
 
-    public void setBenutzer(Verkaeufer benutzer) {
-        this.benutzer = benutzer;
+    public JPanel getAnzeige() {
+        return anzeige;
     }
 
-    public void anzeigen(String ziel){
-        switch (ziel){
-            case "uebersicht":{
-                List<Vorgang> vorgangList=null;
-                try{vorgangList=datenbank.VorgaengeZuVerkaeufer(datenbank.einVerkaufer(5));}
-                catch (SQLException e){
+    public CardLayout getCards() {
+        return cards;
+    }
 
-                }
-                anzeige.add(new Uebersicht(this,vorgangList),"uebersicht");
-                cards.show(anzeige,"uebersicht");
-            }
-        }
-        System.out.println(ziel);
+    public void setBenutzer(Verkaeufer benutzer) {
+        this.benutzer = benutzer;
     }
 
     //todo:doku und evtl weitere details

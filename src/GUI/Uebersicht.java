@@ -14,7 +14,6 @@ public class Uebersicht extends Ansicht {
     //todo: unfertig und doku
     public Uebersicht(OKFZS okfzsInstanz, List<Vorgang> vorgaenge) {
         super(okfzsInstanz);
-        System.out.println(vorgaenge.size());
         String[][] td = new String[vorgaenge.size()][4];
 
 
@@ -31,6 +30,7 @@ public class Uebersicht extends Ansicht {
 
 
         JTable tabelle = new JTable(td, head);
+        tabelle.setAutoCreateRowSorter(true);
         tabelle.setFont(tabelle.getFont().deriveFont(20));
 
         this.add(new JScrollPane(tabelle));

@@ -398,6 +398,27 @@ public class Datenbank {
 //        conn.close();
         return verkaeufer;
     }
+    public Verkaeufer einVerkaufer(String anmeldeName) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_verkaeufer WHERE anmeldename='" + anmeldeName + "'");
+        ResultSetMetaData metadata = r.getMetaData();
+        int spalten = metadata.getColumnCount();
+        Verkaeufer verkaeufer=null;
+        while(r.next()) // as long as valid data is in the result set
+        {
+            long pid = r.getLong("fk_t_person_pid");
+            String anmeldename = r.getString("anmeldename");
+            String passwort = r.getString("passwort");
+            Date inaktivseit = r.getDate("inaktivseit");
+            boolean aktiv = (inaktivseit==null);
+
+
+            verkaeufer = new Verkaeufer(anmeldename,passwort,einePerson(pid),aktiv,isAdmin(pid));
+            // go to next line in the customer table
+        }
+        r.close();
+        return verkaeufer;
+    }
     public boolean isAdmin(long id) throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_admins WHERE fk_t_verkaeufer_fk_t_person_pid=" + id + "");
