@@ -17,111 +17,115 @@ import java.util.Map;
  * Created by mtheilen on 23.05.2016.
  */
 //todo:doku und hinterlegen der listener das die entsprechenden ansichten geladen werden
-public class Menue extends JMenuBar{
+public class Menue extends JMenuBar {
     private OKFZS okfzsInstanz;
-    private Map<String,JMenuItem[]> menues=new HashMap<>();
+    private Map<String, JMenuItem[]> menues = new HashMap<>();
 
-    public Menue(OKFZS okfzsInstanz){
+    public Menue(OKFZS okfzsInstanz) {
         super();
-        this.okfzsInstanz=okfzsInstanz;
-        ActionListener al=new ActionListener() {
+        this.okfzsInstanz = okfzsInstanz;
+        ActionListener al = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switch (e.getActionCommand()){
-                    case "Beenden":{
+                switch (e.getActionCommand()) {
+                    case "Beenden": {
                         okfzsInstanz.anzeigen("ende");
                         break;
                     }
-                    case"Übersicht anzeigen":{
+                    case "Übersicht anzeigen": {
                         okfzsInstanz.anzeigen("uebersicht");
                         break;
                     }
-                    case"Import/Export":{
+                    case "Import/Export": {
                         okfzsInstanz.anzeigen("impexp");
                         break;
                     }
-                    case"Autos anzeigen":{
+                    case "Autos anzeigen": {
                         okfzsInstanz.anzeigen("autoAnz");
                         break;
                     }
-                    case"Auto anlegen":{
+                    case "Auto anlegen": {
                         okfzsInstanz.anzeigen("autoAnl");
                         break;
                     }
-                    case"Personen anzeigen":{
+                    case "Personen anzeigen": {
                         okfzsInstanz.anzeigen("personAnz");
                         break;
                     }
-                    case"Person anlegen":{
+                    case "Person anlegen": {
                         okfzsInstanz.anzeigen("personAnl");
                         break;
                     }
-                    case"Statistik Anzeigen":{
+                    case "Person ändern": {
+                        okfzsInstanz.anzeigen("personAend");
+                        break;
+                    }
+                    case "Statistik Anzeigen": {
                         okfzsInstanz.anzeigen("statstik");
                         break;
                     }
-                    case"Über":{
+                    case "Über": {
                         okfzsInstanz.anzeigen("ueber");
                         break;
                     }
-                    case"Hilfe":{
+                    case "Hilfe": {
                         okfzsInstanz.anzeigen("hilfe");
                         break;
                     }
                 }
             }
         };
-        JMenu ubersicht=new JMenu("Übersicht");
-        JMenuItem uebersichAnz=new JMenuItem("Übersicht anzeigen");
+        JMenu ubersicht = new JMenu("Übersicht");
+        JMenuItem uebersichAnz = new JMenuItem("Übersicht anzeigen");
         uebersichAnz.addActionListener(al);
         ubersicht.add(uebersichAnz);
-        JMenuItem impExp=new JMenuItem("Import/Export");
+        JMenuItem impExp = new JMenuItem("Import/Export");
         impExp.addActionListener(al);
         ubersicht.add(impExp);
-        JMenuItem end=new JMenuItem("Beenden");
+        JMenuItem end = new JMenuItem("Beenden");
         end.addActionListener(al);
         ubersicht.add(end);
 
-        JMenu autos=new JMenu("Autos");
-        JMenuItem autoAnz=new JMenuItem("Autos anzeigen");
+        JMenu autos = new JMenu("Autos");
+        JMenuItem autoAnz = new JMenuItem("Autos anzeigen");
         autoAnz.addActionListener(al);
         autos.add(autoAnz);
-        JMenuItem autoAnl=new JMenuItem("Auto anlegen");
+        JMenuItem autoAnl = new JMenuItem("Auto anlegen");
         autoAnl.addActionListener(al);
         autos.add(autoAnl);
-        JMenuItem autoAendern=new JMenuItem("Auto ändern");
+        JMenuItem autoAendern = new JMenuItem("Auto ändern");
         autoAendern.addActionListener(al);
 
         autos.add(autoAendern);
-        JMenuItem autoVerkaufen=new JMenuItem("Auto Verkaufen");
+        JMenuItem autoVerkaufen = new JMenuItem("Auto Verkaufen");
         autoVerkaufen.addActionListener(al);
         autos.add(autoVerkaufen);
 
 
-        JMenu pers=new JMenu("Personen");
-        JMenuItem persAnz=new JMenuItem("Personen anzeigen");
+        JMenu pers = new JMenu("Personen");
+        JMenuItem persAnz = new JMenuItem("Personen anzeigen");
         persAnz.addActionListener(al);
         pers.add(persAnz);
-        JMenuItem persAnl=new JMenuItem("Person anlegen");
+        JMenuItem persAnl = new JMenuItem("Person anlegen");
         persAnl.addActionListener(al);
         pers.add(persAnl);
-        JMenuItem persAendern=new JMenuItem("Person ändern");
+        JMenuItem persAendern = new JMenuItem("Person ändern");
         persAendern.addActionListener(al);
         persAendern.setEnabled(false);
         pers.add(persAendern);
 
 
-        JMenu stats=new JMenu("Statistik");
-        JMenuItem statsAnz=new JMenuItem("Statistik Anzeigen");
+        JMenu stats = new JMenu("Statistik");
+        JMenuItem statsAnz = new JMenuItem("Statistik Anzeigen");
         statsAnz.addActionListener(al);
         stats.add(statsAnz);
 
 
-        JMenu frageZeichen=new JMenu("?");
-        JMenuItem ueber=new JMenuItem("Über");
+        JMenu frageZeichen = new JMenu("?");
+        JMenuItem ueber = new JMenuItem("Über");
         ueber.addActionListener(al);
         frageZeichen.add(ueber);
-        JMenuItem help=new JMenuItem("Hilfe");
+        JMenuItem help = new JMenuItem("Hilfe");
         help.addActionListener(al);
         frageZeichen.add(help);
 
@@ -133,10 +137,10 @@ public class Menue extends JMenuBar{
         this.add(frageZeichen);
 
         menues.put("immerAn", new JMenuItem[]{ueber, help, end});
-        menues.put("uebersicht", new JMenuItem[]{uebersichAnz,ueber, help, end, impExp, statsAnz, autoAnz, autoAnl, persAnz, persAnl});
-        menues.put("autolist",new JMenuItem[]{uebersichAnz,ueber,help,end,impExp,statsAnz,autoAnz,autoAnl,persAnz,persAnl,autoAendern,autoVerkaufen});
-        menues.put("perslist",new JMenuItem[]{uebersichAnz,ueber,help,end,impExp,statsAnz,autoAnz,autoAnl,persAnz,persAnl,persAendern});
-        menues.put("alle",new JMenuItem[]{ueber,help,end,impExp,statsAnz,autoAnz,autoAnl,persAnz,persAnl,persAendern,autoAendern,autoVerkaufen,uebersichAnz});
+        menues.put("uebersicht", new JMenuItem[]{uebersichAnz, ueber, help, end, impExp, statsAnz, autoAnz, autoAnl, persAnz, persAnl});
+        menues.put("autolist", new JMenuItem[]{uebersichAnz, ueber, help, end, impExp, statsAnz, autoAnz, autoAnl, persAnz, persAnl, autoAendern, autoVerkaufen});
+        menues.put("perslist", new JMenuItem[]{uebersichAnz, ueber, help, end, impExp, statsAnz, autoAnz, autoAnl, persAnz, persAnl, persAendern});
+        menues.put("alle", new JMenuItem[]{ueber, help, end, impExp, statsAnz, autoAnz, autoAnl, persAnz, persAnl, persAendern, autoAendern, autoVerkaufen, uebersichAnz});
 
         menueUmschalten("anmeldung");
 
@@ -147,37 +151,39 @@ public class Menue extends JMenuBar{
      *
      * @param cardID Mögliche Werte["anmeldung","ende","uebersicht","impexp","autoAnz","autoAnl","personAnz","personAnl","statstik","ueber","hilfe"]
      */
-    public void menueUmschalten(String cardID){
-        for(JMenuItem jmi:menues.get("alle")){
+    public void menueUmschalten(String cardID) {
+        for (JMenuItem jmi : menues.get("alle")) {
             jmi.setEnabled(false);
         }
         switch (cardID) {
             case "uebersicht": {
-                for(JMenuItem jmi:menues.get("uebersicht")){
+                for (JMenuItem jmi : menues.get("uebersicht")) {
                     jmi.setEnabled(true);
                 }
                 break;
             }
 
             case "autoAnz": {
-                for(JMenuItem jmi:menues.get("autolist")){
+                for (JMenuItem jmi : menues.get("autolist")) {
                     jmi.setEnabled(true);
                 }
                 break;
             }
 
             case "personAnz": {
-                for(JMenuItem jmi:menues.get("perslist")){
+                for (JMenuItem jmi : menues.get("perslist")) {
                     jmi.setEnabled(true);
                 }
-                break; }
+                break;
+            }
             case "impexp":
             case "autoAnl":
             case "personAnl":
+            case "personAend":
             case "statstik":
             case "ueber":
-            case "hilfe":{
-                for(JMenuItem jmi:menues.get("uebersicht")){
+            case "hilfe": {
+                for (JMenuItem jmi : menues.get("uebersicht")) {
                     jmi.setEnabled(true);
                 }
                 break;
@@ -186,7 +192,7 @@ public class Menue extends JMenuBar{
                 System.out.println(cardID);
         }
 
-        for(JMenuItem jmi:menues.get("immerAn")){
+        for (JMenuItem jmi : menues.get("immerAn")) {
             jmi.setEnabled(true);
         }
 

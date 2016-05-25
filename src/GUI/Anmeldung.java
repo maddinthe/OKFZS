@@ -20,10 +20,10 @@ public class Anmeldung extends Ansicht {
         JPasswordField passwort=new JPasswordField(30);
         JButton anmeldebutton = new JButton("Anmelden");
 
-        anmeldebutton.addActionListener(new ActionListener() {
+        ActionListener al=new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (name.getText().length() == 0 || passwort.getText().length() == 0) {
+                if (name.getText().length() == 0 || passwort.getPassword().length == 0) {
                     JOptionPane.showMessageDialog(null, "Bitte Benutzername und Passwort eingeben", "Anmeldefehler", JOptionPane.ERROR_MESSAGE);
                 } else {
                     Verkaeufer v = anmelden(name.getText(), String.copyValueOf(passwort.getPassword()).hashCode() + "");
@@ -36,7 +36,10 @@ public class Anmeldung extends Ansicht {
                     }
                 }
             }
-        });
+        };
+
+        passwort.addActionListener(al);
+        anmeldebutton.addActionListener(al);
 
         this.add(nameLabel);
         this.add(name);

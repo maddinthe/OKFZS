@@ -141,7 +141,9 @@ public class Datenbank {
     }
 
 
-
+    public void closeDBConnection() throws SQLException {
+        conn.close();
+    }
 
     public void insertPerson(Person person) throws SQLException {
         Statement stmt = conn.createStatement();

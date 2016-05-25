@@ -1,7 +1,6 @@
 package GUI;
 
 import Datenbank.Datenbank;
-import Datenhaltung.KFZ;
 import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import Datenhaltung.Vorgang;
@@ -30,6 +29,7 @@ public class OKFZS extends JFrame {
     private int breite = 1024;
     private JPanel anzeige;
     private CardLayout cards;
+    private Ansicht aktuelleAnsicht;
 
     //todo: stub
     public OKFZS() {
@@ -88,6 +88,11 @@ public class OKFZS extends JFrame {
      */
     private void beenden() {
         System.out.println("ende");
+        try {
+            datenbank.closeDBConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         //todo: schließende sachen tuen;
         System.exit(0);
     }
@@ -127,7 +132,7 @@ public class OKFZS extends JFrame {
 
     /**
      * Lässt die Entsprechende Karte im Fenster anzeigen und lässt die entsprechenden Menüs aktiv/inaktiv werden
-     * @param cardID Mögliche Werte["ende","uebersicht","impexp","autoAnz","autoAnl","personAnz","personAnl","statstik","ueber","hilfe"]
+     * @param cardID Mögliche Werte["ende","uebersicht","impexp","autoAnz","autoAnl","personAnz","personAnl","personAend","statstik","ueber","hilfe"]
      */
     public void anzeigen(String cardID) {
         Menue menue= (Menue)getJMenuBar();
@@ -143,7 +148,8 @@ public class OKFZS extends JFrame {
                 try{vorgangList=datenbank.VorgaengeZuVerkaeufer(benutzer);}
                 catch (SQLException e){
                 }
-                anzeige.add(new Uebersicht(this, vorgangList), "uebersicht");
+                aktuelleAnsicht=new Uebersicht(this, vorgangList);
+                anzeige.add(aktuelleAnsicht, "uebersicht");
                 cards.show(anzeige, "uebersicht");
                 break;
             }
@@ -153,15 +159,16 @@ public class OKFZS extends JFrame {
             case "autoAnz": {
                 java.util.List<Vorgang> kfzList=null;
                 try{kfzList=datenbank.unverkaufteVorgaenge();
-                    anzeige.add(new KFZListe(this, kfzList), "autoAnz");
+                    aktuelleAnsicht=new KFZListe(this, kfzList);
+                    anzeige.add(aktuelleAnsicht, "autoAnz");
                     cards.show(anzeige, "autoAnz");}
                 catch (SQLException e){
                 }
                 break;
             }
             case "autoAnl": {
-
-                    anzeige.add(new KFZEditor(this), "autoAnl");
+                    aktuelleAnsicht=new KFZEditor(this);
+                    anzeige.add(aktuelleAnsicht, "autoAnl");
                     cards.show(anzeige, "autoAnl");
 
 
@@ -170,7 +177,8 @@ public class OKFZS extends JFrame {
             case "personAnz": {
                 java.util.List<Person> personList=null;
                 try{personList=datenbank.allePersonen();
-                    anzeige.add(new PersonenListe(this, personList), "personList");
+                    aktuelleAnsicht=new PersonenListe(this, personList);
+                    anzeige.add(aktuelleAnsicht, "personList");
                     cards.show(anzeige, "personList");}
                 catch (SQLException e){
                 }
@@ -180,7 +188,8 @@ public class OKFZS extends JFrame {
             case "personAnl": {
 
                 try{
-                    anzeige.add(new PersonenEditor(this), "personAnl");
+                    aktuelleAnsicht=new PersonenEditor(this);
+                    anzeige.add(aktuelleAnsicht, "personAnl");
                     cards.show(anzeige, "personAnl");
 
                 }catch(SQLException e){
@@ -189,12 +198,22 @@ public class OKFZS extends JFrame {
 
                 break;
             }
+            case "personAend":{
+                    Person edit=((PersonenListe) aktuelleAnsicht).getSelectedPers();
+                    aktuelleAnsicht=new PersonenEditor(this,edit);
+                    anzeige.add(aktuelleAnsicht, "personAnl");
+                    cards.show(anzeige, "personAnl");
+
+
+                break;
+            }
             case "statstik": {
                 java.util.List<Vorgang> vorgangList=null;
                 try{vorgangList=datenbank.VorgaengeZuVerkaeufer(benutzer);}
                 catch (SQLException e){
                 }
-                anzeige.add(new Statistik(this, vorgangList), "statstik");
+                aktuelleAnsicht=new Statistik(this, vorgangList);
+                anzeige.add(aktuelleAnsicht, "statstik");
                 cards.show(anzeige, "statstik");
                 break;
             }
