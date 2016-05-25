@@ -127,7 +127,10 @@ public class Vorgang {
      * @return Anteiliger gewinn des übergebenen verkäufers in wärung
      */
     public double getGewinn(Verkaeufer verkaeufer) {
-        if (verkaeufer.equals(this.einkauefer) || verkaeufer.equals(this.verkaeufer)) return getGewinn() / 2;
+        if (verkaeufer.equals(this.einkauefer) || verkaeufer.equals(this.verkaeufer)){
+            if(this.verkaeufer.equals(this.einkauefer))return getGewinn();
+            return getGewinn() / 2;
+        }
         return 0;
     }
 

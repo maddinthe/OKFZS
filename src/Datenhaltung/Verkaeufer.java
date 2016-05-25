@@ -41,4 +41,23 @@ public class Verkaeufer {
     public boolean istAdmin() {
         return istAdmin;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Verkaeufer that = (Verkaeufer) o;
+
+        if (!anmeldeName.equals(that.anmeldeName)) return false;
+        return person.equals(that.person);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = anmeldeName.hashCode();
+        result = 31 * result + person.hashCode();
+        return result;
+    }
 }
