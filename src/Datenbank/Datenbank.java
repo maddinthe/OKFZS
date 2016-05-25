@@ -601,7 +601,7 @@ public class Datenbank {
         r.close();
         return gewinn;
     }
-    public List<Vorgang> alleVorgaenge(Verkaeufer verkaeufer) throws SQLException{
+    public List<Vorgang> alleVorgaenge() throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang");
         List<Vorgang> vorgaenge = new ArrayList<>();
