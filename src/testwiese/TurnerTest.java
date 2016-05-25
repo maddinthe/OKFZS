@@ -1,5 +1,6 @@
 package testwiese;
 
+import Datenhaltung.Person;
 import GUI.OKFZS;
 import GUI.Werkzeug.PersonenEditor;
 
