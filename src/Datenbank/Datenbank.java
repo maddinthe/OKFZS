@@ -22,6 +22,15 @@ public class Datenbank {
     private static Connection conn;
     private Datenbank() {
     }
+    public static void schließen(){
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
     public static Datenbank getInstance(String host, int port) throws ClassNotFoundException, SQLException {
         if (datenbank == null) {
@@ -160,7 +169,7 @@ public class Datenbank {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
                     " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','"+ person.getVorname()+"','"+ person.getGeburtstag()+"','"+person.getAnschrift()+"',"+person.getPostleitzahl()+",'"+person.getOrt()+"','"+person.getUstID()+"')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"',vorname='"+person.getVorname()+"',gebtag='"+person.getGeburtstag()+"',anschrift='"+person.getAnschrift()+"',plz="+person.getPostleitzahl()+",ort='"+person.getOrt()+"', ust_id='"+person.getUstID()+"'WHERE pid=" + person.getPid() + "");
+            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='" + person.getName() + "',vorname='" + person.getVorname() + "',gebtag='" + person.getGeburtstag() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
 
         }
     }
@@ -293,10 +302,9 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk="+verkaeufer.getPerson().getPid()+"");
         List<Vorgang> vorgaenge = new ArrayList<>();
-        ResultSetMetaData metadata = r.getMetaData();
-        int spalten = metadata.getColumnCount();
 
-        while(r.next()) // as long as valid data is in the result set
+
+        while(r.next())
         {
             long id = r.getLong("vid");
             String fin = r.getString("fk_t_kfz_fin");
@@ -316,20 +324,17 @@ public class Datenbank {
             double vpreisplan = r.getDouble("vpreisplan");
             Vorgang vorgang = new Vorgang(id,einePerson(pid),einVerkaufer(vk),einVerkaufer(ek),einKfz(fin),vpreis,epreis,vpreisplan,vkdatum,rabattgrund,sonstvereinb,ekdatum,schaeden,tuev,kennz,km);
             vorgaenge.add(vorgang);
-            // go to next line in the customer table
+
         }
         r.close();
-//        conn.close();
         return vorgaenge;
     }
     public Person einePerson(long id) throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_person WHERE pid=" + id + "");
-        ResultSetMetaData metadata = r.getMetaData();
-        int spalten = metadata.getColumnCount();
         Person personret=null;
 
-        while(r.next()) // as long as valid data is in the result set
+        while(r.next())
         {
             long pid = r.getLong("pid");
             String anrede = r.getString("anrede");
@@ -343,20 +348,17 @@ public class Datenbank {
 
 
             personret = new Person(pid, anrede, name,vorname,gebtag,anschrift,plz,ort,ust_id);
-            // go to next line in the customer table
+
         }
         r.close();
-//        conn.close();
         return personret;
     }
     public KFZ einKfz(String fin) throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz WHERE fin='" + fin + "'");
-        ResultSetMetaData metadata = r.getMetaData();
-        int spalten = metadata.getColumnCount();
         KFZ kfz=null;
 
-        while(r.next()) // as long as valid data is in the result set
+        while(r.next())
         {
             String id = r.getString("fin");
             String hersteller = r.getString("hersteller");
@@ -373,16 +375,13 @@ public class Datenbank {
             // go to next line in the customer table
         }
         r.close();
-//        conn.close();
         return kfz;
     }
     public Verkaeufer einVerkaufer(long id) throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_verkaeufer WHERE fk_t_person_pid=" + id + "");
-        ResultSetMetaData metadata = r.getMetaData();
-        int spalten = metadata.getColumnCount();
         Verkaeufer verkaeufer=null;
-        while(r.next()) // as long as valid data is in the result set
+        while(r.next())
         {
             long pid = r.getLong("fk_t_person_pid");
             String anmeldename = r.getString("anmeldename");
@@ -392,19 +391,16 @@ public class Datenbank {
 
 
             verkaeufer = new Verkaeufer(anmeldename,passwort,einePerson(id),aktiv,isAdmin(id));
-            // go to next line in the customer table
+
         }
         r.close();
-//        conn.close();
         return verkaeufer;
     }
     public Verkaeufer einVerkaufer(String anmeldeName) throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_verkaeufer WHERE anmeldename='" + anmeldeName + "'");
-        ResultSetMetaData metadata = r.getMetaData();
-        int spalten = metadata.getColumnCount();
         Verkaeufer verkaeufer=null;
-        while(r.next()) // as long as valid data is in the result set
+        while(r.next())
         {
             long pid = r.getLong("fk_t_person_pid");
             String anmeldename = r.getString("anmeldename");
@@ -412,9 +408,8 @@ public class Datenbank {
             Date inaktivseit = r.getDate("inaktivseit");
             boolean aktiv = (inaktivseit==null);
 
-
             verkaeufer = new Verkaeufer(anmeldename,passwort,einePerson(pid),aktiv,isAdmin(pid));
-            // go to next line in the customer table
+
         }
         r.close();
         return verkaeufer;
@@ -422,43 +417,48 @@ public class Datenbank {
     public boolean isAdmin(long id) throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_admins WHERE fk_t_verkaeufer_fk_t_person_pid=" + id + "");
-        ResultSetMetaData metadata = r.getMetaData();
-        int spalten = metadata.getColumnCount();
         boolean isAdmin=false;
 
 
-        while(r.next()) // as long as valid data is in the result set
+        while(r.next())
         {
             long pid = r.getLong("fk_t_verkaeufer_fk_t_person_pid");
             if (pid==id)isAdmin=true;
-
-
-            // go to next line in the customer table
         }
         r.close();
-//        conn.close();
         return isAdmin;
     }
     public Notiz eineNotiz(Person person) throws SQLException{
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_notiz WHERE fk_t_person_pid=" + person.getPid() + "");
-        ResultSetMetaData metadata = r.getMetaData();
-        int spalten = metadata.getColumnCount();
         Notiz notiz =null;
-        while(r.next()) // as long as valid data is in the result set
+        while(r.next())
         {
             long nid = r.getLong("nid");
             String text = r.getString("text");
             Date datum = r.getDate("datum");
-
             notiz = new Notiz(nid,person,datum,text);
             person.addNotiz(notiz);
-
-            // go to next line in the customer table
         }
         r.close();
-//        conn.close();
         return notiz;
+    }
+    public Erreichbarkeit eineErreichbarkeit(Person person) throws SQLException{
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE fk_t_person_pid=" + person.getPid() + "");
+        Erreichbarkeit erreichbarkeit =null;
+        while(r.next())
+        {
+            long eid = r.getLong("eid");
+            String tel = r.getString("tel");
+            String handy = r.getString("handy");
+            String email = r.getString("email");
+            String text = r.getString("text");
+            erreichbarkeit = new Erreichbarkeit(eid,person,tel,handy,email,text);
+            person.addErreichbarkeit(erreichbarkeit);
+        }
+        r.close();
+        return erreichbarkeit;
     }
 
 

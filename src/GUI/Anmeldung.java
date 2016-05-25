@@ -32,7 +32,7 @@ public class Anmeldung extends Ansicht {
                         JOptionPane.showMessageDialog(null, "Benutzername und/oder Passwort falsch", "Anmeldefehler", JOptionPane.ERROR_MESSAGE);
                     } else {
                         instanz.setBenutzer(v);
-                        ((Menue)getOKFZSInstanz().getJMenuBar()).anzeigen("uebersicht");
+                        getOKFZSInstanz().anzeigen("uebersicht");
                     }
                 }
             }

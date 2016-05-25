@@ -9,7 +9,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mtheilen on 23.05.2016.
@@ -17,9 +19,8 @@ import java.util.List;
 //todo:doku und hinterlegen der listener das die entsprechenden ansichten geladen werden
 public class Menue extends JMenuBar{
     private OKFZS okfzsInstanz;
-    private JMenu[] alleMenues;
-    private JMenu[] autoMenues;
-    private JMenu[] persMenues;
+    private Map<String,JMenuItem[]> menues=new HashMap<>();
+
     public Menue(OKFZS okfzsInstanz){
         super();
         this.okfzsInstanz=okfzsInstanz;
@@ -28,43 +29,43 @@ public class Menue extends JMenuBar{
             public void actionPerformed(ActionEvent e) {
                 switch (e.getActionCommand()){
                     case "Beenden":{
-                        anzeigen("ende");
+                        okfzsInstanz.anzeigen("ende");
                         break;
                     }
                     case"Übersicht anzeigen":{
-                        anzeigen("uebersicht");
+                        okfzsInstanz.anzeigen("uebersicht");
                         break;
                     }
                     case"Import/Export":{
-                        anzeigen("impexp");
+                        okfzsInstanz.anzeigen("impexp");
                         break;
                     }
                     case"Autos anzeigen":{
-                        anzeigen("autoAnz");
+                        okfzsInstanz.anzeigen("autoAnz");
                         break;
                     }
                     case"Auto anlegen":{
-                        anzeigen("autoAnl");
+                        okfzsInstanz.anzeigen("autoAnl");
                         break;
                     }
                     case"Personen anzeigen":{
-                        anzeigen("personAnz");
+                        okfzsInstanz.anzeigen("personAnz");
                         break;
                     }
                     case"Person anlegen":{
-                        anzeigen("personAnl");
+                        okfzsInstanz.anzeigen("personAnl");
                         break;
                     }
                     case"Statistik Anzeigen":{
-                        anzeigen("statstik");
+                        okfzsInstanz.anzeigen("statstik");
                         break;
                     }
                     case"Über":{
-                        anzeigen("ueber");
+                        okfzsInstanz.anzeigen("ueber");
                         break;
                     }
                     case"Hilfe":{
-                        anzeigen("hilfe");
+                        okfzsInstanz.anzeigen("hilfe");
                         break;
                     }
                 }
@@ -90,11 +91,10 @@ public class Menue extends JMenuBar{
         autos.add(autoAnl);
         JMenuItem autoAendern=new JMenuItem("Auto ändern");
         autoAendern.addActionListener(al);
-        autoAendern.setEnabled(false);
+
         autos.add(autoAendern);
         JMenuItem autoVerkaufen=new JMenuItem("Auto Verkaufen");
         autoVerkaufen.addActionListener(al);
-        autoVerkaufen.setEnabled(false);
         autos.add(autoVerkaufen);
 
 
@@ -131,47 +131,70 @@ public class Menue extends JMenuBar{
         this.add(pers);
         this.add(stats);
         this.add(frageZeichen);
-        alleMenues=new JMenu[]{ubersicht,autos,pers,stats};
-        autoMenues=new JMenu[]{ubersicht,autos,stats};
-        persMenues=new JMenu[]{ubersicht,pers,stats};
 
-        inaktivSchalten(alleMenues);
+        menues.put("immerAn", new JMenuItem[]{ueber, help, end});
+        menues.put("uebersicht", new JMenuItem[]{uebersichAnz,ueber, help, end, impExp, statsAnz, autoAnz, autoAnl, persAnz, persAnl});
+        menues.put("autolist",new JMenuItem[]{uebersichAnz,ueber,help,end,impExp,statsAnz,autoAnz,autoAnl,persAnz,persAnl,autoAendern,autoVerkaufen});
+        menues.put("perslist",new JMenuItem[]{uebersichAnz,ueber,help,end,impExp,statsAnz,autoAnz,autoAnl,persAnz,persAnl,persAendern});
+        menues.put("alle",new JMenuItem[]{ueber,help,end,impExp,statsAnz,autoAnz,autoAnl,persAnz,persAnl,persAendern,autoAendern,autoVerkaufen,uebersichAnz});
 
-
-
-
+        menueUmschalten("anmeldung");
 
     }
 
-    public void anzeigen(String ziel){
-        Verkaeufer benutzer=okfzsInstanz.getBenutzer();
-        Datenbank datenbank=okfzsInstanz.getDatenbank();
-        JPanel anzeige=okfzsInstanz.getAnzeige();
-        CardLayout cards=okfzsInstanz.getCards();
-
-        switch (ziel){
-            case "uebersicht":{
-                List<Vorgang> vorgangList=null;
-                try{vorgangList=datenbank.VorgaengeZuVerkaeufer(benutzer);}
-                catch (SQLException e){
+    /**
+     * Lässt die entsprechenden Menüs aktiv/inaktiv werden
+     *
+     * @param cardID Mögliche Werte["anmeldung","ende","uebersicht","impexp","autoAnz","autoAnl","personAnz","personAnl","statstik","ueber","hilfe"]
+     */
+    public void menueUmschalten(String cardID){
+        for(JMenuItem jmi:menues.get("alle")){
+            jmi.setEnabled(false);
+        }
+        switch (cardID) {
+            case "uebersicht": {
+                for(JMenuItem jmi:menues.get("uebersicht")){
+                    jmi.setEnabled(true);
                 }
-                anzeige.add(new Uebersicht(okfzsInstanz, vorgangList), "uebersicht");
-                cards.show(anzeige, "uebersicht");
-                aktivSchalten(alleMenues);
+                break;
             }
+            case "impexp": {
+                break;
+            }
+            case "autoAnz": {
+                for(JMenuItem jmi:menues.get("autolist")){
+                    jmi.setEnabled(true);
+                }
+                break;
+            }
+            case "autoAnl": {
+                break;
+            }
+            case "personAnz": {
+                for(JMenuItem jmi:menues.get("perslist")){
+                    jmi.setEnabled(true);
+                }
+                break;
+            }
+            case "personAnl": {
+                break;
+            }
+            case "statstik": {
+                break;
+            }
+            case "ueber": {
+                break;
+            }
+            case "hilfe":{
+                break;
+            }
+            default:
+                System.out.println(cardID);
         }
-        System.out.println(ziel);
-    }
 
-    private void inaktivSchalten(JMenu[] menus){
-        for(JMenu jm:menus){
-            jm.setEnabled(false);
+        for(JMenuItem jmi:menues.get("immerAn")){
+            jmi.setEnabled(true);
         }
-    }
-    private void aktivSchalten(JMenu[] menus){
-        for(JMenu jm:menus){
-            jm.setEnabled(true);
-        }
-    }
 
+    }
 }
