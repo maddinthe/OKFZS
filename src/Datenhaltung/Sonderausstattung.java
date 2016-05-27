@@ -18,7 +18,6 @@ public class Sonderausstattung {
     }
 
     public String getBeschreibung() {
-
         return beschreibung;
     }
 }

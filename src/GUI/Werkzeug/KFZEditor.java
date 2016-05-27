@@ -8,6 +8,8 @@ import GUI.OKFZS;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 /**
@@ -439,14 +441,22 @@ public class KFZEditor extends Ansicht {
             JScrollPane jsp = new JScrollPane(jList);
 
             JPanel jpButton = new JPanel();
-            JButton jbEdit = new JButton("Editieren");
+            JButton jbEdit = new JButton("Sonderausstattung hinzufügen");
             JButton jbSave = new JButton("Speichern");
+
+            ActionListener al = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    setTestAustattung();
+                }
+            };
+
+            jbEdit.addActionListener(al);
 
             jpAusstattungTest.add(jsp);
             jpButton.add(jbSave);
             jpButton.add(jbEdit);
             jpAusstattungTest.add(jpButton);
-
 
             JPanel jpListTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JTextArea jtListTest = new JTextArea(20, 20);
@@ -917,5 +927,40 @@ public class KFZEditor extends Ansicht {
         return kfz;
     }
 
+    public void setTestAustattung(){
+        JFrame jfKfzEdit = new JFrame("Ausstattungs-Editor");
+        JPanel jpKFZ = new JPanel();
+        jpKFZ.setLayout(new BoxLayout(jpKFZ, BoxLayout.Y_AXIS));
+
+        JPanel jpKfzAngaben = new JPanel();
+        jpKfzAngaben.setBorder(new TitledBorder("Ausstattung hinzufügen"));
+        jpKfzAngaben.setLayout(new BoxLayout(jpKfzAngaben, BoxLayout.Y_AXIS));
+
+        JPanel jpAustattungHinzu = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JTextField jtFin = new JTextField(20);
+        jpAustattungHinzu.add(jtFin);
+
+        JButton jbSave = new JButton("Speichern");
+        jpAustattungHinzu.add(jbSave);
+
+        jpKfzAngaben.add(jpAustattungHinzu);
+
+        jpKFZ.add(jpKfzAngaben);
+        jfKfzEdit.add(jpKFZ, BorderLayout.CENTER);
+
+        //JFrame jf Größe mitgeben
+        jfKfzEdit.setSize(300, 200);
+
+
+        //JFrame jf auf Bildschirm plazieren
+        jfKfzEdit.setLocation(200, 400);
+
+        //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
+        jfKfzEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        //JFrame jf anzeigen
+        jfKfzEdit.setVisible(true);
+
+    }
 }
 
