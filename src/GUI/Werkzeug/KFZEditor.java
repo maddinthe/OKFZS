@@ -447,7 +447,7 @@ public class KFZEditor extends Ansicht {
             ActionListener al = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    setTestAustattung();
+                    setNeueAustattung();
                 }
             };
 
@@ -671,10 +671,29 @@ public class KFZEditor extends Ansicht {
         jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
         jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
 
-        JPanel jpAusstattungTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JTextArea jtAusstattungTest = new JTextArea(17, 20);
-        jpAusstattungTest.add(jtAusstattungTest);
+        JPanel jpAusstattungTest = new JPanel(new GridLayout(2,1));
+        JComponent jList = new JList(testAustattung);
+        JScrollPane jsp = new JScrollPane(jList);
 
+        JPanel jpButton = new JPanel();
+        JButton jbEdit = new JButton("Sonderausstattung hinzufügen");
+        JButton jbSave = new JButton("Speichern");
+
+        ActionListener al = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setNeueAustattung();
+            }
+        };
+
+        //todo ActionListener der die ausgewählte Ausstattung speichert
+
+        jbEdit.addActionListener(al);
+
+        jpAusstattungTest.add(jsp);
+        jpButton.add(jbSave);
+        jpButton.add(jbEdit);
+        jpAusstattungTest.add(jpButton);
 
         JPanel jpListTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JTextArea jtListTest = new JTextArea(20, 20);
@@ -704,7 +723,6 @@ public class KFZEditor extends Ansicht {
 
         //JFrame jf anzeigen
         jfKfzEdit.setVisible(true);
-
 
     }
 
@@ -927,7 +945,7 @@ public class KFZEditor extends Ansicht {
         return kfz;
     }
 
-    public void setTestAustattung(){
+    public void setNeueAustattung(){
         JFrame jfKfzEdit = new JFrame("Ausstattungs-Editor");
         JPanel jpKFZ = new JPanel();
         jpKFZ.setLayout(new BoxLayout(jpKFZ, BoxLayout.Y_AXIS));
@@ -943,8 +961,14 @@ public class KFZEditor extends Ansicht {
         JButton jbSave = new JButton("Speichern");
         jpAustattungHinzu.add(jbSave);
 
-        jpKfzAngaben.add(jpAustattungHinzu);
+        ActionListener al = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //todo Ausstattung in DB speichern
+            }
+        };
 
+        jpKfzAngaben.add(jpAustattungHinzu);
         jpKFZ.add(jpKfzAngaben);
         jfKfzEdit.add(jpKFZ, BorderLayout.CENTER);
 

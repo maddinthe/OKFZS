@@ -5,6 +5,7 @@ import GUI.OKFZS;
 import GUI.Statistik;
 import GUI.Werkzeug.AktionEditor;
 import GUI.Werkzeug.KFZEditor;
+import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +20,9 @@ public class ToniTest {
     public static void main(String[] args) throws SQLException {
 //Spieldaten
         OKFZS okfzs = new OKFZS();
-        KFZEditor editor2 = new KFZEditor(okfzs,okfzs.getDatenbank().einKfz("12311"));
+//        KFZEditor editor2 = new KFZEditor(okfzs,okfzs.getDatenbank().einKfz("12311"));
+
+        PersonenEditor p = new PersonenEditor(okfzs, okfzs.getDatenbank().einePerson(1));
 
 
 //        java.util.List<Vorgang> vorgaenge = new LinkedList<>();

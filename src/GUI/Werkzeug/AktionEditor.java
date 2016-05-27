@@ -435,4 +435,40 @@ public class AktionEditor extends Ansicht {
 //        return Aktion();
 //    }
 
+    public void setNeueAktion(){
+        JFrame jfKfzEdit = new JFrame("Ausstattungs-Editor");
+        JPanel jpKFZ = new JPanel();
+        jpKFZ.setLayout(new BoxLayout(jpKFZ, BoxLayout.Y_AXIS));
+
+        JPanel jpKfzAngaben = new JPanel();
+        jpKfzAngaben.setBorder(new TitledBorder("Ausstattung hinzufügen"));
+        jpKfzAngaben.setLayout(new BoxLayout(jpKfzAngaben, BoxLayout.Y_AXIS));
+
+        JPanel jpAustattungHinzu = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JTextField jtFin = new JTextField(20);
+        jpAustattungHinzu.add(jtFin);
+
+        JButton jbSave = new JButton("Speichern");
+        jpAustattungHinzu.add(jbSave);
+
+        jpKfzAngaben.add(jpAustattungHinzu);
+
+        jpKFZ.add(jpKfzAngaben);
+        jfKfzEdit.add(jpKFZ, BorderLayout.CENTER);
+
+        //JFrame jf Größe mitgeben
+        jfKfzEdit.setSize(300, 200);
+
+
+        //JFrame jf auf Bildschirm plazieren
+        jfKfzEdit.setLocation(200, 400);
+
+        //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
+        jfKfzEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        //JFrame jf anzeigen
+        jfKfzEdit.setVisible(true);
+
+    }
+
 }
