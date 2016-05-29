@@ -57,6 +57,7 @@ public class KaufvertragEditor extends Ansicht {
 
             JButton vorgDruck=new JButton("Vertrag Drucken");
             this.add(vorgDruck);
+            //todo:wenn speichern geht dann wieder aktiv setzen!
            // vorgDruck.addActionListener(speichernListener);
             vorgDruck.addActionListener(new ActionListener() {
                 @Override
@@ -72,9 +73,13 @@ public class KaufvertragEditor extends Ansicht {
 
     }
 
+    /**
+     * Generiert ein temporäres HTML-Dokument aus dem vorgang welches den Kaufvertrag darstellen soll
+     * @param vorgang Vorgang zu dem der Vertrag generiert werden soll
+     */
     private void kaufvertragDrucken(Vorgang vorgang) {
         try{
-            File f=File.createTempFile("Ver"+vorgang.getVid(),"html");
+            File f=File.createTempFile("Vertrag:"+vorgang.getVid(),"html");
             BufferedWriter bw=new BufferedWriter(new FileWriter(f));
             bw.append("<table style=\"height: 297mm; width: 210mm;\">\n" +
                     "    <tbody>\n" +
