@@ -20,6 +20,9 @@ import java.util.TreeMap;
 //todo: stub
 public class KFZListe extends Ansicht {
 
+
+    Vorgang selectedVorg;
+
     //todo:doku und weiter bauen
     public KFZListe(OKFZS okfzsInstanz,List<Vorgang> vorgaenge){
         super(new BorderLayout(),okfzsInstanz);
@@ -47,13 +50,18 @@ public class KFZListe extends Ansicht {
         quickInfo.setLineWrap(true);
         quickInfo.setWrapStyleWord(true);
         tabelle.addRowSelectionInterval(0, 0);
+        selectedVorg=vorgaenge.get(0);
         this.add(BorderLayout.SOUTH,new JScrollPane(quickInfo));
 
         tabelle.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                quickInfo.setText(finVorgaenge.get(tabelle.getValueAt(tabelle.getSelectedRow(),0)).toString());
+                selectedVorg=finVorgaenge.get(tabelle.getValueAt(tabelle.getSelectedRow(),0));
+                quickInfo.setText(selectedVorg.toString());
             }
         });
+    }
+    public Vorgang getSelectedVorg() {
+        return selectedVorg;
     }
 }

@@ -44,8 +44,16 @@ public class Menue extends JMenuBar {
                         okfzsInstanz.anzeigen("autoAnz");
                         break;
                     }
+                    case "Auto ändern":{
+                        okfzsInstanz.anzeigen("autoAend");
+                        break;
+                    }
                     case "Auto anlegen": {
                         okfzsInstanz.anzeigen("autoAnl");
+                        break;
+                    }
+                    case "Auto Verkaufen":{
+                        okfzsInstanz.anzeigen("autoVerk");
                         break;
                     }
                     case "Personen anzeigen": {
@@ -178,8 +186,10 @@ public class Menue extends JMenuBar {
             }
             case "impexp":
             case "autoAnl":
+            case "autoAend":
             case "personAnl":
             case "personAend":
+            case "autoVerk":
             case "statstik":
             case "ueber":
             case "hilfe": {

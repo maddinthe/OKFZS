@@ -666,8 +666,23 @@ public class Datenbank {
     }
 
 
+    public List<Verkaeufer> alleVerkaeufer() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_verkaeufer");
+        List<Verkaeufer> verkaeufer=new ArrayList<>();
+        while(r.next())
+        {
+            long pid = r.getLong("fk_t_person_pid");
+            String anmeldename = r.getString("anmeldename");
+            String passwort = r.getString("passwort");
+            Date inaktivseit = r.getDate("inaktivseit");
+            boolean aktiv = (inaktivseit==null);
 
+            verkaeufer.add(new Verkaeufer(anmeldename,passwort,einePerson(pid),aktiv,isAdmin(pid)));
 
-
+        }
+        r.close();
+        return verkaeufer;
+    }
 }
 

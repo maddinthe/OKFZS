@@ -5,6 +5,7 @@ import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import Datenhaltung.Vorgang;
 import GUI.Werkzeug.KFZEditor;
+import GUI.Werkzeug.KaufvertragEditor;
 import GUI.Werkzeug.PersonenEditor;
 
 import javax.swing.*;
@@ -173,6 +174,24 @@ public class OKFZS extends JFrame {
 
 
                 break;
+            }
+            case "autoAend":{
+                Vorgang v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
+                aktuelleAnsicht=new KFZEditor(this,v);
+                anzeige.add("autoAend",aktuelleAnsicht);
+                cards.show(anzeige,"autoAend");
+                break;
+
+            }
+
+            case "autoVerk":{
+                Vorgang v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
+                aktuelleAnsicht=new KaufvertragEditor(this,v);
+                anzeige.add("autoVerk",aktuelleAnsicht);
+                cards.show(anzeige,"autoVerk");
+
+                break;
+
             }
             case "personAnz": {
                 java.util.List<Person> personList=null;
