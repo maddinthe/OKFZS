@@ -20,5 +20,7 @@ public class Sonderausstattung {
     public String getBeschreibung() {
         return beschreibung;
     }
-
+    public String toString(){
+        return beschreibung;
+    }
 }
