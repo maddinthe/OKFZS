@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
  * Created by mtheilen on 23.05.2016.
  */
 public class KaufvertragEditor extends Ansicht {
+    private SimpleDateFormat tuevDateForm=new SimpleDateFormat("MM-YYYY");
 
     //todo:fertgmachen und doku
     public KaufvertragEditor(OKFZS okfzsInstanz, Vorgang vorgang) {
@@ -35,7 +37,7 @@ public class KaufvertragEditor extends Ansicht {
             List<Verkaeufer> verkaeuferList = okfzsInstanz.getDatenbank().alleVerkaeufer();
             JComboBox<Verkaeufer> verkaeufer = new JComboBox<>(verkaeuferList.toArray(new Verkaeufer[verkaeuferList.size()]));
             kaeufer.setSelectedItem((vorgang.getKauefer() != null) ? vorgang.getKauefer() : null);
-            verkaeufer.setSelectedItem((vorgang.getVerkaeufer() != null) ? vorgang.getVerkaeufer() : null);
+            verkaeufer.setSelectedItem((vorgang.getVerkaeufer() != null) ? vorgang.getVerkaeufer() : okfzsInstanz.getBenutzer());
             this.add(new JLabel("Käufer "));
             this.add(kaeufer);
             JButton neuerKaeufer=new JButton("neu");
@@ -59,7 +61,6 @@ public class KaufvertragEditor extends Ansicht {
             JTextArea vereinbar=new JTextArea(vorgang.getSonstvereinbarungen(),5,20);
             this.add(vereinbar);
             this.add(new JLabel("Tuev"));
-            SimpleDateFormat tuevDateForm=new SimpleDateFormat("MM-YYYY");
             Date tuevDate=vorgang.getTuev();
             if(tuevDate==null)tuevDate=new Date();
             JTextField tuev=new JTextField(tuevDateForm.format(tuevDate));
@@ -76,21 +77,34 @@ public class KaufvertragEditor extends Ansicht {
             ActionListener speichernListener = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    vorgang.setVerkaeufer((Verkaeufer) verkaeufer.getSelectedItem());
+                    vorgang.setKauefer((Person) kaeufer.getSelectedItem());
+                    vorgang.setvPreis(Double.parseDouble(verkaufspreis.getText()));
+                    try {
+                        vorgang.setTuev(tuevDateForm.parse(tuev.getText()));
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                    vorgang.setRabattGrund(rabatt.getText());
+                    vorgang.setSonstvereinbarungen(vereinbar.getText());
+                    vorgang.setKennzeichen(kennz.getText());
+                    if(e.getActionCommand().equals("Vertrag Drucken")){
+                        dieser.kaufvertragDrucken(vorgang);
+                    }
+                    //todo: in die db drücken
                 }
             };
             speichern.addActionListener(speichernListener);
 
             JButton vorgDruck = new JButton("Vertrag Drucken");
             this.add(vorgDruck);
-            //todo:wenn speichern geht dann wieder aktiv setzen!
-            // vorgDruck.addActionListener(speichernListener);
-            vorgDruck.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    dieser.kaufvertragDrucken(vorgang);
-                }
-            });
+            vorgDruck.addActionListener(speichernListener);
+//            vorgDruck.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    dieser.kaufvertragDrucken(vorgang);
+//                }
+//            });
 
         } catch (Exception e) {
             this.add(new JTextField("Es ist ein fehler aufgetreten: /n" + e.getMessage()));
@@ -104,10 +118,17 @@ public class KaufvertragEditor extends Ansicht {
      * @param vorgang Vorgang zu dem der Vertrag generiert werden soll
      */
     private void kaufvertragDrucken(Vorgang vorgang) {
+        //todo:fertig machen
         try {
             File f = File.createTempFile("Vertrag_" + Long.toUnsignedString(vorgang.getVid()), ".html");
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-            bw.append("<table style=\"height: 297mm; width: 210mm;\">\n" +
+            bw.append("<!DOCTYPE html>\n" +
+                    "<html lang=\"de\">\n" +
+                    "<head>\n" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <title>Kaufvertrag Nr.:"+vorgang.getVid()+"</title>\n" +
+                    "</head>"+
+                    "<table style=\"height: 297mm; width: 210mm;\">\n" +
                     "    <tbody>\n" +
                     "    <tr>\n" +
                     "        <td align=\"left\" valign=\"top\">\n" +
@@ -123,12 +144,12 @@ public class KaufvertragEditor extends Ansicht {
                     "                <tr>\n" +
                     "                    <td>\n" +
                     "                        <p>&nbsp;</p>\n" +
-                    "                        <p>Steuer Nr:</p>\n" +
+                    "                        <p></p>\n" +
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>\n" +
                     "                        <p>&nbsp;</p>\n" +
-                    "                        <p>Rechnungs Nr.</p>\n" +
+                    "                        <p>Vertrags Nr."+vorgang.getVid()+"</p>\n" +
                     "                    </td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
@@ -147,26 +168,33 @@ public class KaufvertragEditor extends Ansicht {
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"   +vorgang.getVerkaeufer().getPerson().getAnrede()+" "
+                                                    +vorgang.getVerkaeufer().getPerson().getName()+", "+vorgang.getVerkaeufer().getPerson().getVorname()+
+                                                    "</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Vor- und Nachname / Firma</p>\n" +
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>" +vorgang.getKauefer().getAnrede()+" "
+                    +vorgang.getKauefer().getName()+", "+vorgang.getKauefer().getVorname()+"</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Vor- und Nachname / Firma</p>\n" +
                     "                    </td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+vorgang.getVerkaeufer().getPerson().getAnschrift()+", "
+                                                +vorgang.getVerkaeufer().getPerson().getPostleitzahl()+" "+
+                    vorgang.getVerkaeufer().getPerson().getOrt()+"</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Adresse</p>\n" +
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+vorgang.getKauefer().getAnschrift()+", "+
+                    vorgang.getKauefer().getPostleitzahl()+
+                    " "+vorgang.getKauefer().getOrt()+"</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Adresse</p>\n" +
                     "                    </td>\n" +
@@ -184,21 +212,21 @@ public class KaufvertragEditor extends Ansicht {
                     "                <tr>\n" +
                     "                    <td style=\"width: 80px;\">Hersteller</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+vorgang.getKfz().getHersteller()+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                    <td style=\"width: 80px;\">&nbsp; Modell</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+vorgang.getKfz().getModell()+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                    <td style=\"width: 90px;\">Erstzulassung</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+tuevDateForm.format(vorgang.getKfz().getEz())+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>FahrG-Nr.:</td>\n" +
                     "                    <td colspan=\"5\">\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+vorgang.getKfz().getFin()+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
@@ -206,15 +234,15 @@ public class KaufvertragEditor extends Ansicht {
                     "                        <p>KM Stand<br />laut Tacho</p>\n" +
                     "                    </td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+vorgang.getKilometer()+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                    <td>&nbsp; T&Uuml;V</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+tuevDateForm.format(vorgang.getTuev())+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                    <td>Brief-Nr.:</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+vorgang.getKfz().getKfzBriefNr()+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                </tr>\n" +
                     "                </tbody>\n" +

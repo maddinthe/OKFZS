@@ -68,7 +68,7 @@ CREATE TABLE t_KFZ(
 );
 CREATE TABLE t_Sonderausstattung(
 	SID			SERIAL NOT NULL,
-	Art			VARCHAR(30) NOT NULL,
+	Art			VARCHAR(100) NOT NULL,
 	CONSTRAINT PK_t_Sonderausstattung_SID PRIMARY KEY(SID)
 );
 CREATE TABLE t_Ausstattungsliste(
