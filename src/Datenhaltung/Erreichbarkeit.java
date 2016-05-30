@@ -79,9 +79,9 @@ public class Erreichbarkeit {
 
     @Override
     public String toString() {
-        return details+" \n"+
-                 "Telefon:"+telefonNummer + " \n"
-                  +"Mobil:"+handyNummer + " \n"
-                   +"E-Mail:" +email + " \n\n";
+        return "Details: "+details+" \n"+
+                 "Telefon: "+telefonNummer + " \n"
+                  +"Mobil: "+handyNummer + " \n"
+                   +"E-Mail: " +email + " \n\n";
     }
 }

@@ -179,10 +179,11 @@ public class Datenbank {
     public void insertOrUpdatePersonAdmin(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
+            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='" + person.getName() + "',vorname='" + person.getVorname() + "',gebtag='" + person.getGeburtstag() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
+
+        } catch (SQLException e) {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
                     " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getVorname() + "','" + person.getGeburtstag() + "','" + person.getAnschrift() + "'," + person.getPostleitzahl() + ",'" + person.getOrt() + "','" + person.getUstID() + "')");
-        } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='" + person.getName() + "',vorname='" + person.getVorname() + "',gebtag='" + person.getGeburtstag() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
 
         }
     }
@@ -190,18 +191,20 @@ public class Datenbank {
     public void insertOrUpdateErreichbarkeit(Erreichbarkeit erreichbarkeit) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_erreichbarkeit(fk_t_person_pid,tel,handy,email,text) VALUES (" + erreichbarkeit.getPerson().getPid() + ",'" + erreichbarkeit.getTelefonNummer() + "', '" + erreichbarkeit.getHandyNummer() + "','" + erreichbarkeit.getEmail() + "','" + erreichbarkeit.getDetails() + "')");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_erreichbarkeit SET fk_t_person_pid=" + erreichbarkeit.getPerson().getPid() + ", tel='" + erreichbarkeit.getTelefonNummer() + "',handy='" + erreichbarkeit.getHandyNummer() + "',email='" + erreichbarkeit.getEmail() + "',text='" + erreichbarkeit.getDetails() + "' WHERE eid='" + erreichbarkeit.getEid() + "'");
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_erreichbarkeit(fk_t_person_pid,tel,handy,email,text) VALUES (" + erreichbarkeit.getPerson().getPid() + ",'" + erreichbarkeit.getTelefonNummer() + "', '" + erreichbarkeit.getHandyNummer() + "','" + erreichbarkeit.getEmail() + "','" + erreichbarkeit.getDetails() + "')");
         }
     }
 
     public void insertOrUpdateNotiz(Notiz notiz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_notiz(fk_t_person_pid,text,datum) VALUES (" + notiz.getPerson().getPid() + ",'" + notiz.getBeschreibung() + "', '" + notiz.getDatum() + "')");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_notiz SET fk_t_person_pid=" + notiz.getPerson().getPid() + ", text='" + notiz.getBeschreibung() + "',datum='" + notiz.getDatum() + "' WHERE nid=" + notiz.getNid() + "");
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_notiz(fk_t_person_pid,text,datum) VALUES (" + notiz.getPerson().getPid() + ",'" + notiz.getBeschreibung() + "', '" + notiz.getDatum() + "')");
         }
     }
 
@@ -760,9 +763,9 @@ public class Datenbank {
     public boolean verkaeuferDa() {
         try {
             Statement stmt=conn.createStatement();
-            ResultSet r=stmt.executeQuery("select anmeldename FROM t_verkaeufer");
-            r.last();
-            return(r.getRow()>0);
+            ResultSet r=stmt.executeQuery("select count(anmeldename) FROM t_verkaeufer");
+            if(r.next())
+            return(r.getInt(1)>0);
         } catch (SQLException e) {
             e.printStackTrace();
         }

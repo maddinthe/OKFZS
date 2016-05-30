@@ -25,14 +25,17 @@ import java.util.List;
  */
 //todo:stub
 public class PersonenEditor extends Ansicht {
+    Person selectedPers;
 
     public PersonenEditor(OKFZS okfzsInstanz, Person p) {
         super(okfzsInstanz);
         try {
             Person person = okfzsInstanz.getDatenbank().einePerson(p.getPid());
+            selectedPers=p;
             List<Notiz> notizen = okfzsInstanz.getDatenbank().alleNotizen(p);
             List<Erreichbarkeit> erreichbarkeiten = okfzsInstanz.getDatenbank().alleErreichbarkeiten(p);
-            JFrame jfPersonEdit = new JFrame("Personen-Editor");
+            JPanel jfPersonEdit = this;
+            this.setLayout(new BorderLayout());
             JPanel jpWest = new JPanel();
             jpWest.setLayout(new BoxLayout(jpWest, BoxLayout.Y_AXIS));
 
@@ -174,9 +177,32 @@ public class PersonenEditor extends Ansicht {
             JScrollPane jsErreichbarkeitsListe = new JScrollPane(jtErreichbarkeitsListe);
             jpErreichbarkeiten.add(jsErreichbarkeitsListe);
             JPanel jpButtonCenter = new JPanel();
-            JButton jbNeu = new JButton("Neu");
             JButton jbEdit = new JButton("Edit");
-            jpButtonCenter.add(jbNeu);
+            ActionListener alEdit = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String[] alles = jtErreichbarkeitsListe.getText().split("\n\n");
+                    System.out.println(Arrays.toString(alles));
+                    for (String s : alles) {
+                        String[] temp = s.split("\n");
+                        Erreichbarkeit temp2 = null;
+                        String det = temp[0].split(" ")[1];
+                        String tel = temp[1].split(" ")[1];
+                        String mob = temp[2].split(" ")[1];
+                        String mail = temp[3].split(" ")[1];
+                        System.out.println(det);
+
+                        temp2 = new Erreichbarkeit(p, tel, mob, mail, det);
+
+                        try {
+                            okfzsInstanz.getDatenbank().insertOrUpdateErreichbarkeit(temp2);
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            };
+            jbEdit.addActionListener(alEdit);
             jpButtonCenter.add(jbEdit);
             jpErreichbarkeiten.add(jpButtonCenter);
             jpErreichbarkeit.add(jpErreichbarkeiten);
@@ -197,10 +223,71 @@ public class PersonenEditor extends Ansicht {
             JPanel jpNotizListe = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JList<Notiz> jlNotizListe = new JList<>(notizen.toArray(new Notiz[notizen.size()]));
             jpNotizListe.add(jlNotizListe);
+            JPanel jpNotizButton = new JPanel();
+            JButton jbNotizNeu = new JButton("Neu");
+            JButton jbNotizEdit = new JButton("Edit");
 
+
+            ActionListener alNotizEdit = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Notiz temp = jlNotizListe.getSelectedValue();
+                }
+            };
+            ActionListener alNotizNeu = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFrame jfNotiz = new JFrame("Neue Notiz");
+                    JPanel jpNotiz = new JPanel();
+                    JPanel jpText = new JPanel();
+                    JTextField jtNotiz = new JTextField(25);
+                    JPanel jpButton = new JPanel();
+                    JButton jbSpeichern = new JButton("Speichern");
+                    JButton jbAbbrechen = new JButton("Abbrechen");
+                    ActionListener alSpeichern = new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Notiz temp = new Notiz(p,new Date(),jtNotiz.getText());
+                            try {
+                                okfzsInstanz.getDatenbank().insertOrUpdateNotiz(temp);
+
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            }
+                            okfzsInstanz.anzeigen("personAend");
+                            jfNotiz.dispose();
+
+                        }
+                    };
+                    ActionListener alAbbrechenNotiz = new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            jfNotiz.dispose();
+                        }
+                    };
+                    jbSpeichern.addActionListener(alSpeichern);
+                    jbSpeichern.addActionListener(alAbbrechenNotiz);
+                    jpButton.add(jbSpeichern);
+                    jpButton.add(jbAbbrechen);
+                    jpText.add(jtNotiz);
+                    jpNotiz.add(jpText);
+                    jpNotiz.add(jpButton);
+                    jfNotiz.add(jpNotiz);
+                    jfNotiz.setSize(300, 150);
+                    jfNotiz.setLocation(500,500);
+                    jfNotiz.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    jfNotiz.setVisible(true);
+
+                }
+            };
+            jbNotizNeu.addActionListener(alNotizNeu);
+            jbNotizEdit.addActionListener(alNotizEdit);
+            jpNotizButton.add(jbNotizEdit);
+            jpNotizButton.add(jbNotizNeu);
             jpNotiz.add(jpNotizListe);
-
+            jpNotiz.add(jpNotizButton);
             jpEast.add(jpNotiz);
+
 
             jfPersonEdit.add(jpWest, BorderLayout.WEST);
             jfPersonEdit.add(jpCenter, BorderLayout.CENTER);
@@ -216,7 +303,7 @@ public class PersonenEditor extends Ansicht {
             jfPersonEdit.setLocation(200, 400);
 
             //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
-            jfPersonEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 
 
             //JFrame jf anzeigen
@@ -232,7 +319,8 @@ public class PersonenEditor extends Ansicht {
         super(okfzsInstanz);
         Datenbank db = okfzsInstanz.getDatenbank();
 
-        JFrame jfPersonEdit = new JFrame("Personen-Editor");
+        JPanel jfPersonEdit = this;
+        this.setLayout(new BorderLayout());
         JPanel jpWest = new JPanel();
         jpWest.setLayout(new BoxLayout(jpWest, BoxLayout.Y_AXIS));
 
@@ -411,15 +499,15 @@ public class PersonenEditor extends Ansicht {
         jfPersonEdit.setLocation(200, 400);
 
         //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
-        jfPersonEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         //JFrame jf anzeigen
         jfPersonEdit.setVisible(true);
 
     }
     public Person getPerson(){
-        return null;
+        return selectedPers;
     }
+
     public static java.sql.Date umwandeln(String datum) {
         SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
         Date date = null;

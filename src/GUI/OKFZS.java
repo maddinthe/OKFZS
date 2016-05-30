@@ -227,10 +227,10 @@ public class OKFZS extends JFrame {
             }
             case "personAend":{
                     Person edit=null;
-                    if(aktuelleAnsicht.getClass().equals(PersonenListe.class)){
+                    if(aktuelleAnsicht.getClass()==PersonenListe.class){
                         edit=((PersonenListe) aktuelleAnsicht).getSelectedPers();
-                    }else if(aktuelleAnsicht.getClass().equals(PersonenEditor.class)){
-                        ((PersonenEditor)aktuelleAnsicht).getPerson();
+                    }else if(aktuelleAnsicht.getClass()==PersonenEditor.class){
+                        edit=((PersonenEditor)aktuelleAnsicht).getPerson();
                     }
                     aktuelleAnsicht=new PersonenEditor(this,edit);
                     anzeige.add(aktuelleAnsicht, "personAnl");
