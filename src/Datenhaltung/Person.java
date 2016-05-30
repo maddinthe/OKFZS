@@ -42,6 +42,19 @@ public class Person {
         this.geburtstag = geburtstag;
 
     }
+    public Person(String anrede, String name, String vorname, Date geburtstag, String anschrift, int postleitzahl, String ort, String ustID ) {
+        this.anrede = anrede;
+        this.name = name;
+        this.vorname = vorname;
+        this.geburtstag = geburtstag;
+        this.anschrift = anschrift;
+        this.postleitzahl = postleitzahl;
+        this.ort = ort;
+        this.ustID = ustID;
+
+    }
+
+
 
 
     public long getPid() {

@@ -155,8 +155,8 @@ public class Datenbank {
         try {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,gebTag) VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getGeburtstag() + "')");
             ResultSet rs = stmt.executeQuery("SELECT max(pid) FROM t_person");
-            if(rs.next())
-            person.setPid(rs.getLong(1));
+            if (rs.next())
+                person.setPid(rs.getLong(1));
         } catch (SQLException e) {
             //stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"' WHERE pid=" + person.getPid() + "");
             System.out.println(e.getMessage());
@@ -168,11 +168,13 @@ public class Datenbank {
     public void insertOrUpdatePerson(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',vorname='" + person.getVorname() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
-        } catch (SQLException e) {
-            stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
-                    " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getVorname() + "','" + person.getGeburtstag() + "','" + person.getAnschrift() + "'," + person.getPostleitzahl() + ",'" + person.getOrt() + "','" + person.getUstID() + "')");
+            int count = stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',vorname='" + person.getVorname() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
+            if (count < 1)
+                stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
+                        " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getVorname() + "','" + person.getGeburtstag() + "','" + person.getAnschrift() + "'," + person.getPostleitzahl() + ",'" + person.getOrt() + "','" + person.getUstID() + "')");
 
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
 
         }
     }
@@ -192,20 +194,26 @@ public class Datenbank {
     public void insertOrUpdateErreichbarkeit(Erreichbarkeit erreichbarkeit) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("UPDATE t_erreichbarkeit SET fk_t_person_pid=" + erreichbarkeit.getPerson().getPid() + ", tel='" + erreichbarkeit.getTelefonNummer() + "',handy='" + erreichbarkeit.getHandyNummer() + "',email='" + erreichbarkeit.getEmail() + "',text='" + erreichbarkeit.getDetails() + "' WHERE eid='" + erreichbarkeit.getEid() + "'");
+            int count = stmt.executeUpdate("UPDATE t_erreichbarkeit SET fk_t_person_pid=" + erreichbarkeit.getPerson().getPid() + ", tel='" + erreichbarkeit.getTelefonNummer() + "',handy='" + erreichbarkeit.getHandyNummer() + "',email='" + erreichbarkeit.getEmail() + "',text='" + erreichbarkeit.getDetails() + "' WHERE eid=" + erreichbarkeit.getEid() + "");
+            if (count < 1)
+                stmt.executeUpdate("INSERT  INTO t_erreichbarkeit(fk_t_person_pid,tel,handy,email,text) VALUES (" + erreichbarkeit.getPerson().getPid() + ",'" + erreichbarkeit.getTelefonNummer() + "', '" + erreichbarkeit.getHandyNummer() + "','" + erreichbarkeit.getEmail() + "','" + erreichbarkeit.getDetails() + "')");
+
 
         } catch (SQLException e) {
-            stmt.executeUpdate("INSERT  INTO t_erreichbarkeit(fk_t_person_pid,tel,handy,email,text) VALUES (" + erreichbarkeit.getPerson().getPid() + ",'" + erreichbarkeit.getTelefonNummer() + "', '" + erreichbarkeit.getHandyNummer() + "','" + erreichbarkeit.getEmail() + "','" + erreichbarkeit.getDetails() + "')");
+            System.out.println(e.getMessage());
         }
     }
 
     public void insertOrUpdateNotiz(Notiz notiz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("UPDATE t_notiz SET fk_t_person_pid=" + notiz.getPerson().getPid() + ", text='" + notiz.getBeschreibung() + "',datum='" + notiz.getDatum() + "' WHERE nid=" + notiz.getNid() + "");
+            int test = stmt.executeUpdate("UPDATE t_notiz SET fk_t_person_pid=" + notiz.getPerson().getPid() + ", text='" + notiz.getBeschreibung() + "',datum='" + notiz.getDatum() + "' WHERE nid=" + notiz.getNid() + "");
+            if (test < 1)
+                stmt.executeUpdate("INSERT  INTO t_notiz(fk_t_person_pid,text,datum) VALUES (" + notiz.getPerson().getPid() + ",'" + notiz.getBeschreibung() + "', '" + notiz.getDatum() + "')");
+
 
         } catch (SQLException e) {
-            stmt.executeUpdate("INSERT  INTO t_notiz(fk_t_person_pid,text,datum) VALUES (" + notiz.getPerson().getPid() + ",'" + notiz.getBeschreibung() + "', '" + notiz.getDatum() + "')");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -228,12 +236,12 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         try {
             if (verkaeufer.istAktiv())
-                stmt.executeUpdate("INSERT  INTO t_admins(fk_t_verkaeufer_fk_t_person_pid) VALUES (" + verkaeufer.getPerson().getPid()+ ")");
+                stmt.executeUpdate("INSERT  INTO t_admins(fk_t_verkaeufer_fk_t_person_pid) VALUES (" + verkaeufer.getPerson().getPid() + ")");
             else
                 stmt.executeUpdate("INSERT  INTO t_admins(fk_t_verkaeufer_fk_t_person_pid) VALUES (" + verkaeufer.getPerson().getPid() + ")");
         } catch (SQLException e) {
             if (verkaeufer.istAktiv())
-                stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() +  " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+                stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
             else
                 stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
         }
