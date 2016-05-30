@@ -7,6 +7,7 @@ import GUI.Ansicht;
 import GUI.OKFZS;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,32 +25,55 @@ import java.util.List;
 public class KaufvertragEditor extends Ansicht {
 
     //todo:fertgmachen und doku
-    public KaufvertragEditor(OKFZS okfzsInstanz, Vorgang vorgang){
+    public KaufvertragEditor(OKFZS okfzsInstanz, Vorgang vorgang) {
         super(okfzsInstanz);
-        KaufvertragEditor dieser=this;
-        try{
-            List<Person> personenlist=okfzsInstanz.getDatenbank().allePersonen();
-            Person[] personen=personenlist.toArray(new Person[personenlist.size()]);
-            JComboBox<Person> kaeufer=new JComboBox<>(personen);
-            List<Verkaeufer> verkaeuferList=okfzsInstanz.getDatenbank().alleVerkaeufer();
-            JComboBox<Verkaeufer> verkaeufer=new JComboBox<>(verkaeuferList.toArray(new Verkaeufer[verkaeuferList.size()]));
-            JComboBox<Verkaeufer> einkaeufer=new JComboBox<>(verkaeuferList.toArray(new Verkaeufer[verkaeuferList.size()]));
-
-            kaeufer.setSelectedItem((vorgang.getKauefer()!=null)?vorgang.getKauefer():null);
-
-            verkaeufer.setSelectedItem((vorgang.getVerkaeufer()!=null)?vorgang.getVerkaeufer():null);
-
-            einkaeufer.setSelectedItem((vorgang.getEinkaeufer()!=null)?vorgang.getEinkaeufer():null);
-
+        KaufvertragEditor dieser = this;
+        try {
+            List<Person> personenlist = okfzsInstanz.getDatenbank().allePersonen();
+            Person[] personen = personenlist.toArray(new Person[personenlist.size()]);
+            JComboBox<Person> kaeufer = new JComboBox<>(personen);
+            List<Verkaeufer> verkaeuferList = okfzsInstanz.getDatenbank().alleVerkaeufer();
+            JComboBox<Verkaeufer> verkaeufer = new JComboBox<>(verkaeuferList.toArray(new Verkaeufer[verkaeuferList.size()]));
+            kaeufer.setSelectedItem((vorgang.getKauefer() != null) ? vorgang.getKauefer() : null);
+            verkaeufer.setSelectedItem((vorgang.getVerkaeufer() != null) ? vorgang.getVerkaeufer() : null);
             this.add(new JLabel("Käufer "));
             this.add(kaeufer);
+            JButton neuerKaeufer=new JButton("neu");
+            this.add(neuerKaeufer);//todo: Actionlistener hinzufügen
             this.add(new JLabel("Verkäufer"));
             this.add(verkaeufer);
-            this.add(new JLabel("Einkäufer"));
-            this.add(einkaeufer);
-            JButton speichern=new JButton("Speichern");
+
+            this.add(new JLabel("Verkaufspreis (€)"));
+            JTextField verkaufspreis=new JTextField(Double.toString(vorgang.getvPreis()),5);
+            this.add(verkaufspreis);
+            String vkDatumString="";
+            if(vorgang.getVerkaufsDatum()!=null){
+                vkDatumString=vorgang.getVerkaufsDatum().toString();
+            }
+            JTextField vkDatum=new JTextField(vkDatumString,10);
+            this.add(vkDatum);
+            this.add(new JLabel("Rabattgrund"));
+            JTextArea rabatt=new JTextArea(vorgang.getRabattGrund(),5,20);
+            this.add(rabatt);
+            this.add(new JLabel("Sonstige vereinbarungen"));
+            JTextArea vereinbar=new JTextArea(vorgang.getSonstvereinbarungen(),5,20);
+            this.add(vereinbar);
+            this.add(new JLabel("Tuev"));
+            SimpleDateFormat tuevDateForm=new SimpleDateFormat("MM-YYYY");
+            Date tuevDate=vorgang.getTuev();
+            if(tuevDate==null)tuevDate=new Date();
+            JTextField tuev=new JTextField(tuevDateForm.format(tuevDate));
+            this.add(tuev);
+            this.add(new JLabel("Kennzeichen"));
+            JTextField kennz=new JTextField(vorgang.getKennzeichen(),11);
+            this.add(kennz);
+            JTextField kfz=new JTextField(vorgang.getKfz().toString());
+            this.add(kfz);
+
+
+            JButton speichern = new JButton("Speichern");
             this.add(speichern);
-            ActionListener speichernListener=new ActionListener() {
+            ActionListener speichernListener = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
@@ -55,10 +81,10 @@ public class KaufvertragEditor extends Ansicht {
             };
             speichern.addActionListener(speichernListener);
 
-            JButton vorgDruck=new JButton("Vertrag Drucken");
+            JButton vorgDruck = new JButton("Vertrag Drucken");
             this.add(vorgDruck);
             //todo:wenn speichern geht dann wieder aktiv setzen!
-           // vorgDruck.addActionListener(speichernListener);
+            // vorgDruck.addActionListener(speichernListener);
             vorgDruck.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -66,21 +92,21 @@ public class KaufvertragEditor extends Ansicht {
                 }
             });
 
-        }
-        catch(Exception e){
-            this.add(new JTextField("Es ist ein fehler aufgetreten: /n"+e.getMessage()));
+        } catch (Exception e) {
+            this.add(new JTextField("Es ist ein fehler aufgetreten: /n" + e.getMessage()));
         }
 
     }
 
     /**
      * Generiert ein temporäres HTML-Dokument aus dem vorgang welches den Kaufvertrag darstellen soll
+     *
      * @param vorgang Vorgang zu dem der Vertrag generiert werden soll
      */
     private void kaufvertragDrucken(Vorgang vorgang) {
-        try{
-            File f=File.createTempFile("Vertrag:"+vorgang.getVid(),"html");
-            BufferedWriter bw=new BufferedWriter(new FileWriter(f));
+        try {
+            File f = File.createTempFile("Vertrag_" + Long.toUnsignedString(vorgang.getVid()), ".html");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
             bw.append("<table style=\"height: 297mm; width: 210mm;\">\n" +
                     "    <tbody>\n" +
                     "    <tr>\n" +
@@ -329,7 +355,7 @@ public class KaufvertragEditor extends Ansicht {
                     "</table>");
             bw.close();
 
-            Process p=Runtime.getRuntime().exec("\""+System.getenv("PROGRAMFILES(X86)")+"\\Google\\Chrome\\Application\\chrome.exe\" "+f.getAbsolutePath());
+            Process p = Runtime.getRuntime().exec("\"" + System.getenv("PROGRAMFILES(X86)") + "\\Google\\Chrome\\Application\\chrome.exe\" " + f.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
