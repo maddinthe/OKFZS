@@ -60,4 +60,7 @@ public class Verkaeufer {
         result = 31 * result + person.hashCode();
         return result;
     }
+    public String toString(){
+        return String.format("%s, %s",anmeldeName,person.toString());
+    }
 }

@@ -160,6 +160,10 @@ public class OKFZS extends JFrame {
             case "autoAnz": {
                 java.util.List<Vorgang> kfzList=null;
                 try{kfzList=datenbank.unverkaufteVorgaenge();
+                    if(kfzList.size()==0){
+                        anzeigen("autoAnl");
+                        break;
+                    }
                     aktuelleAnsicht=new KFZListe(this, kfzList);
                     anzeige.add(aktuelleAnsicht, "autoAnz");
                     cards.show(anzeige, "autoAnz");}
@@ -196,6 +200,10 @@ public class OKFZS extends JFrame {
             case "personAnz": {
                 java.util.List<Person> personList=null;
                 try{personList=datenbank.allePersonen();
+                    if(personList.size()==0){
+                        anzeigen("persAnl");
+                        break;
+                    }
                     aktuelleAnsicht=new PersonenListe(this, personList);
                     anzeige.add(aktuelleAnsicht, "personList");
                     cards.show(anzeige, "personList");}

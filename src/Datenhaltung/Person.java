@@ -97,19 +97,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "pid=" + pid +
-                ", anrede='" + anrede + '\'' +
-                ", name='" + name + '\'' +
-                ", vorname='" + vorname + '\'' +
-                ", geburtstag=" + geburtstag +
-                ", anschrift='" + anschrift + '\'' +
-                ", postleitzahl=" + postleitzahl +
-                ", ort='" + ort + '\'' +
-                ", ustID='" + ustID + '\'' +
-                ", notizen=" + notizen +
-                ", erreichbarkeiten=" + erreichbarkeiten +
-                '}';
+        return String.format("%s, %s, %d, %s",name,vorname,postleitzahl,ort);
     }
 
     @Override

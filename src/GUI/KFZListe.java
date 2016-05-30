@@ -28,7 +28,6 @@ public class KFZListe extends Ansicht {
         super(new BorderLayout(),okfzsInstanz);
         Map<String, Vorgang> finVorgaenge=new TreeMap<>();
         String[] thead={"FIN","Hersteller","Modell", "Geplanter Verkaufspreis","Einkaufsdatum"};
-
         String[][] data=new String[vorgaenge.size()][5];
         for (int i = 0; i < vorgaenge.size(); i++) {
             Vorgang v=vorgaenge.get(i);

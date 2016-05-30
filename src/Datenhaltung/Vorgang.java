@@ -200,23 +200,8 @@ public class Vorgang {
 
     //todo: schöner machen
     public String toString() {
-        return "Vorgang{" +
-                "vid=" + vid +
-                ", kauefer=" + kauefer +
-                ", verkaeufer=" + verkaeufer +
-                ", einkauefer=" + einkauefer +
-                ", kfz=" + kfz +
-                ", vPreis=" + vPreis +
-                ", ePreis=" + ePreis +
-                ", vPreisPlan=" + vPreisPlan +
-                ", verkaufsDatum=" + verkaufsDatum +
-                ", rabattGrund='" + rabattGrund + '\'' +
-                ", sonstvereinbarungen='" + sonstvereinbarungen + '\'' +
-                ", einkaufsDatum=" + einkaufsDatum +
-                ", schaeden='" + schaeden + '\'' +
-                ", tuev=" + tuev +
-                ", kennzeichen='" + kennzeichen + '\'' +
-                '}';
+
+        return String.format("%.2f €, Schäden: %s, %s",vPreis,schaeden,kfz.toDetailString());
     }
 }
 

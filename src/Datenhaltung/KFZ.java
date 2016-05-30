@@ -1,6 +1,7 @@
 package Datenhaltung;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class KFZ {
     private List<Aktion> aktionen;
     private List<Sonderausstattung> sonderausstattung;
 
-    public KFZ(String fin, String hersteller, String modell, String kfzBriefNr, int leistungInKw, String farbe, Date ez, Byte umweltPlakette, String kraftstoff){
+    public KFZ(String fin, String hersteller, String modell, String kfzBriefNr, int leistungInKw, String farbe, Date ez, Byte umweltPlakette, String kraftstoff) {
         this.fin = fin;
         this.hersteller = hersteller;
         this.modell = modell;
@@ -123,28 +124,31 @@ public class KFZ {
         this.sonderausstattung = sonderausstattung;
     }
 
-    public void addAktion(Aktion a){
+    public void addAktion(Aktion a) {
         aktionen.add(a);
     }
 
-    public void addSonderstattung(Sonderausstattung s){
+    public void addSonderstattung(Sonderausstattung s) {
         sonderausstattung.add(s);
     }
 
     @Override
     public String toString() {
-        return "KFZ{" +
-                "fin='" + fin + '\'' +
-                ", hersteller='" + hersteller + '\'' +
-                ", modell='" + modell + '\'' +
-                ", kfzBriefNr='" + kfzBriefNr + '\'' +
-                ", leistungInKw=" + leistungInKw +
-                ", farbe='" + farbe + '\'' +
-                ", ez=" + ez +
-                ", umweltPlakette=" + umweltPlakette +
-                ", kraftstoff='" + kraftstoff + '\'' +
-                ", aktionen=" + aktionen +
-                ", sonderausstattung=" + sonderausstattung +
-                '}';
+        return String.format("%s, %s, %s, %s, TÜV: %5$tm - %5$tY, %6$s", hersteller, modell, farbe, kraftstoff, ez, fin);
+    }
+
+    public String toDetailString() {
+        String sonderausstattungString = "keine";
+        if (sonderausstattung != null) {
+            sonderausstattungString = "";
+            for (Sonderausstattung s : sonderausstattung) {
+                sonderausstattungString += s.toString() + ", ";
+            }
+        }
+        if (sonderausstattungString.length() > 0)
+            sonderausstattungString = sonderausstattungString.substring(0, sonderausstattungString.length() - 2);
+
+        return String.format("%s, %s, %s, %s, TÜV: %5$tm-%5$tm, FIN: %6$s, %7$d KW, UWP: %8$d, KFZ-Brief: %9s, Ausstattung: %10s"
+                , hersteller, modell, farbe, kraftstoff, ez, fin, leistungInKw, umweltPlakette, kfzBriefNr, sonderausstattungString);
     }
 }
