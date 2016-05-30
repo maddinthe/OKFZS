@@ -7,6 +7,10 @@ import Datenhaltung.Vorgang;
 import GUI.Ansicht;
 import GUI.OKFZS;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -187,10 +191,11 @@ public class KFZEditor extends Ansicht {
 
             JPanel jpSchaeden = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlSchaeden = new JLabel("Bekannte Schäden:");
-            JTextField jtSchaeden = new JTextField(20);
+            JTextArea jtSchaeden = new JTextArea(3, 20);
             jtSchaeden.setText(vorgang.getSchaeden());
             jpSchaeden.add(jlSchaeden);
             jpSchaeden.add(jtSchaeden);
+
 
             JPanel jpTuev = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlTuev = new JLabel("TÜV:");
@@ -226,14 +231,6 @@ public class KFZEditor extends Ansicht {
             jpSonderausstattung.setBorder(new TitledBorder("Sonderausstattung"));
             jpSonderausstattung.setLayout(new BoxLayout(jpSonderausstattung, BoxLayout.Y_AXIS));
 
-            JPanel jpAutoliste = new JPanel();
-            jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
-            jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
-
-            JPanel jpAusstattungTest = new JPanel(new GridLayout(2,1));
-            JComponent jList = new JList(ausstattungen.toArray(new Sonderausstattung[ausstattungen.size()]));
-            JScrollPane jsp = new JScrollPane(jList);
-
             DefaultListModel ausstattungsListModel = new DefaultListModel();
             JCheckBoxList list = new JCheckBoxList();
             list.setModel(ausstattungsListModel);
@@ -242,7 +239,17 @@ public class KFZEditor extends Ansicht {
                 ausstattungsListModel.addElement(new JCheckboxWithObject(s));
             }
 
+            JPanel jpAutoliste = new JPanel();
+            jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
+            jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
+
+            JPanel jpAusstattungTest = new JPanel(new GridLayout(2,1));
+            JComponent jList = list;
+            JScrollPane jsp = new JScrollPane(jList);
+
+
             jpAusstattungTest.add(jsp);
+
             JPanel jpListTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JTextArea jtListTest = new JTextArea(20, 20);
             jpListTest.add(jtListTest);
@@ -252,6 +259,11 @@ public class KFZEditor extends Ansicht {
 
             jpKfzEast.add(jpSonderausstattung);
             jpKfzEast.add(jpAutoliste);
+
+
+            jfKfzEdit.add(jpKfzWest, BorderLayout.WEST);
+            jfKfzEdit.add(jpKfzCenter, BorderLayout.CENTER);
+            jfKfzEdit.add(jpKfzEast, BorderLayout.EAST);
 
 // South Buttonleiste
             JPanel jpButton = new JPanel();
@@ -278,6 +290,15 @@ public class KFZEditor extends Ansicht {
                     jtEZ.setEditable(false);
                     jtUmweltplakette.setEditable(false);
                     jtKraftstoff.setEditable(false);
+
+                    try {
+
+                        KFZ kfz = new KFZ(jtFin.getText(),jtHersteller.getText(),jtModell.getText(),jtKfzBriefNr.getText(),Integer.parseInt(jtLeistungInKw.getText()),jtFarbe.getText(),umwandeln(jtEZ.getText()),Byte.parseByte(jtUmweltplakette.getText()),jtKraftstoff.getText());
+                        okfzsInstanz.getDatenbank().insertOrUpdateKfz(kfz);
+
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             };
 
@@ -576,6 +597,16 @@ public class KFZEditor extends Ansicht {
                 jtEZ.setEditable(false);
                 jtUmweltplakette.setEditable(false);
                 jtKraftstoff.setEditable(false);
+
+                try {
+
+                    KFZ kfz = new KFZ(jtFin.getText(),jtHersteller.getText(),jtModell.getText(),jtKfzBriefNr.getText(),Integer.parseInt(jtLeistungInKw.getText()),jtFarbe.getText(),umwandeln(jtEZ.getText()),Byte.parseByte(jtUmweltplakette.getText()),jtKraftstoff.getText());
+                    okfzsInstanz.getDatenbank().insertOrUpdateKfz(kfz);
+
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
             }
         };
 
@@ -630,285 +661,6 @@ public class KFZEditor extends Ansicht {
 
     }
 
-//    public KFZEditor(OKFZS okfzsInstanz, Vorgang vorgang) {
-//
-//        super(okfzsInstanz);
-//
-//        //      KFZ DATEN
-//        JFrame jfKfzEdit = new JFrame("KFZ-Editor");
-//        JPanel jpKfzWest = new JPanel();
-//        jpKfzWest.setLayout(new BoxLayout(jpKfzWest, BoxLayout.Y_AXIS));
-//
-//        JPanel jpKfzAngaben = new JPanel();
-//        jpKfzAngaben.setBorder(new TitledBorder("KFZ-Angaben"));
-//        jpKfzAngaben.setLayout(new BoxLayout(jpKfzAngaben, BoxLayout.Y_AXIS));
-//
-//        JPanel jpTypAngaben = new JPanel();
-//        jpTypAngaben.setBorder(new TitledBorder("Typ-Angaben"));
-//        jpTypAngaben.setLayout(new BoxLayout(jpTypAngaben, BoxLayout.Y_AXIS));
-//
-//        JPanel jpSonstigeAngaben = new JPanel();
-//        jpSonstigeAngaben.setBorder(new TitledBorder("Sonstige Angaben"));
-//        jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
-//
-//        JPanel jpFin = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlFin = new JLabel("Fin:");
-//        JTextField jtFin = new JTextField(20);
-//        jpFin.add(jlFin);
-//        jpFin.add(jtFin);
-//
-//        JPanel jpHersteller = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlHersteller = new JLabel("Hersteller:");
-//        JTextField jtHersteller = new JTextField(20);
-//        jpHersteller.add(jlHersteller);
-//        jpHersteller.add(jtHersteller);
-//
-//        JPanel jpModell = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlModell = new JLabel("Modell:");
-//        JTextField jtModell = new JTextField(20);
-//        jpModell.add(jlModell);
-//        jpModell.add(jtModell);
-//
-//        JPanel jpKfzBriefNr = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlKfzBriefNr = new JLabel("KFZ-Brief-Nr.:");
-//        JTextField jtKfzBriefNr = new JTextField(20);
-//        jpKfzBriefNr.add(jlKfzBriefNr);
-//        jpKfzBriefNr.add(jtKfzBriefNr);
-//
-//        JPanel jpLeistungInKw = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlLeistungInKw = new JLabel("Leistung in KW:");
-//        JTextField jtLeistungInKw = new JTextField(20);
-//        jpLeistungInKw.add(jlLeistungInKw);
-//        jpLeistungInKw.add(jtLeistungInKw);
-//
-//        JPanel jpFarbe = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlFarbe = new JLabel("Farbe:");
-//        JTextField jtFarbe = new JTextField(20);
-//        jpFarbe.add(jlFarbe);
-//        jpFarbe.add(jtFarbe);
-//
-//        JPanel jpEZ = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlEZ = new JLabel("Erstzulassung:");
-//        JTextField jtEZ = new JTextField(20);
-//        jpEZ.add(jlEZ);
-//        jpEZ.add(jtEZ);
-//
-//        JPanel jpUmweltplakette = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlUmweltplakette = new JLabel("Umweltplakette:");
-//        JTextField jtUmweltplakette = new JTextField(20);
-//        jpUmweltplakette.add(jlUmweltplakette);
-//        jpUmweltplakette.add(jtUmweltplakette);
-//
-//        JPanel jpKraftstoff = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlKraftstoff = new JLabel("Kraftstoff:");
-//        JTextField jtKraftstoff = new JTextField(20);
-//        jpKraftstoff.add(jlKraftstoff);
-//        jpKraftstoff.add(jtKraftstoff);
-//
-//        JPanel jpAktionen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlAktionen = new JLabel("Aktionen:");
-//        JTextField jtAktionen = new JTextField(20);
-//        jpAktionen.add(jlAktionen);
-//        jpAktionen.add(jtAktionen);
-//
-//        jpKfzAngaben.add(jpFin);
-//        jpKfzAngaben.add(jpKfzBriefNr);
-//        jpKfzAngaben.add(jpEZ);
-//        jpKfzAngaben.add(jpLeistungInKw);
-//
-//        jpTypAngaben.add(jpHersteller);
-//        jpTypAngaben.add(jpModell);
-//        jpTypAngaben.add(jpFarbe);
-//
-//        jpSonstigeAngaben.add(jpKraftstoff);
-//        jpSonstigeAngaben.add(jpUmweltplakette);
-//        jpSonstigeAngaben.add(jpAktionen);
-//
-//        jpKfzWest.add(jpTypAngaben);
-//        jpKfzWest.add(jpKfzAngaben);
-//        jpKfzWest.add(jpSonstigeAngaben);
-//
-//
-//        //JPanel Center
-//
-//        JPanel jpKfzCenter = new JPanel();
-//        jpKfzCenter.setLayout(new BoxLayout(jpKfzCenter, BoxLayout.Y_AXIS));
-//
-//        JPanel jpVKAngaben = new JPanel();
-//        jpVKAngaben.setBorder(new TitledBorder("Verkaufsangaben"));
-//        jpVKAngaben.setLayout(new BoxLayout(jpVKAngaben, BoxLayout.Y_AXIS));
-//
-//        JPanel jpMerkmale = new JPanel();
-//        jpMerkmale.setBorder(new TitledBorder("Merkmale"));
-//        jpMerkmale.setLayout(new BoxLayout(jpMerkmale, BoxLayout.Y_AXIS));
-//
-//        JPanel jpEinkaeufer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlEinkaeufer = new JLabel("Einkäufer:");
-//        JTextField jtEinkaeufer = new JTextField(20);
-//        jtEinkaeufer.setText(String.valueOf(vorgang.getEinkaeufer().getPerson()));
-//        jpEinkaeufer.add(jlEinkaeufer);
-//        jpEinkaeufer.add(jtEinkaeufer);
-//
-//        JPanel jpEK = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlEK = new JLabel("Einkaufspreis:");
-//        JTextField jtEK = new JTextField(20);
-//        jpEK.add(jlEK);
-//        jpEK.add(jtEK);
-//
-//        JPanel jpVKP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlVKP = new JLabel("geplanter Verkaufspreis:");
-//        JTextField jtVKP = new JTextField(20);
-//        jpVKP.add(jlVKP);
-//        jpVKP.add(jtVKP);
-//
-//        JPanel jpEKDat = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlEKDat = new JLabel("Einkaufsdatum:");
-//        JTextField jtEKDat = new JTextField(20);
-//        jpEKDat.add(jlEKDat);
-//        jpEKDat.add(jtEKDat);
-//
-//        JPanel jpSchaeden = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlSchaeden = new JLabel("Bekannte Schäden:");
-//        JTextField jtSchaeden = new JTextField(20);
-//        jpSchaeden.add(jlSchaeden);
-//        jpSchaeden.add(jtSchaeden);
-//
-//        JPanel jpTuev = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlTuev = new JLabel("TÜV:");
-//        JTextField jtTuev = new JTextField(20);
-//        jpTuev.add(jlTuev);
-//        jpTuev.add(jtTuev);
-//
-//        JPanel jpKennzeichen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JLabel jlKennzeichen = new JLabel("Kennzeichen:");
-//        JTextField jtKennzeichen = new JTextField(20);
-//        jpKennzeichen.add(jlKennzeichen);
-//        jpKennzeichen.add(jtKennzeichen);
-//
-//        jpVKAngaben.add(jpEinkaeufer);
-//        jpVKAngaben.add(jpEKDat);
-//        jpVKAngaben.add(jpEK);
-//        jpVKAngaben.add(jpVKP);
-//
-//        jpMerkmale.add(jpSchaeden);
-//        jpMerkmale.add(jpTuev);
-//        jpMerkmale.add(jpKennzeichen);
-//
-//        jpKfzCenter.add(jpMerkmale);
-//        jpKfzCenter.add(jpVKAngaben);
-//
-////        JPanel East
-//        JPanel jpKfzEast = new JPanel();
-//        jpKfzEast.setLayout(new BoxLayout(jpKfzEast, BoxLayout.Y_AXIS));
-//
-//        JPanel jpSonderausstattung = new JPanel();
-//        jpSonderausstattung.setBorder(new TitledBorder("Sonderausstattung"));
-//        jpSonderausstattung.setLayout(new BoxLayout(jpSonderausstattung, BoxLayout.Y_AXIS));
-//
-//        JPanel jpAutoliste = new JPanel();
-//        jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
-//        jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
-//
-//        JPanel jpAusstattungTest = new JPanel(new GridLayout(2,1));
-//        JComponent jList = new JList(testAustattung);
-//        JScrollPane jsp = new JScrollPane(jList);
-//
-//
-//        jpAusstattungTest.add(jsp);
-//
-//        JPanel jpListTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//        JTextArea jtListTest = new JTextArea(20, 20);
-//        jpListTest.add(jtListTest);
-//
-//        jpSonderausstattung.add(jpAusstattungTest);
-//        jpAutoliste.add(jpListTest);
-//
-//        jpKfzEast.add(jpSonderausstattung);
-//        jpKfzEast.add(jpAutoliste);
-//
-//
-//        jfKfzEdit.add(jpKfzWest, BorderLayout.WEST);
-//        jfKfzEdit.add(jpKfzCenter, BorderLayout.CENTER);
-//        jfKfzEdit.add(jpKfzEast, BorderLayout.EAST);
-//
-//
-//        // South Buttonleiste
-//        JPanel jpButton = new JPanel();
-//        JButton jbFahrzeugSave = new JButton("Fahrzeug speichern");
-//        JButton jbFahrzeugBearbeiten = new JButton("Fahrzeug bearbeiten");
-//        JButton jbNeueAktion = new JButton("Fahrzeugaktion hinzufügen");
-//        JButton jbNeueAusstattung = new JButton("Fahrzeugausstattung hinzufügen");
-//        JButton jbVerkauf = new JButton("Fahrzeugverkauf vorbereiten");
-//
-//// Actionlistener
-//
-//        //todo Daten der AL in DB speichern
-//        ActionListener alFahrzeugSave = new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                jtFin.setEditable(false);
-//                jtHersteller.setEditable(false);
-//                jtHersteller.setEditable(false);
-//                jtKfzBriefNr.setEditable(false);
-//                jtLeistungInKw.setEditable(false);
-//                jtFarbe.setEditable(false);
-//                jtEZ.setEditable(false);
-//                jtUmweltplakette.setEditable(false);
-//                jtKraftstoff.setEditable(false);
-//            }
-//        };
-//
-//        ActionListener alFahrzeugBearbeiten = new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                jtFin.setEditable(true);
-//                jtHersteller.setEditable(true);
-//                jtHersteller.setEditable(true);
-//                jtKfzBriefNr.setEditable(true);
-//                jtLeistungInKw.setEditable(true);
-//                jtFarbe.setEditable(true);
-//                jtEZ.setEditable(true);
-//                jtUmweltplakette.setEditable(true);
-//                jtKraftstoff.setEditable(true);
-//            }
-//        };
-//
-//        ActionListener alNeueAusstattung = new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                setNeueAustattung();
-//            }
-//        };
-//
-//        jbFahrzeugSave.addActionListener(alFahrzeugSave);
-//        jbFahrzeugBearbeiten.addActionListener(alFahrzeugBearbeiten);
-//        jbNeueAusstattung.addActionListener(alNeueAusstattung);
-//
-//        jpButton.add(jbFahrzeugSave);
-//        jpButton.add(jbFahrzeugBearbeiten);
-//        jpButton.add(jbNeueAktion);
-//        jpButton.add(jbNeueAusstattung);
-//        jpButton.add(jbVerkauf);
-//
-//        jfKfzEdit.add(jpKfzWest, BorderLayout.WEST);
-//        jfKfzEdit.add(jpKfzCenter, BorderLayout.CENTER);
-//        jfKfzEdit.add(jpKfzEast, BorderLayout.EAST);
-//        jfKfzEdit.add(jpButton, BorderLayout.SOUTH);
-//
-//        //JFrame jf Größe mitgeben
-//        jfKfzEdit.setSize(1024, 768);
-//
-//
-//        //JFrame jf auf Bildschirm plazieren
-//        jfKfzEdit.setLocation(200, 400);
-//
-//        //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
-//        jfKfzEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//
-//        //JFrame jf anzeigen
-//        jfKfzEdit.setVisible(true);
-//    }
-
     public String getKFZ(String kfz) {
         return kfz;
     }
@@ -954,6 +706,25 @@ public class KFZEditor extends Ansicht {
         jfKfzEdit.setVisible(true);
 
     }
+    public static java.sql.Date umwandeln(String datum) {
+        SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
+        Date date = null;
+        try {
+            date = format.parse(datum);
+            System.out.println(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+        }
+        java.sql.Date sDate = new java.sql.Date(date.getTime());
+        return sDate;
+    }
+
+
+    /**
+     * Klasse ist nach Anleitung gebaut und entsprechend abgeändert.
+     * Quelle: http://blog.mynotiz.de/programmieren/java-checkbox-in-jlist-1061/
+     */
 
     private class JCheckBoxList extends JList {
 
@@ -979,12 +750,13 @@ public class KFZEditor extends Ansicht {
                     JCheckBox checkbox = (JCheckBox) value;
 
                     if (isSelected) {
-                        // checkbox.setBorderPainted(true);
-                        // checkbox.setForeground(UIManager.getColor("List.selectionForeground"));
-                        // checkbox.setBackground(UIManager.getColor("List.selectionBackground"));
+                        checkbox.setBorderPainted(true);
+                        checkbox.setForeground(UIManager.getColor("List.selectionForeground"));
+                        checkbox.setBackground(UIManager.getColor("List.selectionBackground"));
+
                     } else {
-                        // checkbox.setBorderPainted(false);
-                        // checkbox.setForeground(UIManager.getColor("List.foreground"));
+                        checkbox.setBorderPainted(false);
+                        checkbox.setForeground(UIManager.getColor("List.foreground"));
                         checkbox.setBackground(UIManager.getColor("List.background"));
                     }
                     return checkbox;
@@ -1011,7 +783,24 @@ public class KFZEditor extends Ansicht {
                 this.repaint();
             }
 
+//        public void sortieren(List<Sonderausstattung> liste){
+//            Sonderausstattung[] sonderausstattungArray= liste.toArray(new Sonderausstattung[liste.size()]);
+//            JList<Sonderausstattung> sListe = new JList<>(sonderausstattungArray);
+//
+//            for (int i = 0; i < sonderausstattungArray.length; i++) {
+//                sonderausstattungArray[i].get
+//            }
+//
+//            }
+//
+//        }
+
     }
+
+    /**
+     * Klasse ist nach Anleitung gebaut und entsprechend abgeändert.
+     * Quelle: http://blog.mynotiz.de/programmieren/java-checkbox-in-jlist-1061/
+     */
         private class JCheckboxWithObject extends JCheckBox{
             private Object object;
 
