@@ -189,7 +189,12 @@ public class OKFZS extends JFrame {
             }
 
             case "autoVerk":{
-                Vorgang v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
+                Vorgang v=null;
+                if(aktuelleAnsicht.getClass().equals(KFZListe.class)){
+                    v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
+                }else if (aktuelleAnsicht.getClass().equals(KFZEditor.class)){
+                    v=((KFZEditor)aktuelleAnsicht).getVorgang();
+                }
                 aktuelleAnsicht=new KaufvertragEditor(this,v);
                 anzeige.add("autoVerk",aktuelleAnsicht);
                 cards.show(anzeige,"autoVerk");

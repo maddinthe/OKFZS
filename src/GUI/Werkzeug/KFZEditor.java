@@ -25,10 +25,11 @@ import java.sql.SQLException;
  * Created by tkertz on 23.05.2016.
  */
 public class KFZEditor extends Ansicht {
-
+    private Vorgang vorgang;
     public KFZEditor(OKFZS okfzsInstanz, Vorgang vorgang) {
         super(okfzsInstanz);
         KFZ k=vorgang.getKfz();
+        this.vorgang=vorgang;
         try {
             //      KFZ DATEN
             List<Sonderausstattung> ausstattungen=okfzsInstanz.getDatenbank().ausstattungsliste();
@@ -718,6 +719,10 @@ public class KFZEditor extends Ansicht {
         }
         java.sql.Date sDate = new java.sql.Date(date.getTime());
         return sDate;
+    }
+
+    public Vorgang getVorgang() {
+        return vorgang;
     }
 
 
