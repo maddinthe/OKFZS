@@ -7,6 +7,7 @@ import Datenhaltung.Vorgang;
 import GUI.Ansicht;
 import GUI.OKFZS;
 
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -20,233 +21,13 @@ import java.sql.SQLException;
  * Created by tkertz on 23.05.2016.
  */
 public class KFZEditor extends Ansicht {
-    private String[] testAustattung = {
-            "8fach bereift (8f)",
-            "Abgasuntersuchung (Au)",
-            "Airbag (AB, AIR)",
-            "Airbag (AIR)",
-            "Alarmanlage (Alarm)",
-            "Alcantara (Alc)",
-            "Alufelgen (Alu)",
-            "Anhängerkupplung (AHK)",
-            "Anti-Schlupf-Regelung (ASR)",
-            "Antiblockiersystem (ABS)",
-            "Aufstelldach (ADa)",
-            "aus erster Hand (1.Hd)",
-            "Außenspiegel (Asp)",
-            "Außentemperaturanzeiger (ATA)",
-            "Aussenthemperaturanzeige (AT)",
-            "Ausstattung (Ausst.)",
-            "Austauschgetriebe (ATG)",
-            "Austauschmotor (ATM)",
-            "ausweisbar (awb.)",
-            "Auto-Check-System (AC)",
-            "Automatische Motorantenne (AA)",
-            "Automatisches Park-System (APS)",
-            "Automatik (Aut.)",
-            "automatisch abklappbarer Spiegel (aSp)",
-            "Automatisches Sperrdifferenzial (ASD)",
-            "Autotelefon (Tel)",
-            "Baujahr (Bj.)",
-            "Bordcomputer (BC)",
-            "BOSE-Soundsystem (BOSE)",
-            "breite Reifen (BR)",
-            "Cassetten-Recorder (Cass.)",
-            "Cassettenablage (Cass)",
-            "CD-Wechsler (CD)",
-            "Colorverglasung (Col.)",
-            "Dachreling (DR)",
-            "Dachreling (Dachr., DR)",
-            "Dachträger (Dachtr.)",
-            "Dämmglas (Dä)",
-            "Diebstahlsicherung (Diebstahl.)",
-            "Diebstahlwarnanlage (DWA)",
-            "Differentialsperre (Diff-Sp.)",
-            "Digitales Soundsystem (Digi)",
-            "diverse Extras (div.Extr.)",
-            "Drehzahlmesser (DZM)",
-            "Durchlade (DL)",
-            "Durchladesystem / Skisack (DU)",
-            "elektrisch einstellb.u.beheizbare Spiegel (eSP)",
-            "Elektrische Differentialsperre (EDS)",
-            "Elektrisches Faltdach (eFalt)",
-            "Elektrische Fensterheber (eFH)",
-            "Elektrische Fensterheber vorn (eFHvo)",
-            "Elektrische geregelte Klimaanlage (Climatroni)",
-            "Elektrisches Schiebedach (eSD)",
-            "Elektrisches Solarschiebedach (eSD)",
-            "Elektrisches Sonnenrollo (eSo)",
-            "Elektrisches Stabilitäts-Programm (ESP)",
-            "Elektrisches Verdeck (Cabrio) (eV)",
-            "Elektrisch verstellbare Sitze (eSi)",
-            "Elektrische Außenspiegel (eAsp)",
-            "elektrische Fensterheber (el.FH oder eFH)",
-            "elektrische Zentralverriegelung (eZV)",
-            "elektrisches Glas-Hebe-Dach (eGHD)",
-            "elektrisches Glas-Schiebe-Dach (eGSD)",
-            "elektrisches Schiebe-Dach (eSD)",
-            "elektrisches Schiebe-Hebe-Dach (eSHD)",
-            "elektrisches Stabilisierungsprogramm (ESP)",
-            "Erstzulassung (EZ)",
-            "Extras (Extr.)",
-            "Fahrer-Informations-System (FIS)",
-            "Fahrersitz, höhenverstellbar (vSi)",
-            "Fahrradhalter (FaHa)",
-            "Fernbedienung (FB)",
-            "Festpreis (FP)",
-            "Finanzierung (Finz.)",
-            "Ganzjahresreifen (GJ)",
-            "Garagenwagen (GaWa)",
-            "Garagenwagen (GW)",
-            "Garantie (Herstellergarantie) (GAR)",
-            "Gebrauchtwagengarantie (GW-Gar.)",
-            "Gepäckraumabdeckung (GA)",
-            "gepflegt (gepfl.)",
-            "Geregelter Katalysator (G-Kat.)",
-            "Geschwindigkeitsregelanlage (GRA)",
-            "geteilte Rückbank (1/3-2/3) (gRü)",
-            "Glas-Hebe-Dach (GHD)",
-            "Glasdach (GD)",
-            "Glasdach, elektrisch (GDe)",
-            "Glasschiebedach (GSD)",
-            "Glasschiebehebedach (GSHD)",
-            "Grünkeil (Grünk.)",
-            "Gurt-Integralsitze (Cabrio) (GIS)",
-            "Halbjahreswagen (HJW)",
-            "Hardtop (HT)",
-            "Hecklautsprecher (HLS)",
-            "Heckscheibenwischer (Heckw./HW)",
-            "Heckspoiler (Hecksp.)",
-            "Heckspoiler (HSp)",
-            "Heckwischer (HeWi.)",
-            "heizbare Scheibenwaschdüsen (HS)",
-            "Heizung (Hzg.)",
-            "Hochdach (Reisemobil) (HDa)",
-            "Holzapplikationen (HO)",
-            "Im Auftrag (i.A)",
-            "Innenspiegel automatisch abblendend (abSP)",
-            "Inspektion durchgeführt (Ins)",
-            "integrierte Kindersitze (Kind)",
-            "Inzahlungsnahme (Inz.)",
-            "Jahreswagen (JW)",
-            "Jaquard-Satin-Sitzbezüge (JAQ)",
-            "katalysator (Kat)",
-            "Kilowatt (kW)",
-            "Klimaanlage, elektronisch geregelt (Ke)",
-            "Klimaanlage, halbautomatisch manuell (K)",
-            "Klimaanlage, manuelle Regelung (Klima)",
-            "Komfortsitze (KS)",
-            "komplett (kpl.)",
-            "Kopfstützen (Kopfst.)",
-            "Kopfstützen hinten (KO)",
-            "Kundendienst (KD.)",
-            "Kundendienstgepflegt (KDgepfl.)",
-            "kurzer Radstand (KRS)",
-            "langer Radstand (LRS)",
-            "Lederausstattung (Leder)",
-            "Lederlenkrad (LLR)",
-            "Leichtmetallfelgen (Alu)",
-            "Leichtmetallfelgen (LMF oder Alu)",
-            "LKW-Zulassung (LKW-Zul.)",
-            "Markise (Reisemobil) (MA)",
-            "Memory Sitze (MEM)",
-            "Metallic-Lackierung (met)",
-            "Mittelarmlehne (Arm)",
-            "Mittelarmlehne (MAL oder Arm)",
-            "Modell (Mod.)",
-            "Multifunktionsanzeige (MFA)",
-            "Navigationssystem (Navi)",
-            "Navigationssystem mit Farbdisplay (RC-Navi)",
-            "Nebelscheinwerfer (NS)",
-            "Nebelscheinwerfer (NE)",
-            "Netztrennwand (Netz)",
-            "Neupreis (NP)",
-            "Nichtraucherfahrzeug (NR)",
-            "Niveauregulierung (Niveau)",
-            "Parkdistanzkontrolle (PDC)",
-            "Perl-Effect-Lackierung (perl)",
-            "PKW-Zulassung (PKW-Zul.)",
-            "Pollenfilter (PF)",
-            "Pollenfilter (Pollenfil.)",
-            "Radio (R)",
-            "Radio-Cassette (RC/RD)",
-            "Radio-CD-Player (RD)",
-            "Radio-Gamma (RC-Gamma)",
-            "Radio/Cassetten/CD (Soundsyst. oder CD)",
-            "rechtgesteuert (RHD)",
-            "Regensensor (RS)",
-            "Reling (Rel.)",
-            "Scheckheftgepflegt (Scheckh.)",
-            "Scheibenantenne (SA)",
-            "Scheinwerfer-Reinigungsanlage (SRA)",
-            "Scheinwerferwaschanlage (SWW)",
-            "Schiebedach, manuell (SD)",
-            "Schiebefenster (hieb)",
-            "Servolenkung (Servo)",
-            "Servolenkung (SV)",
-            "Servotronic (ST)",
-            "Sitzheizung (Si.Hzg. oder SHZ)",
-            "Sitzpaket (Sitz)",
-            "Skisack (Skis.)",
-            "Softtop (ST)",
-            "Sommerreifen (SR)",
-            "Sonnenrollo (SO)",
-            "Soundsystem / Aktivlautsprecher (HiFi)",
-            "Sperrdifferential (Sperrdiff.)",
-            "Spoiler (Spoil.)",
-            "Sportausstattung (SpA)",
-            "Sportfahrwerk (Sport.FW)",
-            "Sportfahrwerk (SpF)",
-            "Sportlenkrad aus Leder (SpL)",
-            "Sportsitze (SpS)",
-            "Stahlhubdach (SHD)",
-            "Stahlkurbeldach (SKD)",
-            "Stahlschiebedach (SS)",
-            "Standheizung (SH)",
-            "Styling-Paket (Styling)",
-            "Technikpaket (Technik)",
-            "Teillederausstaung (TL)",
-            "Telefonvorbereitung (TelVor)",
-            "Tempomat (Tempom.)",
-            "Thermotronic (THER)",
-            "Topzustand (Topzust.)",
-            "Tüv (§)",
-            "Überrollbügel (ÜB)",
-            "und viele Extras (u.v.Extr.)",
-            "und vieles mehr (uvm.)",
-            "und weitere Extras (u.w.Extr.)",
-            "Unfallfrei (unf.-fr.)",
-            "Ungeregelter Katalysator (U-Kat.)",
-            "Velours-Sitzbezüge (VE)",
-            "Verhandlungsbasis (VB)",
-            "Verhandlungssache (VS)",
-            "Verkaufstermin (VK)",
-            "verstellbare Lenksäule (vL)",
-            "Vollausstattung (Vollausst.)",
-            "von Privat (v. Pr.)",
-            "von Werksangehörigen (v. WA oder WA)",
-            "Vorführwagen (VFW)",
-            "wärmedämmendes Glas (WDG)",
-            "Wärmeschutzglas (WSG)",
-            "Wärmeschutzglas (Wä)",
-            "Wegfahrsperre (WS)",
-            "Wegfahrsperre (WFS)",
-            "Windschott (Cabrio) (Wind)",
-            "Winterpaket (Winter)",
-            "Winterreifen (Wi.-Rf.)",
-            "Xenon-Scheinwerfer (Xenon)",
-            "Xenonscheinwerfer (XE)",
-            "Zentralverriegelung (ZV)",
-            "Zentralverriegelung mit Funkbedienung (ZVFu)",
-    };
-    private Sonderausstattung[] ausstattungen=new Sonderausstattung[testAustattung.length];
-
 
     public KFZEditor(OKFZS okfzsInstanz, Vorgang vorgang) {
         super(okfzsInstanz);
         KFZ k=vorgang.getKfz();
         try {
             //      KFZ DATEN
+            List<Sonderausstattung> ausstattungen=okfzsInstanz.getDatenbank().ausstattungsliste();
             this.setLayout(new BorderLayout());
             JPanel jfKfzEdit = this;
             JPanel jpKfzWest = new JPanel();
@@ -450,8 +231,16 @@ public class KFZEditor extends Ansicht {
             jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
 
             JPanel jpAusstattungTest = new JPanel(new GridLayout(2,1));
-            JComponent jList = new JList(testAustattung);
+            JComponent jList = new JList(ausstattungen.toArray(new Sonderausstattung[ausstattungen.size()]));
             JScrollPane jsp = new JScrollPane(jList);
+
+            DefaultListModel ausstattungsListModel = new DefaultListModel();
+            JCheckBoxList list = new JCheckBoxList();
+            list.setModel(ausstattungsListModel);
+
+            for(Sonderausstattung s:ausstattungen){
+                ausstattungsListModel.addElement(new JCheckboxWithObject(s));
+            }
 
             jpAusstattungTest.add(jsp);
             JPanel jpListTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -550,10 +339,12 @@ public class KFZEditor extends Ansicht {
     }
 
     public KFZEditor(OKFZS okfzsInstanz) {
-
         super(okfzsInstanz);
-        for (int i = 0; i < ausstattungen.length; i++) {
-            ausstattungen[i]=new Sonderausstattung(i,testAustattung[i]);
+        List<Sonderausstattung> ausstattungen= null;
+        try {
+            ausstattungen = okfzsInstanz.getDatenbank().ausstattungsliste();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
 //      KFZ DATEN
@@ -727,24 +518,12 @@ public class KFZEditor extends Ansicht {
         jpSonderausstattung.setBorder(new TitledBorder("Sonderausstattung"));
         jpSonderausstattung.setLayout(new BoxLayout(jpSonderausstattung, BoxLayout.Y_AXIS));
 
-        DefaultListModel personenListModel = new DefaultListModel();
+        DefaultListModel ausstattungsListModel = new DefaultListModel();
         JCheckBoxList list = new JCheckBoxList();
-        list.setModel(personenListModel);
-
-        // Daten hinzufügen
-//        Sonderausstattung test = new Sonderausstattung(24, "Test");
-//        Sonderausstattung test2 = new Sonderausstattung(27, "Test2");
-//
-//        JCheckboxWithObject hansCheckbox = new JCheckboxWithObject(test);
-//        JCheckboxWithObject peterCheckbox = new JCheckboxWithObject(
-//                test2);
-//
-//
-//        personenListModel.addElement(hansCheckbox);
-//        personenListModel.addElement(peterCheckbox);
+        list.setModel(ausstattungsListModel);
 
         for(Sonderausstattung s:ausstattungen){
-            personenListModel.addElement(new JCheckboxWithObject(s));
+            ausstattungsListModel.addElement(new JCheckboxWithObject(s));
         }
 
         JPanel jpAutoliste = new JPanel();
