@@ -736,5 +736,22 @@ public class Datenbank {
         r.close();
         return erreichbarkeiten;
     }
+
+    public List<Sonderausstattung> ausstattungsliste() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT sid,art from t_sonderausstattung");
+        List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
+
+
+        while (r.next()) {
+            long sid = r.getLong("sid");
+            String art = r.getString("art");
+            Sonderausstattung sonderausstattung = new Sonderausstattung(sid, art);
+            sonderausstattungsListe.add(sonderausstattung);
+
+        }
+        r.close();
+        return sonderausstattungsListe;
+    }
 }
 
