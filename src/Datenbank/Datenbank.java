@@ -154,7 +154,7 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         try {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,gebTag) VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getGeburtstag() + "')");
-            ResultSet rs=stmt.executeQuery("SELECT pid FROM t_person WHERE pid=max(pid)");
+            ResultSet rs = stmt.executeQuery("SELECT pid FROM t_person WHERE pid=max(pid)");
             person.setPid(rs.getLong(0));
         } catch (SQLException e) {
             //stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"' WHERE pid=" + person.getPid() + "");
@@ -212,14 +212,17 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         try {
             if (verkaeufer.istAktiv())
+                stmt.executeUpdate("UPDATE t_verkaeufer SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+
+            else
+                stmt.executeUpdate("UPDATE t_verkaeufer SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "', inaktivseit='" + new Date() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+
+        } catch (SQLException e) {
+            if (verkaeufer.istAktiv())
                 stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
             else
                 stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort,inaktivseit) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "','" + new Date() + "')");
-        } catch (SQLException e) {
-            if (verkaeufer.istAktiv())
-                stmt.executeUpdate("UPDATE t_verkaeufer SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
-            else
-                stmt.executeUpdate("UPDATE t_verkaeufer SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "', inaktivseit='" + new Date() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+
         }
     }
 
@@ -227,23 +230,28 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         try {
             if (verkaeufer.istAktiv())
+                stmt.executeUpdate("UPDATE t_admins SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+
+            else
+                stmt.executeUpdate("UPDATE t_admins SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "', inaktivseit='" + new Date() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+
+        } catch (SQLException e) {
+            if (verkaeufer.istAktiv())
                 stmt.executeUpdate("INSERT  INTO t_admins(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
             else
                 stmt.executeUpdate("INSERT  INTO t_admins(fk_t_person_pid,anmeldename,passwort,inaktivseit) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "','" + new Date() + "')");
-        } catch (SQLException e) {
-            if (verkaeufer.istAktiv())
-                stmt.executeUpdate("UPDATE t_admins SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
-            else
-                stmt.executeUpdate("UPDATE t_admins SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "', inaktivseit='" + new Date() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+
         }
     }
 
     public void insertOrUpdateKfz(KFZ kfz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_kfz SET fin='" + kfz.getFin() + "',hersteller='" + kfz.getHersteller() + "',modell='" + kfz.getModell() + "',kfz_brief='" + kfz.getKfzBriefNr() + "',leistung=" + kfz.getLeistungInKw() + ",farbe='" + kfz.getFarbe() + "',ez='" + kfz.getEz() + "', plakette='" + kfz.getUmweltPlakette() + "',kraftstoff='" + kfz.getKraftstoff() + "'WHERE fin='" + kfz.getFin() + "'");
+
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
 
         }
     }
@@ -251,36 +259,40 @@ public class Datenbank {
     public void insertOrUpdateAktion(Aktion aktion) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_aktion(fk_t_person_pid,fk_t_kfz_fin,datum,text) VALUES (" + aktion.getDurchfuehrender().getPid() + ",'" + aktion.getKfz().getFin() + "', '" + aktion.getDurchfuehrung() + "','" + aktion.getBeschreibung() + "')");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_aktion SET fk_t_person_pid='" + aktion.getDurchfuehrender().getPid() + "' fk_t_kfz_fin='" + aktion.getKfz().getFin() + "',datum='" + aktion.getDurchfuehrung() + "',text='" + aktion.getBeschreibung() + "' WHERE fk_t_person_pid=" + aktion.getDurchfuehrender().getPid() + " AND fk_t_kfz_fin='" + aktion.getKfz().getFin() + "'");
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_aktion(fk_t_person_pid,fk_t_kfz_fin,datum,text) VALUES (" + aktion.getDurchfuehrender().getPid() + ",'" + aktion.getKfz().getFin() + "', '" + aktion.getDurchfuehrung() + "','" + aktion.getBeschreibung() + "')");
         }
     }
 
     public void insertOrUpdateSonderausstattung(Sonderausstattung sonderausstattung) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_sonderausstattung(art) VALUES ('" + sonderausstattung.getBeschreibung() + "')");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_sonderausstattung SET art='" + sonderausstattung.getBeschreibung() + "' WHERE sid=" + sonderausstattung.getSid() + "");
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_sonderausstattung(art) VALUES ('" + sonderausstattung.getBeschreibung() + "')");
         }
     }
 
     public void insertOrUpdateVorgang(Vorgang vorgang) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + vorgang.getKauefer().getPid() + "," + vorgang.getEinkaeufer().getPerson().getPid() + ", " + vorgang.getVerkaeufer().getPerson().getPid() + ",'" + vorgang.getKfz().getFin() + "'," + vorgang.getePreis() + "," + vorgang.getvPreis() + "," + vorgang.getKilometer() + ",'" + vorgang.getSchaeden() + "','" + vorgang.getVerkaufsDatum() + "','" + vorgang.getEinkaufsDatum() + "','" + vorgang.getKennzeichen() + "','" + vorgang.getRabattGrund() + "'," + vorgang.getTuev() + ",'" + vorgang.getSonstvereinbarungen() + "'," + vorgang.getvPreisPlan() + ")");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + vorgang.getKauefer().getPid() + ", fk_t_verkaeufer_pid_ek=" + vorgang.getEinkaeufer().getPerson().getPid() + ",fk_t_verkaeufer_pid_vk=" + vorgang.getVerkaeufer().getPerson().getPid() + ",fk_t_kfz_fin='" + vorgang.getKfz().getFin() + "',epreis=" + vorgang.getePreis() + ",vpreis=" + vorgang.getvPreis() + ",km=" + vorgang.getKilometer() + ",schaeden='" + vorgang.getSchaeden() + "',vkdatum='" + vorgang.getVerkaufsDatum() + "',ekdatum='" + vorgang.getEinkaufsDatum() + "',kennz='" + vorgang.getKennzeichen() + "',rabattgrund='" + vorgang.getRabattGrund() + "',tuev=" + vorgang.getTuev() + ",sonstvereinb='" + vorgang.getSonstvereinbarungen() + "',vpreisplan=" + vorgang.getvPreisPlan() + " WHERE vid=" + vorgang.getVid() + "");
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + vorgang.getKauefer().getPid() + "," + vorgang.getEinkaeufer().getPerson().getPid() + ", " + vorgang.getVerkaeufer().getPerson().getPid() + ",'" + vorgang.getKfz().getFin() + "'," + vorgang.getePreis() + "," + vorgang.getvPreis() + "," + vorgang.getKilometer() + ",'" + vorgang.getSchaeden() + "','" + vorgang.getVerkaufsDatum() + "','" + vorgang.getEinkaufsDatum() + "','" + vorgang.getKennzeichen() + "','" + vorgang.getRabattGrund() + "'," + vorgang.getTuev() + ",'" + vorgang.getSonstvereinbarungen() + "'," + vorgang.getvPreisPlan() + ")");
         }
     }
 
     public void insertOrUpdateAusstattungsliste(Sonderausstattung sonderausstattung, KFZ kfz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_ausstattungsliste(fk_t_sonderausstattung_sid,fk_t_kfz_fin) VALUES (" + sonderausstattung.getSid() + ",'" + kfz.getFin() + "')");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_ausstattungsliste SET fk_t_sonderausstattung_sid=" + sonderausstattung.getSid() + ",fk_t_kfz_fin='" + kfz.getFin() + "' WHERE fk_t_sonderausstattung_sid=" + sonderausstattung.getSid() + " AND fk_t_kfz_fin='" + kfz.getFin() + "' ");
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_ausstattungsliste(fk_t_sonderausstattung_sid,fk_t_kfz_fin) VALUES (" + sonderausstattung.getSid() + ",'" + kfz.getFin() + "')");
         }
     }
 
@@ -708,6 +720,7 @@ public class Datenbank {
         r.close();
         return verkaeufer;
     }
+
     public List<Notiz> alleNotizen(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_notiz WHERE fk_t_person_pid=" + person.getPid() + "");
@@ -724,6 +737,7 @@ public class Datenbank {
         r.close();
         return notizen;
     }
+
     public List<Erreichbarkeit> alleErreichbarkeiten(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE fk_t_person_pid=" + person.getPid() + "");
@@ -745,7 +759,7 @@ public class Datenbank {
 
     public List<Sonderausstattung> ausstattungsliste() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT sid,art from t_sonderausstattung");
+        ResultSet r = stmt.executeQuery("SELECT sid,art FROM t_sonderausstattung");
         List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
 
 
@@ -762,10 +776,10 @@ public class Datenbank {
 
     public boolean verkaeuferDa() {
         try {
-            Statement stmt=conn.createStatement();
-            ResultSet r=stmt.executeQuery("select count(anmeldename) FROM t_verkaeufer");
-            if(r.next())
-            return(r.getInt(1)>0);
+            Statement stmt = conn.createStatement();
+            ResultSet r = stmt.executeQuery("SELECT count(anmeldename) FROM t_verkaeufer");
+            if (r.next())
+                return (r.getInt(1) > 0);
         } catch (SQLException e) {
             e.printStackTrace();
         }
