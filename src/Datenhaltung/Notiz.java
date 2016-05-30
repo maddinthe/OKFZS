@@ -10,10 +10,21 @@ public class Notiz {
     private long nid;
     private Person person;
     private Date datum;
+
+    @Override
+    public String toString() {
+        return  datum + " " +  beschreibung;
+    }
+
     private String beschreibung;
 
     public Notiz(long nid, Person person, Date datum, String beschreibung) {
         this.nid = nid;
+        this.person = person;
+        this.datum = datum;
+        this.beschreibung = beschreibung;
+    }
+    public Notiz(Person person, Date datum, String beschreibung) {
         this.person = person;
         this.datum = datum;
         this.beschreibung = beschreibung;

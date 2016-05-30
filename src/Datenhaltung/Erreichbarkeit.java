@@ -20,6 +20,14 @@ public class Erreichbarkeit {
         this.email = email;
         this.details = details;
     }
+    public Erreichbarkeit(Person person, String telefonNummer, String handyNummer, String email, String details) {
+
+        this.person = person;
+        this.telefonNummer = telefonNummer;
+        this.handyNummer = handyNummer;
+        this.email = email;
+        this.details = details;
+    }
 
     public long getEid() {
         return eid;
@@ -67,5 +75,13 @@ public class Erreichbarkeit {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    @Override
+    public String toString() {
+        return details+" \n"+
+                 "Telefon:"+telefonNummer + " \n"
+                  +"Mobil:"+handyNummer + " \n"
+                   +"E-Mail:" +email + " \n\n";
     }
 }
