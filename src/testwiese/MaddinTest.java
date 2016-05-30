@@ -1,12 +1,13 @@
 package testwiese;
 
 import Datenbank.Datenbank;
-import Datenhaltung.*;
-import GUI.*;
-
+import Datenhaltung.Erreichbarkeit;
 import javax.swing.*;
+
+import java.awt.*;
 import java.sql.SQLException;
-import java.util.*;
+
+import java.util.List;
 
 /**
  * Created by mtheilen on 23.05.2016.
@@ -15,50 +16,51 @@ public class MaddinTest {
 
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-//        //Spieldaten
-//        List<Vorgang> vorgaenge = new LinkedList<>();
-//        Verkaeufer[] verkaufer={
-//                //new Verkaeufer("maddin","madinspw",new Person("Herr", "Theilen"),true,true),
-//                //new Verkaeufer("toni","tonispw",new Person("Herr", "Kertz"),true,true),
-//                //new Verkaeufer("turner","turnerspw",new Person("Herr", "Dreher"),true,true)
-//        };
-//        KFZ[] kfzs = {new KFZ("12345678912345678", "Nissan", "Micra", "J124456", 100, "Rot", new Date(2015, 5, 1), (byte) 4, "Diesel"),
-//                new KFZ("123453478912345678", "Honda", "Civic", "J127856", 101, "Rot", new Date(2014, 5, 1), (byte) 4, "Diesel"),
-//                new KFZ("1234538912345678", "VW", "Golf", "J12786", 102, "Gelb", new Date(2013, 5, 1), (byte) 4, "Benzin" ),
-//                new KFZ("1232378912345678", "Skoda", "Octavia", "J12378", 103, "Schwarz", new Date(2012, 5, 1), (byte) 4, "Benzin")};
-//
-//        vorgaenge.add(new Vorgang(kfzs[0],verkaufer[0],9500));
-//        vorgaenge.add(new Vorgang(kfzs[1],verkaufer[0],19500));
-//        vorgaenge.add(new Vorgang(kfzs[2],verkaufer[0],29500));
-//        vorgaenge.add(new Vorgang(kfzs[3],verkaufer[0],39500));
-//
-//        List<Person> personen=new LinkedList<>();
-//        personen.add(verkaufer[0].getPerson());
-//        personen.add(verkaufer[1].getPerson());
-//        personen.add(verkaufer[2].getPerson());
-
-
         //Spieldaten ende
 
 
         JFrame test = new JFrame("OKFZS-TEST-Maddin");
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         test.setSize(1024, 786);
-        test.setJMenuBar(new Menue(null));
-//        test.add(new KFZListe(null, vorgaenge));
-//        test.add(new PersonenListe(null,personen));
 
-        //Anmeldung a=new Anmeldung(null);
-        //test.add(a);
 
-        //test.setVisible(true);
+        Datenbank db=Datenbank.getInstance("localhost", 5432);
 
-        Datenbank db=Datenbank.getInstance("localhost",5432);
+        List<Erreichbarkeit> notizs=db.alleErreichbarkeiten(db.einePerson(6));
 
-        System.out.println(db.VorgaengeZuVerkaeufer(db.einVerkaufer(6)));
+        JList<Erreichbarkeit> notizJList = new JList<>(notizs.toArray(new Erreichbarkeit[notizs.size()]));
+        notizJList.setCellRenderer(new ErrListRenderer());
+
+        test.add(notizJList);
+
+
+
+        test.setVisible(true);
+
+
 
 
 
 
     }
+  static class ErrListRenderer extends JLabel implements ListCellRenderer<Erreichbarkeit>{
+
+      @Override
+      public Component getListCellRendererComponent(JList<? extends Erreichbarkeit> list, Erreichbarkeit value, int index, boolean isSelected, boolean cellHasFocus) {
+
+          setText("<html>"+value.getDetails()+"<br>"
+                  +"Telefon: "+value.getTelefonNummer()+"<br>"
+                  +"Handy: "+value.getHandyNummer()+"<br>"
+                  +"E-Mail: "+value.getEmail()+"</html>");
+
+          if (isSelected) {
+              setBackground(Color.white);
+              setForeground(Color.BLUE);
+          } else {
+              setBackground(Color.white);
+              setForeground(Color.black);
+          }
+          return this;
+      }
+  }
 }
