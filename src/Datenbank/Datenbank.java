@@ -150,15 +150,18 @@ public class Datenbank {
         conn.close();
     }
 
-    public void insertPerson(Person person) throws SQLException {
+    public Person insertPerson(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,gebTag) VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getGeburtstag() + "')");
+            ResultSet rs=stmt.executeQuery("SELECT pid FROM t_person WHERE pid=max(pid)");
+            person.setPid(rs.getLong(0));
         } catch (SQLException e) {
             //stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"' WHERE pid=" + person.getPid() + "");
             System.out.println(e.getMessage());
         }
 
+        return person;
     }
 
     public void insertOrUpdatePerson(Person person) throws SQLException {
@@ -752,6 +755,19 @@ public class Datenbank {
         }
         r.close();
         return sonderausstattungsListe;
+    }
+
+    public boolean verkaeuferDa() {
+        try {
+            Statement stmt=conn.createStatement();
+            ResultSet r=stmt.executeQuery("select anmeldename FROM t_verkaeufer");
+            r.last();
+            return(r.getRow()>0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
 

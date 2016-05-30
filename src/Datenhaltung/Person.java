@@ -133,4 +133,8 @@ public class Person {
         result = 31 * result + (ustID != null ? ustID.hashCode() : 0);
         return result;
     }
+
+    public void setPid(long pid) {
+        this.pid = pid;
+    }
 }

@@ -120,7 +120,7 @@ public class KaufvertragEditor extends Ansicht {
     private void kaufvertragDrucken(Vorgang vorgang) {
         //todo:fertig machen
         try {
-            File f = File.createTempFile("Vertrag_" + Long.toUnsignedString(vorgang.getVid()), ".html");
+            File f = File.createTempFile("Vertrag_" + vorgang.getVid()+"-", ".html");
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));
             bw.append("<!DOCTYPE html>\n" +
                     "<html lang=\"de\">\n" +
