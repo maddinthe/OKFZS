@@ -342,7 +342,7 @@ public class PersonenEditor extends Ansicht {
 
             //JPanel East
             JPanel jpEast = new JPanel();
-            jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.Y_AXIS));
+            jpEast.setLayout(new BoxLayout(jpEast, BoxLayout.Y_AXIS));
 
             JPanel jpNotiz = new JPanel();
             jpNotiz.setBorder(new TitledBorder("Notizen"));
