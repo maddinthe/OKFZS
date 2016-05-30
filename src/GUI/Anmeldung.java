@@ -7,7 +7,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class Anmeldung extends Ansicht {
 
     public Anmeldung(OKFZS instanz) {
         super(instanz);
-        if(instanz.getDatenbank().verkaeuferDa()) {
+        if(instanz.getDatenbank().adminDa()) {
 
 
             JLabel nameLabel = new JLabel("Benutzername:");
@@ -79,17 +81,24 @@ public class Anmeldung extends Ansicht {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(anrede.getSelectedItem()!=null&&!name.getText().equals("")&&!geburtstag.getText().equals("")&&!anmeldeName.getText().equals("")){
-                        if (passwort.getPassword().toString().equals(paswortBest.getPassword().toString())&&passwort.getPassword().length>4){
-
+                        System.out.println(String.copyValueOf(passwort.getPassword()));
+                        System.out.println(String.copyValueOf(paswortBest.getPassword()));
+                        if ((String.copyValueOf(passwort.getPassword()).hashCode()==String.copyValueOf(paswortBest.getPassword()).hashCode())&&passwort.getPassword().length>=4){
                             try {
                                 SimpleDateFormat sdf=new SimpleDateFormat("DD.MM.YYYY");
-                                Person p=getOKFZSInstanz().getDatenbank().insertPerson(new Person((String)anrede.getSelectedItem(),name.getText(),new Date()));
+                                Person p=getOKFZSInstanz().getDatenbank().insertPerson(new Person((String)anrede.getSelectedItem(),name.getText(),sdf.parse(geburtstag.getText())));
+                                Verkaeufer v=getOKFZSInstanz().getDatenbank().insertVerkaeufer(new Verkaeufer(anmeldeName.getText(),String.copyValueOf(passwort.getPassword()).hashCode()+"",p,true,true));
+                                getOKFZSInstanz().getDatenbank().insertOrUpdateAdmins(v);
+                                getOKFZSInstanz().setBenutzer(v);
+                                getOKFZSInstanz().anzeigen("uebersicht");
                             } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            } catch (ParseException e1) {
                                 e1.printStackTrace();
                             }
 
                         }else{
-                            JOptionPane.showMessageDialog(getOKFZSInstanz(),"Die Passwörter Stimmen nicht überein oder sind zu kurz(5 Zeichen)","Passwortfehler",JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(getOKFZSInstanz(),"Die Passwörter Stimmen nicht überein oder sind zu kurz(4 Zeichen)","Passwortfehler",JOptionPane.ERROR_MESSAGE);
                         }
                     }else{
                         JOptionPane.showMessageDialog(getOKFZSInstanz(),"Bitte füllen sie alle Felder aus","Nicht komplett...",JOptionPane.ERROR_MESSAGE);

@@ -154,8 +154,9 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         try {
             stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,gebTag) VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getGeburtstag() + "')");
-            ResultSet rs=stmt.executeQuery("SELECT pid FROM t_person WHERE pid=max(pid)");
-            person.setPid(rs.getLong(0));
+            ResultSet rs = stmt.executeQuery("SELECT max(pid) FROM t_person");
+            if(rs.next())
+            person.setPid(rs.getLong(1));
         } catch (SQLException e) {
             //stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"' WHERE pid=" + person.getPid() + "");
             System.out.println(e.getMessage());
@@ -227,14 +228,14 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         try {
             if (verkaeufer.istAktiv())
-                stmt.executeUpdate("INSERT  INTO t_admins(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
+                stmt.executeUpdate("INSERT  INTO t_admins(fk_t_verkaeufer_fk_t_person_pid) VALUES (" + verkaeufer.getPerson().getPid()+ ")");
             else
-                stmt.executeUpdate("INSERT  INTO t_admins(fk_t_person_pid,anmeldename,passwort,inaktivseit) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "','" + new Date() + "')");
+                stmt.executeUpdate("INSERT  INTO t_admins(fk_t_verkaeufer_fk_t_person_pid) VALUES (" + verkaeufer.getPerson().getPid() + ")");
         } catch (SQLException e) {
             if (verkaeufer.istAktiv())
-                stmt.executeUpdate("UPDATE t_admins SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+                stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() +  " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
             else
-                stmt.executeUpdate("UPDATE t_admins SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "', inaktivseit='" + new Date() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+                stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
         }
     }
 
@@ -708,6 +709,7 @@ public class Datenbank {
         r.close();
         return verkaeufer;
     }
+
     public List<Notiz> alleNotizen(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_notiz WHERE fk_t_person_pid=" + person.getPid() + "");
@@ -724,6 +726,7 @@ public class Datenbank {
         r.close();
         return notizen;
     }
+
     public List<Erreichbarkeit> alleErreichbarkeiten(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE fk_t_person_pid=" + person.getPid() + "");
@@ -760,17 +763,30 @@ public class Datenbank {
         return sonderausstattungsListe;
     }
 
-    public boolean verkaeuferDa() {
+    public boolean adminDa() {
         try {
-            Statement stmt=conn.createStatement();
-            ResultSet r=stmt.executeQuery("select count(anmeldename) FROM t_verkaeufer");
-            if(r.next())
-            return(r.getInt(1)>0);
+            Statement stmt = conn.createStatement();
+            ResultSet r = stmt.executeQuery("select count(fk_t_verkaeufer_fk_t_person_pid) FROM t_admins");
+            if (r.next())
+                return (r.getInt(1) > 0);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return false;
+    }
+
+    public Verkaeufer insertVerkaeufer(Verkaeufer verkaeufer) {
+
+
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return verkaeufer;
     }
 }
 
