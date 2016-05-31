@@ -225,6 +225,11 @@ public class OKFZS extends JFrame {
 
                 else if (aktuelleAnsicht.getClass().equals(KFZEditor.class)) {
                     v = ((KFZEditor) aktuelleAnsicht).getVorgang();
+                    try {
+                        v=getDatenbank().einVorgang(v.getKfz());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
                 aktuelleAnsicht = new KFZEditor(this, v);
                 anzeige.add("autoAend", aktuelleAnsicht);

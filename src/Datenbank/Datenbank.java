@@ -294,7 +294,7 @@ public class Datenbank {
         try {
             stmt.executeUpdate("INSERT  INTO t_aktion(fk_t_person_pid,fk_t_kfz_fin,datum,text) VALUES (" + aktion.getDurchfuehrender().getPid() + ",'" + aktion.getKfz().getFin() + "', '" + aktion.getDurchfuehrung() + "','" + aktion.getBeschreibung() + "')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_aktion SET fk_t_person_pid='" + aktion.getDurchfuehrender().getPid() + "' fk_t_kfz_fin='" + aktion.getKfz().getFin() + "',datum='" + aktion.getDurchfuehrung() + "',text='" + aktion.getBeschreibung() + "' WHERE fk_t_person_pid=" + aktion.getDurchfuehrender().getPid() + " AND fk_t_kfz_fin='" + aktion.getKfz().getFin() + "'");
+            stmt.executeUpdate("UPDATE t_aktion SET fk_t_person_pid='" + aktion.getDurchfuehrender().getPid() + "', fk_t_kfz_fin='" + aktion.getKfz().getFin() + "',datum='" + aktion.getDurchfuehrung() + "',text='" + aktion.getBeschreibung() + "' WHERE fk_t_person_pid=" + aktion.getDurchfuehrender().getPid() + " AND fk_t_kfz_fin='" + aktion.getKfz().getFin() + "'");
         }
     }
 
