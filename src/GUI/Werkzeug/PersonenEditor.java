@@ -678,7 +678,7 @@ public class PersonenEditor extends Ansicht {
                     e1.printStackTrace();
                 }
                 selectedPers = temp;
-                okfzsInstanz.anzeigen("personAend");
+                okfzsInstanz.anzeigen(new PersonenEditor(okfzsInstanz,temp));
 
 
             }

@@ -5,9 +5,9 @@ import Datenhaltung.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
@@ -18,6 +18,7 @@ import java.util.Date;
 public class Datenbank {
     private static Datenbank datenbank;
     private static Connection conn;
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyy-MM-dd");
 
     private Datenbank() {
     }
@@ -316,13 +317,12 @@ public class Datenbank {
         Double vPreis = (vorgang.getvPreis() == 0) ? null : vorgang.getvPreis();
         Double ePreis = (vorgang.getePreis() == 0) ? null : vorgang.getePreis();
         Double vPreisPlan = (vorgang.getvPreisPlan() == 0) ? null : vorgang.getvPreisPlan();
-        ;
-        String vkDatum = (vorgang.getVerkaufsDatum() == null) ? null : vorgang.getVerkaufsDatum().toString();
+        String vkDatum = (vorgang.getVerkaufsDatum() == null) ? null : "'"+sdf.format(vorgang.getVerkaufsDatum())+"'";
         String rabbatGrund = (vorgang.getRabattGrund() == null) ? "" : vorgang.getRabattGrund();
         String sonstVereinbarung = (vorgang.getSonstvereinbarungen() == null) ? "" : vorgang.getSonstvereinbarungen();
-        String ekDatum = vorgang.getEinkaufsDatum().toString();
+        String ekDatum = sdf.format(vorgang.getEinkaufsDatum());
         String scheaden = (vorgang.getSchaeden() == null) ? "" : vorgang.getSchaeden();
-        String tuev = (vorgang.getTuev() == null) ? null : vorgang.getTuev().toString();
+        String tuev = (vorgang.getTuev() == null) ? null : "'"+sdf.format(vorgang.getTuev())+"'";
         String kenzeichen = (vorgang.getKennzeichen() == null) ? "" : vorgang.getKennzeichen();
         Integer km = (vorgang.getKilometer() == 0) ? null : vorgang.getKilometer();
 
@@ -331,7 +331,7 @@ public class Datenbank {
             stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + kPid + "," + ekPid + ", " + vkPid + ",'" + kfz.getFin() + "'," + ePreis + "," + vPreis + "," + km + ",'" + scheaden + "'," + vkDatum + ",'" + ekDatum + "','" + kenzeichen + "','" + rabbatGrund + "'," + tuev + ",'" + sonstVereinbarung + "'," + vPreisPlan + ")");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + vorgang.getKauefer().getPid() + ", fk_t_verkaeufer_pid_ek=" + vorgang.getEinkaeufer().getPerson().getPid() + ",fk_t_verkaeufer_pid_vk=" + vorgang.getVerkaeufer().getPerson().getPid() + ",fk_t_kfz_fin='" + vorgang.getKfz().getFin() + "',epreis=" + vorgang.getePreis() + ",vpreis=" + vorgang.getvPreis() + ",km=" + vorgang.getKilometer() + ",schaeden='" + vorgang.getSchaeden() + "',vkdatum='" + vorgang.getVerkaufsDatum() + "',ekdatum='" + vorgang.getEinkaufsDatum() + "',kennz='" + vorgang.getKennzeichen() + "',rabattgrund='" + vorgang.getRabattGrund() + "',tuev=" + vorgang.getTuev() + ",sonstvereinb='" + vorgang.getSonstvereinbarungen() + "',vpreisplan=" + vorgang.getvPreisPlan() + " WHERE vid=" + vorgang.getVid() + "");
+            stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + kPid + ", fk_t_verkaeufer_pid_ek=" + ekPid + ",fk_t_verkaeufer_pid_vk=" + vkPid + ",fk_t_kfz_fin='" + kfz.getFin() + "',epreis=" + ePreis + ",vpreis=" + vPreis+ ",km=" + km + ",schaeden='" + scheaden + "',vkdatum='" + vkDatum + "',ekdatum='" + ekDatum + "',kennz='" + kenzeichen + "',rabattgrund='" + rabbatGrund + "',tuev=" + tuev + ",sonstvereinb='" + sonstVereinbarung + "',vpreisplan=" + vPreisPlan + " WHERE vid=" + vorgang.getVid() + "");
         }
     }
 

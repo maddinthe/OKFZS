@@ -4,8 +4,12 @@ import java.util.Date;
 
 /**
  * Created by tkertz on 23.05.2016.
+ * Finished by mtheilen on 31.05.2016
  */
-//todo: stub
+
+/**
+ * Datenhaltungsklasse für die Vorgänge
+ */
 public class Vorgang {
     private long vid;
     private Person kauefer;
@@ -24,15 +28,39 @@ public class Vorgang {
     private String kennzeichen;
     private int kilometer;
 
-    //todo:doku
+    /**
+     * Minimalconstruktor für den Vorgang hier ermittelt sich der geplante Verkaufspreis automatisch genause wie das Einkaufsdatum welches auf die aktuelle zeit gesetzt wird
+     * @param kfz KFZ das im Vorgang behandelt wird
+     * @param einkauefer Verkäufer der das KFz in diesem vorgang eingekauft hat
+     * @param ePreis Einkaufspreis des Fahrzeugs in €
+     */
     public Vorgang(KFZ kfz, Verkaeufer einkauefer, double ePreis) {
         this.kfz = kfz;
         this.einkauefer = einkauefer;
         this.ePreis = ePreis;
         this.einkaufsDatum=new Date();
-        this.vPreisPlan=ePreis*1.2; //todo:realistische preisspanne einbauen
+        this.vPreisPlan=ePreis*1.2;
     }
 
+    /**
+     * maximaler Konstruktor der z.b. für eine erstellung aus der Datenbak verwendet wird
+     * @param vid Vorgangsid
+     * @param kauefer @Nullable der Käufer des Fahrzeugs
+     * @param verkaeufer  @Nullable der Verkäufer des Fahrzeugs
+     * @param einkaeufer @NotNull der Verkäufer der das Fahrzeug eingekauft hat
+     * @param kfz @NotNull das Fahrzeug um das es in diesem Vorgang geht
+     * @param vPreis der Verkaufspreis
+     * @param ePreis der Einkaufspreis
+     * @param vPreisPlan der geplante Verkaufspreis
+     * @param verkaufsDatum @Nullable das Verkaufsdatum
+     * @param rabattGrund @Nullable der Rabattgrund
+     * @param sonstvereinbarungen @Nullable sonstige vereinbarungen zum Kauf
+     * @param einkaufsDatum @NotNull das Einkaufsdatum
+     * @param schaeden @Nullable evtl Schäden am Fahrzeug
+     * @param tuev @Nullable Zeitpunkt an dem HU/AU ablaufen
+     * @param kennzeichen @Nullable das aktuelle Kennzeichen
+     * @param kilometer der Aktuelle Kilometerstand
+     */
     public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer, Verkaeufer einkaeufer, KFZ kfz, double vPreis, double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen, Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen,int kilometer) {
         this.vid = vid;
         this.kauefer = kauefer;
@@ -112,6 +140,10 @@ public class Vorgang {
         return kennzeichen;
     }
 
+    /**
+     * Berechnet der gewinn am KFZ-Verkauf
+     * @return der Reingewinn
+     */
     public double getGewinn() {
         return vPreis - ePreis;
     }
@@ -198,9 +230,7 @@ public class Vorgang {
         this.kilometer=kilometer;
     }
 
-    //todo: schöner machen
     public String toString() {
-
         return String.format("%.2f €, Schäden: %s, %s",vPreis,schaeden,kfz.toDetailString());
     }
 }

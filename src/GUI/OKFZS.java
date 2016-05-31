@@ -19,12 +19,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by mtheilen on 23.05.2016.
  */
-//todo: noch nicht fertig
 public class OKFZS extends JFrame {
     private Datenbank datenbank;
     private Map<String, Ansicht> ansichten;
@@ -35,7 +33,9 @@ public class OKFZS extends JFrame {
     private CardLayout cards;
     private Ansicht aktuelleAnsicht;
 
-    //todo: stub
+    /**
+     * Erstellt das Fenster und sorgt anschließend dafür das alles Richtig angezeigt wird und stellt den ansichten die daten bereit bzw sorgt dafür das die ansichten sich die daten holen können
+     */
     public OKFZS() {
         super();
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -97,7 +97,6 @@ public class OKFZS extends JFrame {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //todo: schließende sachen tuen;
         System.exit(0);
     }
 
@@ -167,7 +166,9 @@ public class OKFZS extends JFrame {
                 try {
                     vorgangList = datenbank.VorgaengeZuVerkaeufer(benutzer);
                 } catch (SQLException e) {
+                    System.out.println(e.getMessage());
                 }
+                if (vorgangList==null) System.out.println("nullliste");
                 aktuelleAnsicht = new Uebersicht(this, vorgangList);
                 anzeige.add(aktuelleAnsicht, "uebersicht");
                 cards.show(anzeige, "uebersicht");
@@ -314,7 +315,34 @@ public class OKFZS extends JFrame {
 
     }
 
-    //todo:doku und evtl weitere details
+    public void anzeigen(Ansicht a){
+        Menue menue = (Menue) getJMenuBar();
+        switch (a.getClass().getSimpleName()){
+            case "PersonenEditor":{
+                aktuelleAnsicht=a;
+                menue.menueUmschalten("personAend");
+                anzeige.add(aktuelleAnsicht, "personAend");
+                cards.show(anzeige, "personAend");
+                break;
+            }
+            case "KFZEditor":{
+                aktuelleAnsicht=a;
+                menue.menueUmschalten("autoAend");
+                anzeige.add(aktuelleAnsicht, "autoAend");
+                cards.show(anzeige, "autoAend");
+                break;
+            }
+            case "KaufvertragEditor":{
+                aktuelleAnsicht=a;
+                menue.menueUmschalten("autoVerk");
+                anzeige.add(aktuelleAnsicht, "autoVerk");
+                cards.show(anzeige, "autoVerk");
+                break;
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
         new OKFZS();
 
