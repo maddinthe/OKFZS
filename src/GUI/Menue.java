@@ -94,12 +94,6 @@ public class Menue extends JMenuBar {
         JMenuItem uebersichAnz = new JMenuItem("Übersicht anzeigen");
         uebersichAnz.addActionListener(al);
         ubersicht.add(uebersichAnz);
-        JMenuItem sucheKFZ=new JMenuItem("KFZ suchen");
-        sucheKFZ.addActionListener(al);
-        ubersicht.add(sucheKFZ);
-        JMenuItem suchePers=new JMenuItem("Person suchen");
-        suchePers.addActionListener(al);
-        ubersicht.add(suchePers);
 
         JMenuItem impExp = new JMenuItem("Import/Export");
         impExp.addActionListener(al);
@@ -117,6 +111,10 @@ public class Menue extends JMenuBar {
         autos.add(autoAnl);
         JMenuItem autoAendern = new JMenuItem("Auto ändern");
         autoAendern.addActionListener(al);
+        JMenuItem sucheKFZ=new JMenuItem("KFZ suchen");
+        sucheKFZ.addActionListener(al);
+        autos.add(sucheKFZ);
+
 
         autos.add(autoAendern);
         JMenuItem autoVerkaufen = new JMenuItem("Auto Verkaufen");
@@ -135,6 +133,9 @@ public class Menue extends JMenuBar {
         persAendern.addActionListener(al);
         persAendern.setEnabled(false);
         pers.add(persAendern);
+        JMenuItem suchePers=new JMenuItem("Person suchen");
+        suchePers.addActionListener(al);
+        pers.add(suchePers);
 
 
         JMenu stats = new JMenu("Statistik");

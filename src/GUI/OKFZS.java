@@ -178,7 +178,7 @@ public class OKFZS extends JFrame {
             case "autoAnz": {
                 java.util.List<Vorgang> vorgList = null;
                 java.util.List<KFZ> kfzList=null;
-                if (aktuelleAnsicht.getClass().equals(Suche.class)) {
+                if (aktuelleAnsicht.getClass().equals(Suche.class)&&((Suche) aktuelleAnsicht).getKfzs().size()>0) {
                     kfzList = ((Suche) aktuelleAnsicht).getKfzs();
                 } else
                     try {
@@ -189,7 +189,7 @@ public class OKFZS extends JFrame {
                     anzeigen("autoAnl");
                     break;
                 }
-                if (vorgList.size()>0){
+                if (vorgList!=null&&vorgList.size()>0){
                     aktuelleAnsicht = new KFZListe(this, vorgList);
                 }
                 else aktuelleAnsicht =new KFZListe(this, kfzList);
