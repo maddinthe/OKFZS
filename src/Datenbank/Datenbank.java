@@ -207,8 +207,8 @@ public class Datenbank {
     public void insertOrUpdateNotiz(Notiz notiz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            int test = stmt.executeUpdate("UPDATE t_notiz SET fk_t_person_pid=" + notiz.getPerson().getPid() + ", text='" + notiz.getBeschreibung() + "',datum='" + notiz.getDatum() + "' WHERE nid=" + notiz.getNid() + "");
-            if (test < 1)
+            int count = stmt.executeUpdate("UPDATE t_notiz SET fk_t_person_pid=" + notiz.getPerson().getPid() + ", text='" + notiz.getBeschreibung() + "',datum='" + notiz.getDatum() + "' WHERE nid=" + notiz.getNid() + "");
+            if (count < 1)
                 stmt.executeUpdate("INSERT  INTO t_notiz(fk_t_person_pid,text,datum) VALUES (" + notiz.getPerson().getPid() + ",'" + notiz.getBeschreibung() + "', '" + notiz.getDatum() + "')");
 
 
@@ -250,9 +250,10 @@ public class Datenbank {
     public void insertOrUpdateKfz(KFZ kfz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
-        } catch (SQLException e) {
             stmt.executeUpdate("UPDATE t_kfz SET fin='" + kfz.getFin() + "',hersteller='" + kfz.getHersteller() + "',modell='" + kfz.getModell() + "',kfz_brief='" + kfz.getKfzBriefNr() + "',leistung=" + kfz.getLeistungInKw() + ",farbe='" + kfz.getFarbe() + "',ez='" + kfz.getEz() + "', plakette='" + kfz.getUmweltPlakette() + "',kraftstoff='" + kfz.getKraftstoff() + "'WHERE fin='" + kfz.getFin() + "'");
+
+        } catch (SQLException e) {
+            stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
 
         }
     }
@@ -269,9 +270,11 @@ public class Datenbank {
     public void insertOrUpdateSonderausstattung(Sonderausstattung sonderausstattung) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_sonderausstattung(art) VALUES ('" + sonderausstattung.getBeschreibung() + "')");
+            int count = stmt.executeUpdate("UPDATE t_sonderausstattung SET art='" + sonderausstattung.getBeschreibung() + "' WHERE sid=" + sonderausstattung.getSid() + "");
+            if (count < 1)
+                stmt.executeUpdate("INSERT  INTO t_sonderausstattung(art) VALUES ('" + sonderausstattung.getBeschreibung() + "')");
         } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_sonderausstattung SET art='" + sonderausstattung.getBeschreibung() + "' WHERE sid=" + sonderausstattung.getSid() + "");
+
         }
     }
 
@@ -756,7 +759,7 @@ public class Datenbank {
 
     public List<Sonderausstattung> ausstattungsliste() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT sid,art from t_sonderausstattung");
+        ResultSet r = stmt.executeQuery("SELECT sid,art FROM t_sonderausstattung");
         List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
 
 
@@ -774,7 +777,7 @@ public class Datenbank {
     public boolean adminDa() {
         try {
             Statement stmt = conn.createStatement();
-            ResultSet r = stmt.executeQuery("select count(fk_t_verkaeufer_fk_t_person_pid) FROM t_admins");
+            ResultSet r = stmt.executeQuery("SELECT count(fk_t_verkaeufer_fk_t_person_pid) FROM t_admins");
             if (r.next())
                 return (r.getInt(1) > 0);
         } catch (SQLException e) {
