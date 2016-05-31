@@ -98,6 +98,7 @@ public class Datenbank {
         try {
             getInstance(host, port);
         } catch (ClassNotFoundException e) {
+
         }
 
         einlesenScript();
@@ -219,12 +220,12 @@ public class Datenbank {
         Statement stmt = conn.createStatement();
         try {
             if (verkaeufer.istAktiv())
-                stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
+                stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort,inaktivseit) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "',NULL )");
             else
                 stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort,inaktivseit) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "','" + new Date() + "')");
         } catch (SQLException e) {
             if (verkaeufer.istAktiv())
-                stmt.executeUpdate("UPDATE t_verkaeufer SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+                stmt.executeUpdate("UPDATE t_verkaeufer SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "',inaktivseit=NULL WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
             else
                 stmt.executeUpdate("UPDATE t_verkaeufer SET fk_t_person_pid=" + verkaeufer.getPerson().getPid() + ", anmeldename='" + verkaeufer.getAnmeldeName() + "',passwort='" + verkaeufer.getPasswortHash() + "', inaktivseit='" + new Date() + "' WHERE fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
         }
@@ -242,6 +243,14 @@ public class Datenbank {
                 stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
             else
                 stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
+        }
+    }
+    public void deleteAdmin(Verkaeufer verkaeufer) throws SQLException {
+        Statement stmt = conn.createStatement();
+        try {
+            stmt.executeUpdate("DELETE FROM t_admins WHERE fk_t_verkaeufer_fk_t_person_pid="+verkaeufer.getPerson().getPid());
+        }catch (SQLException e){
+        System.out.println(e.getMessage());
         }
     }
 

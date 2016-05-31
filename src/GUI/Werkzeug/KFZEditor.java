@@ -122,7 +122,7 @@ public class KFZEditor extends Ansicht {
             JPanel jpAktionen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlAktionen = new JLabel("Aktionen:");
             JTextField jtAktionen = new JTextField(20);
-//            jtAktionen.setText(aktion.getDurchfuehrender().getName()+" "+aktion.getKfz().getFin()+" "+aktion.getBeschreibung()+" "+aktion.getDurchfuehrung().toString());
+//            jtAktionen.setText(okfzsInstanz.getDatenbank().eineAktion(k,));
             jpAktionen.add(jlAktionen);
             jpAktionen.add(jtAktionen);
 
@@ -154,7 +154,7 @@ public class KFZEditor extends Ansicht {
             jpVKAngaben.setLayout(new BoxLayout(jpVKAngaben, BoxLayout.Y_AXIS));
 
             JPanel jpMerkmale = new JPanel();
-            jpMerkmale.setBorder(new TitledBorder("Merkmale"));
+            jpMerkmale.setBorder(new TitledBorder("KFZ-Merkmale"));
             jpMerkmale.setLayout(new BoxLayout(jpMerkmale, BoxLayout.Y_AXIS));
 
             JPanel jpEinkaeufer = new JPanel(new FlowLayout(FlowLayout.RIGHT));

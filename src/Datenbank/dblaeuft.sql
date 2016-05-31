@@ -1,14 +1,3 @@
-CREATE DATABASE db_okfzs
-
-WITH OWNER = postgres
-ENCODING = 'UTF8'
-TABLESPACE=pg_default
-LC_COLLATE='German_Germany.1252'
-LC_CTYPE='German_Germany.1252'
-CONNECTION LIMIT = -1;
-
-\c db_okfzs
-
 create table t_Person(
 	PID			serial,
 	Anrede		varchar(30) NOT NULL,
