@@ -1,9 +1,6 @@
 package GUI.Werkzeug;
 
-import Datenhaltung.KFZ;
-import Datenhaltung.Person;
-import Datenhaltung.Sonderausstattung;
-import Datenhaltung.Vorgang;
+import Datenhaltung.*;
 import GUI.Ansicht;
 import GUI.OKFZS;
 
@@ -32,7 +29,7 @@ public class KFZEditor extends Ansicht {
         this.vorgang=vorgang;
         try {
             //      KFZ DATEN
-            List<Sonderausstattung> ausstattungen=okfzsInstanz.getDatenbank().ausstattungsliste();
+            List<Sonderausstattung> ausstattungen=okfzsInstanz.getDatenbank().ausstattungslisteSortiert();
             this.setLayout(new BorderLayout());
             JPanel jfKfzEdit = this;
             JPanel jpKfzWest = new JPanel();
@@ -240,6 +237,7 @@ public class KFZEditor extends Ansicht {
                 ausstattungsListModel.addElement(new JCheckboxWithObject(s));
             }
 
+
             JPanel jpAutoliste = new JPanel();
             jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
             jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
@@ -321,13 +319,21 @@ public class KFZEditor extends Ansicht {
             ActionListener alNeueAusstattung = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    setNeueAustattung();
+                    setNeueAustattung(okfzsInstanz);
                 }
             };
 
+            ActionListener alNeueAktion = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    AktionEditor aktionEditor = new AktionEditor(okfzsInstanz, vorgang.getKfz());
+
+                }
+            };
 
             jbFahrzeugSave.addActionListener(alFahrzeugSave);
             jbFahrzeugBearbeiten.addActionListener(alFahrzeugBearbeiten);
+            jbNeueAktion.addActionListener(alNeueAktion);
             jbNeueAusstattung.addActionListener(alNeueAusstattung);
 
             jpButton.add(jbFahrzeugSave);
@@ -364,7 +370,7 @@ public class KFZEditor extends Ansicht {
         super(okfzsInstanz);
         List<Sonderausstattung> ausstattungen= null;
         try {
-            ausstattungen = okfzsInstanz.getDatenbank().ausstattungsliste();
+            ausstattungen = okfzsInstanz.getDatenbank().ausstattungslisteSortiert();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -589,20 +595,15 @@ public class KFZEditor extends Ansicht {
         ActionListener alFahrzeugSave = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jtFin.setEditable(false);
-                jtHersteller.setEditable(false);
-                jtHersteller.setEditable(false);
-                jtKfzBriefNr.setEditable(false);
-                jtLeistungInKw.setEditable(false);
-                jtFarbe.setEditable(false);
-                jtEZ.setEditable(false);
-                jtUmweltplakette.setEditable(false);
-                jtKraftstoff.setEditable(false);
 
                 try {
 
                     KFZ kfz = new KFZ(jtFin.getText(),jtHersteller.getText(),jtModell.getText(),jtKfzBriefNr.getText(),Integer.parseInt(jtLeistungInKw.getText()),jtFarbe.getText(),umwandeln(jtEZ.getText()),Byte.parseByte(jtUmweltplakette.getText()),jtKraftstoff.getText());
                     okfzsInstanz.getDatenbank().insertOrUpdateKfz(kfz);
+                    Vorgang v=new Vorgang(kfz,okfzsInstanz.getBenutzer(),Double.parseDouble(jtEK.getText()));
+                    okfzsInstanz.getDatenbank().insertOrUpdateVorgang(v);
+                    vorgang=v;
+                    okfzsInstanz.anzeigen("autoAend");
 
                 } catch (SQLException e1) {
                     e1.printStackTrace();
@@ -629,12 +630,15 @@ public class KFZEditor extends Ansicht {
         ActionListener alNeueAusstattung = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setNeueAustattung();
+                setNeueAustattung(okfzsInstanz);
             }
         };
 
+
+
         jbFahrzeugSave.addActionListener(alFahrzeugSave);
         jbFahrzeugBearbeiten.addActionListener(alFahrzeugBearbeiten);
+//        jbNeueAktion.addActionListener(alNeueAktion);
         jbNeueAusstattung.addActionListener(alNeueAusstattung);
 
         jpButton.add(jbFahrzeugSave);
@@ -666,7 +670,7 @@ public class KFZEditor extends Ansicht {
         return kfz;
     }
 
-    public void setNeueAustattung(){
+    public void setNeueAustattung(OKFZS okfzsInstanz){
         JFrame jfKfzEdit = new JFrame("Ausstattungs-Editor");
         JPanel jpKFZ = new JPanel();
         jpKFZ.setLayout(new BoxLayout(jpKFZ, BoxLayout.Y_AXIS));
@@ -676,18 +680,31 @@ public class KFZEditor extends Ansicht {
         jpKfzAngaben.setLayout(new BoxLayout(jpKfzAngaben, BoxLayout.Y_AXIS));
 
         JPanel jpAustattungHinzu = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JTextField jtFin = new JTextField(20);
-        jpAustattungHinzu.add(jtFin);
+        JTextField jtAusstattungHinzu = new JTextField(20);
+        jpAustattungHinzu.add(jtAusstattungHinzu);
 
-        JButton jbSave = new JButton("Speichern");
-        jpAustattungHinzu.add(jbSave);
+        JButton jbAusstattungSave = new JButton("Speichern");
+        jpAustattungHinzu.add(jbAusstattungSave);
 
-        ActionListener al = new ActionListener() {
+        ActionListener alAusstattungSave = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo Ausstattung in DB speichern
+                try {
+
+                    Sonderausstattung sonderausstattung = new Sonderausstattung(jtAusstattungHinzu.getText());
+                    okfzsInstanz.getDatenbank().insertOrUpdateSonderausstattung(sonderausstattung);
+                    System.out.println("test");
+
+                } catch (SQLException e1) {
+                    System.out.println(e1.getMessage());
+                }
+//                okfzsInstanz.anzeigen("autoAend");
+                jfKfzEdit.dispose();
+
             }
         };
+
+        jbAusstattungSave.addActionListener(alAusstattungSave);
 
         jpKfzAngaben.add(jpAustattungHinzu);
         jpKFZ.add(jpKfzAngaben);
@@ -707,6 +724,62 @@ public class KFZEditor extends Ansicht {
         jfKfzEdit.setVisible(true);
 
     }
+
+//    public void setNeueAktion(OKFZS okfzsInstanz){
+//        JFrame jfKfzEdit = new JFrame("Aktionen-Editor");
+//        JPanel jpKFZ = new JPanel();
+//        jpKFZ.setLayout(new BoxLayout(jpKFZ, BoxLayout.Y_AXIS));
+//
+//        JPanel jpKfzAngaben = new JPanel();
+//        jpKfzAngaben.setBorder(new TitledBorder("Aktion hinzufügen"));
+//        jpKfzAngaben.setLayout(new BoxLayout(jpKfzAngaben, BoxLayout.Y_AXIS));
+//
+//        JPanel jpAktionHinzu = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+//        JTextField jtAktionHinzu = new JTextField(20);
+//        jpAktionHinzu.add(jtAktionHinzu);
+//
+//        JButton jbAktionSave = new JButton("Speichern");
+//        jpAktionHinzu.add(jbAktionSave);
+//
+//        ActionListener alAktionSave = new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//
+//                    Aktion aktion = new Aktion(jtAktionHinzu.getText());
+//                    okfzsInstanz.getDatenbank().insertOrUpdateSonderausstattung(aktion);
+//                    System.out.println("test");
+//
+//                } catch (SQLException e1) {
+//                    System.out.println(e1.getMessage());
+//                }
+////                okfzsInstanz.anzeigen("autoAend");
+//                jfKfzEdit.dispose();
+//
+//            }
+//        };
+//
+//        jbAusstattungSave.addActionListener(alAusstattungSave);
+//
+//        jpKfzAngaben.add(jpAustattungHinzu);
+//        jpKFZ.add(jpKfzAngaben);
+//        jfKfzEdit.add(jpKFZ, BorderLayout.CENTER);
+//
+//        //JFrame jf Größe mitgeben
+//        jfKfzEdit.setSize(300, 200);
+//
+//
+//        //JFrame jf auf Bildschirm plazieren
+//        jfKfzEdit.setLocation(200, 400);
+//
+//        //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
+//        jfKfzEdit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//
+//        //JFrame jf anzeigen
+//        jfKfzEdit.setVisible(true);
+//
+//    }
+
     public static java.sql.Date umwandeln(String datum) {
         SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
         Date date = null;

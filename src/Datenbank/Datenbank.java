@@ -8,10 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.sql.*;
+import java.util.*;
 import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by cdreher on 23.05.2016.
@@ -250,11 +248,10 @@ public class Datenbank {
     public void insertOrUpdateKfz(KFZ kfz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("UPDATE t_kfz SET fin='" + kfz.getFin() + "',hersteller='" + kfz.getHersteller() + "',modell='" + kfz.getModell() + "',kfz_brief='" + kfz.getKfzBriefNr() + "',leistung=" + kfz.getLeistungInKw() + ",farbe='" + kfz.getFarbe() + "',ez='" + kfz.getEz() + "', plakette='" + kfz.getUmweltPlakette() + "',kraftstoff='" + kfz.getKraftstoff() + "'WHERE fin='" + kfz.getFin() + "'");
-
+            int i=stmt.executeUpdate("UPDATE t_kfz SET fin='" + kfz.getFin() + "',hersteller='" + kfz.getHersteller() + "',modell='" + kfz.getModell() + "',kfz_brief='" + kfz.getKfzBriefNr() + "',leistung=" + kfz.getLeistungInKw() + ",farbe='" + kfz.getFarbe() + "',ez='" + kfz.getEz() + "', plakette='" + kfz.getUmweltPlakette() + "',kraftstoff='" + kfz.getKraftstoff() + "'WHERE fin='" + kfz.getFin() + "'");
+            if(i<1)stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
         } catch (SQLException e) {
-            stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
-
+            System.out.println(e.getMessage());
         }
     }
 
@@ -274,7 +271,7 @@ public class Datenbank {
             if (count < 1)
                 stmt.executeUpdate("INSERT  INTO t_sonderausstattung(art) VALUES ('" + sonderausstattung.getBeschreibung() + "')");
         } catch (SQLException e) {
-
+            System.out.println(e.getMessage());
         }
     }
 

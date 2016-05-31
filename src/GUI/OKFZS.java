@@ -180,7 +180,12 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "autoAend":{
-                Vorgang v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
+                Vorgang v=null;
+                if(aktuelleAnsicht.getClass().equals(KFZListe.class))
+                        v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
+                else if(aktuelleAnsicht.getClass().equals(KFZEditor.class)){
+                    v=((KFZEditor)aktuelleAnsicht).getVorgang();
+                }
                 aktuelleAnsicht=new KFZEditor(this,v);
                 anzeige.add("autoAend",aktuelleAnsicht);
                 cards.show(anzeige,"autoAend");
