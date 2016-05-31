@@ -12,6 +12,9 @@ public class Sonderausstattung {
         this.sid = sid;
         this.beschreibung = beschreibung;
     }
+    public Sonderausstattung(String beschreibung) {
+        this.beschreibung = beschreibung;
+    }
 
     public long getSid() {
         return sid;
