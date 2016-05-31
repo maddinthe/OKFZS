@@ -126,6 +126,7 @@ public class KFZEditor extends Ansicht {
             JLabel jlAktionen = new JLabel("Aktionen:");
 //            JTextArea jtAktionen = new JTextArea(3,20);
             JList jtAktionen = new JList(k.getAktionen().toArray(new Aktion[k.getAktionen().size()]));
+            jtAktionen.setSize(20,3);
 
 //            jtAktionen.setEditable(false);
             jtAktionen.setOpaque(false);
@@ -684,7 +685,7 @@ public class KFZEditor extends Ansicht {
                     v.setKilometer(Integer.parseInt(jtKm.getText()));
                     okfzsInstanz.getDatenbank().insertOrUpdateVorgang(v);
                     vorgang=v;
-                    okfzsInstanz.anzeigen("autoAend");
+                    okfzsInstanz.anzeigen(new KFZEditor(okfzsInstanz, v));
 
                 } catch (SQLException e1) {
                     e1.printStackTrace();

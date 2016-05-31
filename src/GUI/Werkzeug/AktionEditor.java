@@ -376,6 +376,8 @@ public class AktionEditor extends Ansicht {
         };
 
 
+
+
         //        Button
 
         JButton jbAktionSave = new JButton("Speichern");
