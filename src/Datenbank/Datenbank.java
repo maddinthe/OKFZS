@@ -98,6 +98,7 @@ public class Datenbank {
         try {
             getInstance(host, port);
         } catch (ClassNotFoundException e) {
+
         }
 
         einlesenScript();

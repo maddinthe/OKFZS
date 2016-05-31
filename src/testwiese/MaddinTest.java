@@ -48,10 +48,10 @@ public class MaddinTest {
       @Override
       public Component getListCellRendererComponent(JList<? extends Erreichbarkeit> list, Erreichbarkeit value, int index, boolean isSelected, boolean cellHasFocus) {
 
-          setText("<html>"+value.getDetails()+"<br>"
-                  +"Telefon: "+value.getTelefonNummer()+"<br>"
-                  +"Handy: "+value.getHandyNummer()+"<br>"
-                  +"E-Mail: "+value.getEmail()+"</html>");
+          setText("<html>" + value.getDetails() + "<br>"
+                  + "Telefon: " + value.getTelefonNummer() + "<br>"
+                  + "Handy: " + value.getHandyNummer() + "<br>"
+                  + "E-Mail: " + value.getEmail() + "</html>");
 
           if (isSelected) {
               setBackground(Color.white);
