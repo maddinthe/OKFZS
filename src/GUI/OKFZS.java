@@ -185,7 +185,7 @@ public class OKFZS extends JFrame {
                         vorgList = datenbank.unverkaufteVorgaenge();
                     } catch (SQLException e) {
                     }
-                if(vorgList==null||kfzList.size()==0){
+                if(vorgList==null&&kfzList.size()==0){
                     anzeigen("autoAnl");
                     break;
                 }
