@@ -16,7 +16,7 @@ import java.util.List;
  * Created by cdreher on 23.05.2016.
  */
 public class Suche extends Ansicht {
-    OKFZS okfzsinstanz = new OKFZS();
+
     private List<KFZ> kfzs = new ArrayList<>();
     private List<Person> personen = new ArrayList<>();
 
@@ -26,8 +26,8 @@ public class Suche extends Ansicht {
 
     public Suche(OKFZS okfzsinstanz, boolean kfzOderPerson) {
         super(okfzsinstanz);
-        JFrame jfSuche = new JFrame("Suche");
-        JPanel jpSuche = new JPanel();
+
+        JPanel jpSuche = this;
         JPanel jpEingabe = new JPanel();
         JPanel jpButton = new JPanel();
         String[] kfz = {"Fin", "Hersteller", "Modell","KFZ-Brief","Leistung","Farbe","EZ","Plakette","Kraftstoff"};
@@ -40,16 +40,23 @@ public class Suche extends Ansicht {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (kfzOderPerson) {
-                    if (jtSuche.getText() != null)
+                    if (jtSuche.getText() != null){
                         sucheKFZ(jcKfz.getSelectedItem().toString(), jtSuche.getText());
+                        okfzsinstanz.anzeigen("autoAnz");
+                    }
+
+
                     else JOptionPane.showMessageDialog(null, "Keine Eingabe");
                 }
                 else{
-                if (jtSuche.getText()!=null)
+                if (jtSuche.getText()!=null){
                     suchePerson(jcPerson.getSelectedItem().toString(),jtSuche.getText());
+                    okfzsinstanz.anzeigen("personAnz");
+                }
+
                 else JOptionPane.showMessageDialog(null,"Keine Eingabe");
                 }
-                jfSuche.dispose();
+
             }
         };
         jbSuche.addActionListener(alSuche);
@@ -57,7 +64,8 @@ public class Suche extends Ansicht {
         ActionListener alAbbrechen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              jfSuche.dispose();
+
+             okfzsinstanz.anzeigen("uebersicht");
             }
         };
         jbAbbrechen.addActionListener(alAbbrechen);
@@ -73,12 +81,9 @@ public class Suche extends Ansicht {
         jpButton.add(jbAbbrechen);
         jpSuche.add(jpEingabe);
         jpSuche.add(jpButton);
-        jfSuche.add(jpSuche);
 
-        jfSuche.setSize(300, 150);
-        jfSuche.setLocation(500, 500);
-        jfSuche.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        jfSuche.setVisible(true);
+
+
 
 
 
@@ -94,7 +99,7 @@ public class Suche extends Ansicht {
     private void sucheKFZ(String spalte, String begriff) {
 
         try {
-            List<KFZ> kfzListe = okfzsinstanz.getDatenbank().alleKfz();
+            List<KFZ> kfzListe = getOKFZSInstanz().getDatenbank().alleKfz();
             switch (spalte) {
                 case ("Fin"):
                     for (KFZ kfz : kfzListe) {
@@ -163,7 +168,7 @@ public class Suche extends Ansicht {
     private void suchePerson(String spalte, String begriff) {
 
         try {
-            List<Person> personenListe = okfzsinstanz.getDatenbank().allePersonen();
+            List<Person> personenListe = getOKFZSInstanz().getDatenbank().allePersonen();
 
             switch (spalte) {
                 case ("PID"):
