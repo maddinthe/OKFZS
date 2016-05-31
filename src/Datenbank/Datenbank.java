@@ -73,7 +73,8 @@ public class Datenbank {
                 conn = DriverManager.getConnection(url + database, props);
 
             } catch (SQLException e) {
-                throw new SQLException("Datenbank existiert nicht", e.getSQLState(), e);
+                getInstance("db_okfzs",host,port);
+                //throw new SQLException("Datenbank existiert nicht", e.getSQLState(), e);
             }
 
         }
@@ -90,7 +91,7 @@ public class Datenbank {
 
         try {
             conn = DriverManager.getConnection(url, props);
-            conn.createStatement().executeUpdate("CREATE DATABASE" + database);
+            conn.createStatement().executeUpdate("CREATE DATABASE " + database);
             conn.close();
         } catch (SQLException e) {
             throw new SQLException("Zugriff verweigert", e.getSQLState(), e);
@@ -285,10 +286,27 @@ public class Datenbank {
     }
 
     public void insertOrUpdateVorgang(Vorgang vorgang) throws SQLException {
+        Long kPid=(vorgang.getKauefer()!=null)?vorgang.getKauefer().getPid():null;
+        Long vkPid=(vorgang.getVerkaeufer()!=null)?vorgang.getVerkaeufer().getPerson().getPid():null;
+        Long ekPid=vorgang.getEinkaeufer().getPerson().getPid();
+        KFZ kfz=vorgang.getKfz();
+        Double vPreis=(vorgang.getvPreis()==0)?null:vorgang.getvPreis();
+        Double ePreis=(vorgang.getePreis()==0)?null:vorgang.getePreis();
+        Double vPreisPlan=(vorgang.getvPreisPlan()==0)?null:vorgang.getvPreisPlan();;
+        String vkDatum=(vorgang.getVerkaufsDatum()==null)?null:vorgang.getVerkaufsDatum().toString();
+        String rabbatGrund=(vorgang.getRabattGrund()==null)?"":vorgang.getRabattGrund();
+        String sonstVereinbarung=(vorgang.getSonstvereinbarungen()==null)?"":vorgang.getSonstvereinbarungen();
+        String ekDatum=vorgang.getEinkaufsDatum().toString();
+        String scheaden=(vorgang.getSchaeden()==null)?"":vorgang.getSchaeden();
+        String tuev=(vorgang.getTuev()==null)?null:vorgang.getTuev().toString();
+        String kenzeichen=(vorgang.getKennzeichen()==null)?"":vorgang.getKennzeichen();
+        Integer km=(vorgang.getKilometer()==0)?null:vorgang.getKilometer();
+
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + vorgang.getKauefer().getPid() + "," + vorgang.getEinkaeufer().getPerson().getPid() + ", " + vorgang.getVerkaeufer().getPerson().getPid() + ",'" + vorgang.getKfz().getFin() + "'," + vorgang.getePreis() + "," + vorgang.getvPreis() + "," + vorgang.getKilometer() + ",'" + vorgang.getSchaeden() + "','" + vorgang.getVerkaufsDatum() + "','" + vorgang.getEinkaufsDatum() + "','" + vorgang.getKennzeichen() + "','" + vorgang.getRabattGrund() + "'," + vorgang.getTuev() + ",'" + vorgang.getSonstvereinbarungen() + "'," + vorgang.getvPreisPlan() + ")");
+            stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES ("+ kPid + "," + ekPid + ", " + vkPid + ",'" + kfz.getFin() + "'," + ePreis + "," + vPreis + ","+ km + ",'" + scheaden + "'," + vkDatum + ",'" + ekDatum + "','" + kenzeichen + "','" + rabbatGrund + "'," + tuev + ",'" + sonstVereinbarung + "'," + vPreisPlan+ ")");
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + vorgang.getKauefer().getPid() + ", fk_t_verkaeufer_pid_ek=" + vorgang.getEinkaeufer().getPerson().getPid() + ",fk_t_verkaeufer_pid_vk=" + vorgang.getVerkaeufer().getPerson().getPid() + ",fk_t_kfz_fin='" + vorgang.getKfz().getFin() + "',epreis=" + vorgang.getePreis() + ",vpreis=" + vorgang.getvPreis() + ",km=" + vorgang.getKilometer() + ",schaeden='" + vorgang.getSchaeden() + "',vkdatum='" + vorgang.getVerkaufsDatum() + "',ekdatum='" + vorgang.getEinkaufsDatum() + "',kennz='" + vorgang.getKennzeichen() + "',rabattgrund='" + vorgang.getRabattGrund() + "',tuev=" + vorgang.getTuev() + ",sonstvereinb='" + vorgang.getSonstvereinbarungen() + "',vpreisplan=" + vorgang.getvPreisPlan() + " WHERE vid=" + vorgang.getVid() + "");
         }
     }
