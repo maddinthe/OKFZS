@@ -2,80 +2,157 @@ package GUI.Werkzeug;
 
 import Datenhaltung.KFZ;
 import Datenhaltung.Person;
+import GUI.Ansicht;
 import GUI.OKFZS;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by cdreher on 23.05.2016.
  */
-public class Suche {
-    OKFZS okfzsinstanz = new OKFZS();
+public class Suche extends Ansicht {
 
-    public Suche(String spalte, String begriff, boolean kfzOderPerson) {
-        if (kfzOderPerson)
-            sucheKFZ(spalte, begriff);
-        else
-            suchePerson(spalte, begriff);
+    private List<KFZ> kfzs = new ArrayList<>();
+    private List<Person> personen = new ArrayList<>();
+
+
+
+
+
+    public Suche(OKFZS okfzsinstanz, boolean kfzOderPerson) {
+        super(okfzsinstanz);
+
+        JPanel jpSuche = this;
+        JPanel jpEingabe = new JPanel();
+        JPanel jpButton = new JPanel();
+        String[] kfz = {"Fin", "Hersteller", "Modell","KFZ-Brief","Leistung","Farbe","EZ","Plakette","Kraftstoff"};
+        String[] person = {"PID", "Anrede", "Name","Vorname","Geburtstag","Anschrift","PLZ","Ort","Ust-ID"};
+        JComboBox jcKfz = new JComboBox(kfz);
+        JComboBox jcPerson = new JComboBox(person);
+        JTextField jtSuche = new JTextField(20);
+        JButton jbSuche = new JButton("Suche");
+        ActionListener alSuche = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (kfzOderPerson) {
+                    if (jtSuche.getText() != null){
+                        sucheKFZ(jcKfz.getSelectedItem().toString(), jtSuche.getText());
+                        okfzsinstanz.anzeigen("autoAnz");
+                    }
+
+
+                    else JOptionPane.showMessageDialog(null, "Keine Eingabe");
+                }
+                else{
+                if (jtSuche.getText()!=null){
+                    suchePerson(jcPerson.getSelectedItem().toString(),jtSuche.getText());
+                    okfzsinstanz.anzeigen("personAnz");
+                }
+
+                else JOptionPane.showMessageDialog(null,"Keine Eingabe");
+                }
+
+            }
+        };
+        jbSuche.addActionListener(alSuche);
+        JButton jbAbbrechen = new JButton("Abbrechen");
+        ActionListener alAbbrechen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+             okfzsinstanz.anzeigen("uebersicht");
+            }
+        };
+        jbAbbrechen.addActionListener(alAbbrechen);
+        if(kfzOderPerson){
+            jpEingabe.add(jcKfz);
+            jpEingabe.add(jtSuche);
+        }
+        else{
+            jpEingabe.add(jcPerson);
+            jpEingabe.add(jtSuche);
+        }
+        jpButton.add(jbSuche);
+        jpButton.add(jbAbbrechen);
+        jpSuche.add(jpEingabe);
+        jpSuche.add(jpButton);
+
+
+
+
+
+
+    }
+    public List<KFZ> getKfzs() {
+        return kfzs;
     }
 
-    private KFZ sucheKFZ(String spalte, String begriff) {
+    public List<Person> getPersonen() {
+        return personen;
+    }
+
+    private void sucheKFZ(String spalte, String begriff) {
 
         try {
-            List<KFZ> kfzListe = okfzsinstanz.getDatenbank().alleKfz();
+            List<KFZ> kfzListe = getOKFZSInstanz().getDatenbank().alleKfz();
             switch (spalte) {
                 case ("Fin"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getFin().equals(begriff))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("Hersteller"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getHersteller().equals(begriff))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("Modell"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getModell().equals(begriff))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("KFZ-Brief"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getKfzBriefNr().equals(begriff))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("Leistung"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getLeistungInKw() == (Integer.parseInt(begriff)))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("Farbe"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getFarbe().equals(begriff))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("EZ"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getEz().toString().equals(begriff))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("Plakette"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getUmweltPlakette() == (Byte.parseByte(begriff)))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 case ("Kraftstoff"):
                     for (KFZ kfz : kfzListe) {
                         if (kfz.getKraftstoff().equals(begriff))
-                            return kfz;
+                            kfzs.add(kfz);
                     }
                     break;
                 default:
@@ -85,68 +162,67 @@ public class Suche {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+
     }
 
-    private Person suchePerson(String spalte, String begriff) {
+    private void suchePerson(String spalte, String begriff) {
 
-        List<Person> personenListe = null;
         try {
-            personenListe = okfzsinstanz.getDatenbank().allePersonen();
+            List<Person> personenListe = getOKFZSInstanz().getDatenbank().allePersonen();
 
             switch (spalte) {
-                case ("Pid"):
+                case ("PID"):
                     for (Person person : personenListe) {
                         if (person.getPid() == (Long.parseLong(begriff)))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("Anrede"):
                     for (Person person : personenListe) {
                         if (person.getAnrede().equals(begriff))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("Name"):
                     for (Person person : personenListe) {
                         if (person.getName().equals(begriff))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("Vorname"):
                     for (Person person : personenListe) {
                         if (person.getVorname().equals(begriff))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("Geburtstag"):
                     for (Person person : personenListe) {
                         if (person.getGeburtstag().toString().equals(begriff))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("Anschrift"):
                     for (Person person : personenListe) {
                         if (person.getAnschrift().equals(begriff))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("PLZ"):
                     for (Person person : personenListe) {
                         if (person.getPostleitzahl() == (Integer.parseInt(begriff)))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("Ort"):
                     for (Person person : personenListe) {
                         if (person.getOrt().equals(begriff))
-                            return person;
+                            personen.add(person);
                     }
                     break;
                 case ("Ust-ID"):
                     for (Person person : personenListe) {
                         if (person.getUstID().equals(begriff))
-                            return person;
+                           personen.add(person);
                     }
                     break;
                 default:
@@ -156,7 +232,7 @@ public class Suche {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+
     }
 
 
