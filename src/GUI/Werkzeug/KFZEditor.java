@@ -615,7 +615,8 @@ public class KFZEditor extends Ansicht {
                 try {
                     KFZ kfz = new KFZ(jtFin.getText(),jtHersteller.getText(),jtModell.getText(),jtKfzBriefNr.getText(),Integer.parseInt(jtLeistungInKw.getText()),jtFarbe.getText(),umwandeln(jtEZ.getText()),Byte.parseByte(jtUmweltplakette.getText()),jtKraftstoff.getText());
                     okfzsInstanz.getDatenbank().insertOrUpdateKfz(kfz);
-                    Vorgang v=new Vorgang(kfz,okfzsInstanz.getBenutzer(),Double.parseDouble(jtEK.getText()),Integer.parseInt(jtKm.getText());
+                    Vorgang v=new Vorgang(kfz,okfzsInstanz.getBenutzer(),Double.parseDouble(jtEK.getText()));
+                    v.setKilometer(Integer.parseInt(jtKm.getText()));
                     okfzsInstanz.getDatenbank().insertOrUpdateVorgang(v);
                     vorgang=v;
                     okfzsInstanz.anzeigen("autoAend");
