@@ -1,12 +1,14 @@
 package GUI;
 
 import Datenbank.Datenbank;
+import Datenhaltung.KFZ;
 import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import Datenhaltung.Vorgang;
 import GUI.Werkzeug.KFZEditor;
 import GUI.Werkzeug.KaufvertragEditor;
 import GUI.Werkzeug.PersonenEditor;
+import GUI.Werkzeug.Suche;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by mtheilen on 23.05.2016.
@@ -133,23 +136,38 @@ public class OKFZS extends JFrame {
 
     /**
      * Lässt die Entsprechende Karte im Fenster anzeigen und lässt die entsprechenden Menüs aktiv/inaktiv werden
+     *
      * @param cardID Mögliche Werte["ende","uebersicht","impexp","autoAnz","autoAnl","personAnz","personAnl","personAend","statstik","ueber","hilfe"]
      */
     public void anzeigen(String cardID) {
-        Menue menue= (Menue)getJMenuBar();
+        Menue menue = (Menue) getJMenuBar();
         menue.menueUmschalten(cardID);
         switch (cardID) {
             case "ende": {
-                if(JOptionPane.showConfirmDialog(this, "Wirklich beenden?", "Beenden", JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION)==0);
+                if (JOptionPane.showConfirmDialog(this, "Wirklich beenden?", "Beenden", JOptionPane.CANCEL_OPTION, JOptionPane.CLOSED_OPTION) == 0)
+                    ;
                 beenden();
                 break;
             }
+            case "sucheKFZ": {
+                aktuelleAnsicht = new Suche(this, true);
+                anzeige.add(aktuelleAnsicht, "sucheKFZ");
+                cards.show(anzeige, "sucheKFZ");
+                break;
+            }
+            case "suchePers": {
+                aktuelleAnsicht = new Suche(this, false);
+                anzeige.add(aktuelleAnsicht, "suchePers");
+                cards.show(anzeige, "suchePers");
+                break;
+            }
             case "uebersicht": {
-                java.util.List<Vorgang> vorgangList=null;
-                try{vorgangList=datenbank.VorgaengeZuVerkaeufer(benutzer);}
-                catch (SQLException e){
+                java.util.List<Vorgang> vorgangList = null;
+                try {
+                    vorgangList = datenbank.VorgaengeZuVerkaeufer(benutzer);
+                } catch (SQLException e) {
                 }
-                aktuelleAnsicht=new Uebersicht(this, vorgangList);
+                aktuelleAnsicht = new Uebersicht(this, vorgangList);
                 anzeige.add(aktuelleAnsicht, "uebersicht");
                 cards.show(anzeige, "uebersicht");
                 break;
@@ -158,103 +176,124 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "autoAnz": {
-                java.util.List<Vorgang> kfzList=null;
-                try{kfzList=datenbank.unverkaufteVorgaenge();
-                    if(kfzList.size()==0){
-                        anzeigen("autoAnl");
-                        break;
+                java.util.List<Vorgang> vorgList = null;
+                java.util.List<KFZ> kfzList=null;
+                if (aktuelleAnsicht.getClass().equals(Suche.class)) {
+                    kfzList = ((Suche) aktuelleAnsicht).getKfzs();
+                } else
+                    try {
+                        vorgList = datenbank.unverkaufteVorgaenge();
+                    } catch (SQLException e) {
                     }
-                    aktuelleAnsicht=new KFZListe(this, kfzList);
-                    anzeige.add(aktuelleAnsicht, "autoAnz");
-                    cards.show(anzeige, "autoAnz");}
-                catch (SQLException e){
+                if(vorgList==null||kfzList.size()==0){
+                    anzeigen("autoAnl");
+                    break;
                 }
+                if (vorgList.size()>0){
+                    aktuelleAnsicht = new KFZListe(this, vorgList);
+                }
+                else aktuelleAnsicht =new KFZListe(this, kfzList);
+                anzeige.add(aktuelleAnsicht, "autoAnz");
+                cards.show(anzeige, "autoAnz");
+
                 break;
             }
             case "autoAnl": {
-                    aktuelleAnsicht=new KFZEditor(this);
-                    anzeige.add(aktuelleAnsicht, "autoAnl");
-                    cards.show(anzeige, "autoAnl");
-
-
+                aktuelleAnsicht = new KFZEditor(this);
+                anzeige.add(aktuelleAnsicht, "autoAnl");
+                cards.show(anzeige, "autoAnl");
                 break;
             }
-            case "autoAend":{
-                Vorgang v=null;
-                if(aktuelleAnsicht.getClass().equals(KFZListe.class))
-                        v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
-                else if(aktuelleAnsicht.getClass().equals(KFZEditor.class)){
-                    v=((KFZEditor)aktuelleAnsicht).getVorgang();
+            case "autoAend": {
+                Vorgang v = null;
+                if (aktuelleAnsicht.getClass().equals(KFZListe.class)){
+                    v = ((KFZListe) aktuelleAnsicht).getSelectedVorg();
+                    if (v==null){//todo:nach tonis kram wieder herstellen
+//                        aktuelleAnsicht = new KFZEditor(this, ((KFZListe) aktuelleAnsicht).getSelectedKFZ());
+//                        anzeige.add("autoAend", aktuelleAnsicht);
+//                        cards.show(anzeige, "autoAend");
+//                        break;
+
+                    }
                 }
-                aktuelleAnsicht=new KFZEditor(this,v);
-                anzeige.add("autoAend",aktuelleAnsicht);
-                cards.show(anzeige,"autoAend");
+
+
+                else if (aktuelleAnsicht.getClass().equals(KFZEditor.class)) {
+                    v = ((KFZEditor) aktuelleAnsicht).getVorgang();
+                }
+                aktuelleAnsicht = new KFZEditor(this, v);
+                anzeige.add("autoAend", aktuelleAnsicht);
+                cards.show(anzeige, "autoAend");
                 break;
 
             }
 
-            case "autoVerk":{
-                Vorgang v=null;
-                if(aktuelleAnsicht.getClass().equals(KFZListe.class)){
-                    v=((KFZListe)aktuelleAnsicht).getSelectedVorg();
-                }else if (aktuelleAnsicht.getClass().equals(KFZEditor.class)){
-                    v=((KFZEditor)aktuelleAnsicht).getVorgang();
+            case "autoVerk": {
+                Vorgang v = null;
+                if (aktuelleAnsicht.getClass().equals(KFZListe.class)) {
+                    v = ((KFZListe) aktuelleAnsicht).getSelectedVorg();
+                } else if (aktuelleAnsicht.getClass().equals(KFZEditor.class)) {
+                    v = ((KFZEditor) aktuelleAnsicht).getVorgang();
                 }
-                aktuelleAnsicht=new KaufvertragEditor(this,v);
-                anzeige.add("autoVerk",aktuelleAnsicht);
-                cards.show(anzeige,"autoVerk");
+                aktuelleAnsicht = new KaufvertragEditor(this, v);
+                anzeige.add("autoVerk", aktuelleAnsicht);
+                cards.show(anzeige, "autoVerk");
 
                 break;
 
             }
             case "personAnz": {
-                java.util.List<Person> personList=null;
-                try{personList=datenbank.allePersonen();
-                    if(personList.size()==0){
-                        anzeigen("persAnl");
-                        break;
+                java.util.List<Person> personList = null;
+                if (aktuelleAnsicht.getClass().equals(Suche.class)) {
+                    personList = ((Suche) aktuelleAnsicht).getPersonen();
+                } else
+                    try {
+                        personList = datenbank.allePersonen();
+                    } catch (SQLException e) {
                     }
-                    aktuelleAnsicht=new PersonenListe(this, personList);
-                    anzeige.add(aktuelleAnsicht, "personList");
-                    cards.show(anzeige, "personList");}
-                catch (SQLException e){
+                if(personList==null||personList.size()==0){
+                    anzeigen("personAnl");
+                    break;
                 }
-
+                aktuelleAnsicht = new PersonenListe(this, personList);
+                anzeige.add(aktuelleAnsicht, "personList");
+                cards.show(anzeige, "personList");
                 break;
             }
             case "personAnl": {
 
-                try{
-                    aktuelleAnsicht=new PersonenEditor(this);
+                try {
+                    aktuelleAnsicht = new PersonenEditor(this);
                     anzeige.add(aktuelleAnsicht, "personAnl");
                     cards.show(anzeige, "personAnl");
 
-                }catch(SQLException e){
+                } catch (SQLException e) {
 
                 }
 
                 break;
             }
-            case "personAend":{
-                    Person edit=null;
-                    if(aktuelleAnsicht.getClass()==PersonenListe.class){
-                        edit=((PersonenListe) aktuelleAnsicht).getSelectedPers();
-                    }else if(aktuelleAnsicht.getClass()==PersonenEditor.class){
-                        edit=((PersonenEditor)aktuelleAnsicht).getPerson();
-                    }
-                    aktuelleAnsicht=new PersonenEditor(this,edit);
-                    anzeige.add(aktuelleAnsicht, "personAnl");
-                    cards.show(anzeige, "personAnl");
+            case "personAend": {
+                Person edit = null;
+                if (aktuelleAnsicht.getClass() == PersonenListe.class) {
+                    edit = ((PersonenListe) aktuelleAnsicht).getSelectedPers();
+                } else if (aktuelleAnsicht.getClass() == PersonenEditor.class) {
+                    edit = ((PersonenEditor) aktuelleAnsicht).getPerson();
+                }
+                aktuelleAnsicht = new PersonenEditor(this, edit);
+                anzeige.add(aktuelleAnsicht, "personAnl");
+                cards.show(anzeige, "personAnl");
 
 
                 break;
             }
             case "statstik": {
-                java.util.List<Vorgang> vorgangList=null;
-                try{vorgangList=datenbank.VorgaengeZuVerkaeufer(benutzer);}
-                catch (SQLException e){
+                java.util.List<Vorgang> vorgangList = null;
+                try {
+                    vorgangList = datenbank.VorgaengeZuVerkaeufer(benutzer);
+                } catch (SQLException e) {
                 }
-                aktuelleAnsicht=new Statistik(this, vorgangList);
+                aktuelleAnsicht = new Statistik(this, vorgangList);
                 anzeige.add(aktuelleAnsicht, "statstik");
                 cards.show(anzeige, "statstik");
                 break;
@@ -262,7 +301,7 @@ public class OKFZS extends JFrame {
             case "ueber": {
                 break;
             }
-            case "hilfe":{
+            case "hilfe": {
                 break;
             }
             default:
