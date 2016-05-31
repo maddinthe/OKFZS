@@ -773,6 +773,22 @@ public class Datenbank {
         r.close();
         return sonderausstattungsListe;
     }
+    public List<Sonderausstattung> ausstattungslisteSortiert() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT sid,art FROM t_sonderausstattung ORDER BY art");
+        List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
+
+
+        while (r.next()) {
+            long sid = r.getLong("sid");
+            String art = r.getString("art");
+            Sonderausstattung sonderausstattung = new Sonderausstattung(sid, art);
+            sonderausstattungsListe.add(sonderausstattung);
+
+        }
+        r.close();
+        return sonderausstattungsListe;
+    }
 
     public boolean adminDa() {
         try {
@@ -799,5 +815,6 @@ public class Datenbank {
         }
         return verkaeufer;
     }
+
 }
 
