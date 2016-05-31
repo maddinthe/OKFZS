@@ -208,11 +208,11 @@ public class OKFZS extends JFrame {
                 Vorgang v = null;
                 if (aktuelleAnsicht.getClass().equals(KFZListe.class)){
                     v = ((KFZListe) aktuelleAnsicht).getSelectedVorg();
-                    if (v==null){//todo:nach tonis kram wieder herstellen
-//                        aktuelleAnsicht = new KFZEditor(this, ((KFZListe) aktuelleAnsicht).getSelectedKFZ());
-//                        anzeige.add("autoAend", aktuelleAnsicht);
-//                        cards.show(anzeige, "autoAend");
-//                        break;
+                    if (v==null){
+                        aktuelleAnsicht = new KFZEditor(this, ((KFZListe) aktuelleAnsicht).getSelectedKFZ());
+                        anzeige.add("autoAend", aktuelleAnsicht);
+                        cards.show(anzeige, "autoAend");
+                        break;
 
                     }
                 }
