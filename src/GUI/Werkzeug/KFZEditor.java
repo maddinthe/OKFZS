@@ -2,6 +2,7 @@ package GUI.Werkzeug;
 
 import Datenhaltung.*;
 import GUI.Ansicht;
+import GUI.KFZListe;
 import GUI.OKFZS;
 
 import java.text.ParseException;
@@ -17,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.Vector;
 
 /**
  * Created by tkertz on 23.05.2016.
@@ -29,6 +31,7 @@ public class KFZEditor extends Ansicht {
         this.vorgang=vorgang;
         try {
             //      KFZ DATEN
+            List<KFZ> kfzs=okfzsInstanz.getDatenbank().alleKfz();
             List<Sonderausstattung> ausstattungen=okfzsInstanz.getDatenbank().ausstattungslisteSortiert();
             this.setLayout(new BorderLayout());
             JPanel jfKfzEdit = this;
@@ -119,10 +122,15 @@ public class KFZEditor extends Ansicht {
             jpKraftstoff.add(jlKraftstoff);
             jpKraftstoff.add(jtKraftstoff);
 
+
+
             JPanel jpAktionen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlAktionen = new JLabel("Aktionen:");
-            JTextField jtAktionen = new JTextField(20);
+            JTextArea jtAktionen = new JTextArea(3,20);
 //            jtAktionen.setText(okfzsInstanz.getDatenbank().eineAktion(k,));
+            jtAktionen.setEditable(false);
+            jtAktionen.setOpaque(false);
+            jtAktionen.setBorder(new TitledBorder(""));
             jpAktionen.add(jlAktionen);
             jpAktionen.add(jtAktionen);
 
@@ -161,6 +169,7 @@ public class KFZEditor extends Ansicht {
             JLabel jlEinkaeufer = new JLabel("Einkäufer:");
             JTextField jtEinkaeufer = new JTextField(20);
            jtEinkaeufer.setText(vorgang.getEinkaeufer().getAnmeldeName());
+            jtEinkaeufer.setEditable(false);
             jpEinkaeufer.add(jlEinkaeufer);
             jpEinkaeufer.add(jtEinkaeufer);
 
@@ -168,15 +177,17 @@ public class KFZEditor extends Ansicht {
             JLabel jlEK = new JLabel("Einkaufspreis: * ");
             JTextField jtEK = new JTextField(20);
             jtEK.setText(String.valueOf(vorgang.getePreis()));
+            jtEK.setEditable(false);
             jpEK.add(jlEK);
             jpEK.add(jtEK);
 
             JPanel jpVKP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlVKP = new JLabel("gepl. Verkaufspreis:");
+            JLabel jlVKP = new JLabel("Verkaufspreis:");
             JTextField jtVKP = new JTextField(20);
             if(vorgang.getvPreis()==0.0) {
                 jtVKP.setText(String.valueOf(vorgang.getePreis()*1.2));
             }
+            jtVKP.setEditable(false);
             jpVKP.add(jlVKP);
             jpVKP.add(jtVKP);
 
@@ -184,6 +195,7 @@ public class KFZEditor extends Ansicht {
             JLabel jlEKDat = new JLabel("Einkaufsdatum:");
             JTextField jtEKDat = new JTextField(20);
             jtEKDat.setText(vorgang.getEinkaufsDatum().toString());
+            jtEKDat.setEditable(false);
             jpEKDat.add(jlEKDat);
             jpEKDat.add(jtEKDat);
 
@@ -191,6 +203,9 @@ public class KFZEditor extends Ansicht {
             JLabel jlSchaeden = new JLabel("Schäden:");
             JTextArea jtSchaeden = new JTextArea(3, 20);
             jtSchaeden.setText(vorgang.getSchaeden());
+            jtSchaeden.setEditable(false);
+            jtSchaeden.setOpaque(false);
+            jtSchaeden.setBorder(new TitledBorder(""));
             jpSchaeden.add(jlSchaeden);
             jpSchaeden.add(jtSchaeden);
 
@@ -199,6 +214,7 @@ public class KFZEditor extends Ansicht {
             JLabel jlTuev = new JLabel("TÜV:");
             JTextField jtTuev = new JTextField(20);
             jtTuev.setText(String.valueOf(vorgang.getTuev()));
+            jtTuev.setEditable(false);
             jpTuev.add(jlTuev);
             jpTuev.add(jtTuev);
 
@@ -206,6 +222,7 @@ public class KFZEditor extends Ansicht {
             JLabel jlKennzeichen = new JLabel("Kennzeichen:");
             JTextField jtKennzeichen = new JTextField(20);
             jtKennzeichen.setText(vorgang.getKennzeichen());
+            jtKennzeichen.setEditable(false);
             jpKennzeichen.add(jlKennzeichen);
             jpKennzeichen.add(jtKennzeichen);
 
@@ -213,6 +230,7 @@ public class KFZEditor extends Ansicht {
             JLabel jlKm = new JLabel("KM:");
             JTextField jtKm = new JTextField(20);
             jtKm.setText(String.valueOf(vorgang.getKilometer()));
+            jtKm.setEditable(false);
             jpKm.add(jlKm);
             jpKm.add(jtKm);
 
@@ -249,20 +267,17 @@ public class KFZEditor extends Ansicht {
             JPanel jpAutoliste = new JPanel();
             jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
             jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
-
-            JPanel jpAusstattungTest = new JPanel(new GridLayout(2,1));
+            JPanel jpSonderAusstattungsListe = new JPanel(new GridLayout(2,1));
             JComponent jList = list;
             JScrollPane jsp = new JScrollPane(jList);
+            jpSonderAusstattungsListe.add(jsp);
 
+            JPanel jpListFahrzeugbestand = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JList jtFahrzeugbestand = new JList(kfzs.toArray(new KFZ[kfzs.size()]));
+            jpListFahrzeugbestand.add(jtFahrzeugbestand);
 
-            jpAusstattungTest.add(jsp);
-
-            JPanel jpListTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JTextArea jtListTest = new JTextArea(20, 20);
-            jpListTest.add(jtListTest);
-
-            jpSonderausstattung.add(jpAusstattungTest);
-            jpAutoliste.add(jpListTest);
+            jpSonderausstattung.add(jpSonderAusstattungsListe);
+            jpAutoliste.add(jpListFahrzeugbestand);
 
             jpKfzEast.add(jpSonderausstattung);
             jpKfzEast.add(jpAutoliste);
@@ -297,6 +312,18 @@ public class KFZEditor extends Ansicht {
                     jtEZ.setEditable(false);
                     jtUmweltplakette.setEditable(false);
                     jtKraftstoff.setEditable(false);
+                    jtAktionen.setEditable(false);
+                    jtAktionen.setOpaque(false);
+                    jtSchaeden.setEditable(false);
+                    jtSchaeden.setOpaque(false);
+                    jtTuev.setEditable(false);
+                    jtKennzeichen.setEditable(false);
+                    jtKm.setEditable(false);
+                    jtEinkaeufer.setEditable(false);
+                    jtEKDat.setEditable(false);
+                    jtEK.setEditable(false);
+                    jtVKP.setEditable(false);
+
 
                     try {
 
@@ -321,6 +348,17 @@ public class KFZEditor extends Ansicht {
                     jtEZ.setEditable(true);
                     jtUmweltplakette.setEditable(true);
                     jtKraftstoff.setEditable(true);
+                    jtAktionen.setEditable(true);
+                    jtAktionen.setOpaque(true);
+                    jtSchaeden.setEditable(true);
+                    jtSchaeden.setOpaque(true);
+                    jtTuev.setEditable(true);
+                    jtKennzeichen.setEditable(true);
+                    jtKm.setEditable(true);
+                    jtEinkaeufer.setEditable(true);
+                    jtEKDat.setEditable(true);
+                    jtEK.setEditable(true);
+                    jtVKP.setEditable(true);
                 }
             };
 
@@ -334,7 +372,8 @@ public class KFZEditor extends Ansicht {
             ActionListener alNeueAktion = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    AktionEditor aktionEditor = new AktionEditor(okfzsInstanz, vorgang.getKfz());
+                    jbNeueAktion.setEnabled(false);
+                    System.out.println("test");
 
                 }
             };
@@ -457,7 +496,7 @@ public class KFZEditor extends Ansicht {
 
         JPanel jpAktionen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel jlAktionen = new JLabel("Aktionen:");
-        JTextField jtAktionen = new JTextField(20);
+        JTextArea jtAktionen = new JTextArea(3,20);
         jpAktionen.add(jlAktionen);
         jpAktionen.add(jtAktionen);
 
@@ -505,7 +544,7 @@ public class KFZEditor extends Ansicht {
         jpEK.add(jtEK);
 
         JPanel jpVKP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlVKP = new JLabel("gepl. Verkaufspreis:");
+        JLabel jlVKP = new JLabel("Verkaufspreis:");
         JTextField jtVKP = new JTextField(20);
         jpVKP.add(jlVKP);
         jpVKP.add(jtVKP);
@@ -518,7 +557,7 @@ public class KFZEditor extends Ansicht {
 
         JPanel jpSchaeden = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel jlSchaeden = new JLabel("Schäden:");
-        JTextField jtSchaeden = new JTextField(20);
+        JTextArea jtSchaeden = new JTextArea(3,20);
         jpSchaeden.add(jlSchaeden);
         jpSchaeden.add(jtSchaeden);
 
@@ -573,20 +612,17 @@ public class KFZEditor extends Ansicht {
         JPanel jpAutoliste = new JPanel();
         jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
         jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
-
-        JPanel jpAusstattungTest = new JPanel(new GridLayout(2,1));
+        JPanel jpSonderAusstattungsListe = new JPanel(new GridLayout(2,1));
         JComponent jList = list;
         JScrollPane jsp = new JScrollPane(jList);
+        jpSonderAusstattungsListe.add(jsp);
 
+        JPanel jpListFahrzeugbestand = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JTextArea jtFahrzeugbestand = new JTextArea(20, 20);
+        jpListFahrzeugbestand.add(jtFahrzeugbestand);
 
-        jpAusstattungTest.add(jsp);
-
-        JPanel jpListTest = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JTextArea jtListTest = new JTextArea(20, 20);
-        jpListTest.add(jtListTest);
-
-        jpSonderausstattung.add(jpAusstattungTest);
-        jpAutoliste.add(jpListTest);
+        jpSonderausstattung.add(jpSonderAusstattungsListe);
+        jpAutoliste.add(jpListFahrzeugbestand);
 
         jpKfzEast.add(jpSonderausstattung);
         jpKfzEast.add(jpAutoliste);
