@@ -42,6 +42,22 @@ public class Verkaeufer {
         return istAdmin;
     }
 
+    public void setAnmeldeName(String anmeldeName) {
+        this.anmeldeName = anmeldeName;
+    }
+
+    public void setPasswortHash(String passwortHash) {
+        this.passwortHash = passwortHash;
+    }
+
+    public void setIstAktiv(boolean istAktiv) {
+        this.istAktiv = istAktiv;
+    }
+
+    public void setIstAdmin(boolean istAdmin) {
+        this.istAdmin = istAdmin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

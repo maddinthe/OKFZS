@@ -4,6 +4,7 @@ import Datenbank.Datenbank;
 import Datenhaltung.Erreichbarkeit;
 import Datenhaltung.Notiz;
 import Datenhaltung.Person;
+import Datenhaltung.Verkaeufer;
 import GUI.Ansicht;
 import GUI.OKFZS;
 import GUI.PersonenListe;
@@ -61,15 +62,15 @@ public class PersonenEditor extends Ansicht {
                 if (person.getAnrede().equals(Anrede[i]))
                     jcAnredeListe.setSelectedIndex(i);
             }
-            if(!okfzsInstanz.getBenutzer().istAdmin())
-            jcAnredeListe.setEnabled(false);
+            if (!okfzsInstanz.getBenutzer().istAdmin())
+                jcAnredeListe.setEnabled(false);
 
             JPanel jpName = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlName = new JLabel("Name:");
             JTextField jtName = new JTextField(20);
             jtName.setText(person.getName());
-            if(!okfzsInstanz.getBenutzer().istAdmin())
-            jtName.setEditable(false);
+            if (!okfzsInstanz.getBenutzer().istAdmin())
+                jtName.setEditable(false);
             jpName.add(jlName);
             jpName.add(jtName);
 
@@ -84,8 +85,8 @@ public class PersonenEditor extends Ansicht {
             JLabel jlGeburtstag = new JLabel("Geburtstag:");
             JTextField jtGeburtstag = new JTextField(20);
             jtGeburtstag.setText(person.getGeburtstag().toString());
-            if(!okfzsInstanz.getBenutzer().istAdmin())
-            jtGeburtstag.setEditable(false);
+            if (!okfzsInstanz.getBenutzer().istAdmin())
+                jtGeburtstag.setEditable(false);
             jpGeburtstag.add(jlGeburtstag);
             jpGeburtstag.add(jtGeburtstag);
 
@@ -99,8 +100,8 @@ public class PersonenEditor extends Ansicht {
             JPanel jpPlz = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlPlz = new JLabel("Postleitzahl:");
             JTextField jtPlz = new JTextField(20);
-            if(person.getPostleitzahl()!=0)
-            jtPlz.setText(String.valueOf(person.getPostleitzahl()));
+            if (person.getPostleitzahl() != 0)
+                jtPlz.setText(String.valueOf(person.getPostleitzahl()));
             jpPlz.add(jlPlz);
             jpPlz.add(jtPlz);
 
@@ -117,6 +118,39 @@ public class PersonenEditor extends Ansicht {
             jtUst.setText(person.getUstID());
             jpUst.add(jlUst);
             jpUst.add(jtUst);
+
+            JPanel jpAnmeldename = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JLabel jlAnmeldename = new JLabel("Anmeldename:");
+            JTextField jtAnmeldename = new JTextField(20);
+
+
+            jpAnmeldename.add(jlAnmeldename);
+            jpAnmeldename.add(jtAnmeldename);
+
+            JPanel jpPasswort = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JLabel jlPasswort = new JLabel("Passwort:");
+            JPasswordField jtPasswort = new JPasswordField(20);
+            jpPasswort.add(jlPasswort);
+            jpPasswort.add(jtPasswort);
+
+            JPanel jpAktiv = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JLabel jlAktiv = new JLabel("Aktiv:");
+            JCheckBox jcAktiv = new JCheckBox();
+            jpAktiv.add(jlAktiv);
+            jpAktiv.add(jcAktiv);
+
+            JPanel jpAdmin = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JLabel jlAdmin = new JLabel("Admin:");
+            JCheckBox jcAdmin = new JCheckBox();
+            jpAdmin.add(jlAdmin);
+            jpAdmin.add(jcAdmin);
+
+            Verkaeufer v=okfzsInstanz.getDatenbank().einVerkaufer(p.getPid());
+            if (v!=null){
+                jtAnmeldename.setText(v.getAnmeldeName());
+                jcAdmin.setSelected(v.istAdmin());
+                jcAktiv.setSelected(v.istAktiv());
+            }
 
             jpAnrede.add(jlAnrede);
             jpAnrede.add(jcAnredeListe);
@@ -140,8 +174,32 @@ public class PersonenEditor extends Ansicht {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Person temp = new Person(p.getPid(), jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), Integer.parseInt(jtPlz.getText()), jtOrt.getText(), jtUst.getText());
-
+                    if (okfzsInstanz.getBenutzer().istAdmin()) {
+                        String password=String.copyValueOf(jtPasswort.getPassword()).hashCode()+"";
+                        Verkaeufer verkaeufer =v;
+                        if(verkaeufer==null) {
+                            verkaeufer = new Verkaeufer(jtAnmeldename.getText(), password, p, jcAktiv.isSelected(), jcAdmin.isSelected());
+                        }else{
+                            verkaeufer.setAnmeldeName(jtAnmeldename.getText());
+                            verkaeufer.setIstAktiv(jcAktiv.isSelected());
+                            verkaeufer.setIstAdmin(jcAdmin.isSelected());
+                            if (jtPasswort.getPassword().length>0){
+                                verkaeufer.setPasswortHash(password);
+                            }
+                            }
+                        try {
+                            okfzsInstanz.getDatenbank().insertOrUpdateVerkaeufer(verkaeufer);
+                            if (verkaeufer.istAdmin())
+                                okfzsInstanz.getDatenbank().insertOrUpdateAdmins(verkaeufer);
+                            if(!jcAktiv.isSelected())
+                                okfzsInstanz.getDatenbank().deleteAdmin(verkaeufer);
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                     try {
+                        if (okfzsInstanz.getBenutzer().istAdmin())
+                            okfzsInstanz.getDatenbank().insertOrUpdatePersonAdmin(temp);
                         okfzsInstanz.getDatenbank().insertOrUpdatePerson(temp);
                     } catch (SQLException e1) {
                         e1.printStackTrace();
@@ -162,8 +220,14 @@ public class PersonenEditor extends Ansicht {
 
 
             jpSonstigeAngaben.add(jpUst);
-            jpSonstigeAngaben.add(jpButton);
 
+            if (okfzsInstanz.getBenutzer().istAdmin()) {
+                jpSonstigeAngaben.add(jpAnmeldename);
+                jpSonstigeAngaben.add(jpPasswort);
+                jpSonstigeAngaben.add(jpAktiv);
+                jpSonstigeAngaben.add(jpAdmin);
+            }
+            jpSonstigeAngaben.add(jpButton);
             jpWest.add(jpPersonenAngaben);
             jpWest.add(jpAdressdaten);
             jpWest.add(jpSonstigeAngaben);
@@ -287,7 +351,7 @@ public class PersonenEditor extends Ansicht {
                     ActionListener alSpeichernErreichbarkeit = new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            Erreichbarkeit temp = new Erreichbarkeit(p,jtTel.getText(),jtMob.getText(),jtMail.getText(),jtDetails.getText());
+                            Erreichbarkeit temp = new Erreichbarkeit(p, jtTel.getText(), jtMob.getText(), jtMail.getText(), jtDetails.getText());
                             try {
                                 okfzsInstanz.getDatenbank().insertOrUpdateErreichbarkeit(temp);
                             } catch (SQLException e1) {
@@ -489,111 +553,109 @@ public class PersonenEditor extends Ansicht {
 
     public PersonenEditor(OKFZS okfzsInstanz) throws SQLException {
         super(okfzsInstanz);
-            JPanel jfPersonEdit = this;
-            this.setLayout(new BorderLayout());
-            JPanel jpWest = new JPanel();
-            jpWest.setLayout(new BoxLayout(jpWest, BoxLayout.Y_AXIS));
+        JPanel jfPersonEdit = this;
+        this.setLayout(new BorderLayout());
+        JPanel jpWest = new JPanel();
+        jpWest.setLayout(new BoxLayout(jpWest, BoxLayout.Y_AXIS));
 
-            JPanel jpPersonenAngaben = new JPanel();
-            jpPersonenAngaben.setBorder(new TitledBorder("Angaben zur Person"));
-            jpPersonenAngaben.setLayout(new BoxLayout(jpPersonenAngaben, BoxLayout.Y_AXIS));
+        JPanel jpPersonenAngaben = new JPanel();
+        jpPersonenAngaben.setBorder(new TitledBorder("Angaben zur Person"));
+        jpPersonenAngaben.setLayout(new BoxLayout(jpPersonenAngaben, BoxLayout.Y_AXIS));
 
-            JPanel jpAdressdaten = new JPanel();
-            jpAdressdaten.setBorder(new TitledBorder("Adressdaten"));
-            jpAdressdaten.setLayout(new BoxLayout(jpAdressdaten, BoxLayout.Y_AXIS));
-
-
-            JPanel jpSonstigeAngaben = new JPanel();
-            jpSonstigeAngaben.setBorder(new TitledBorder("Sonstige Angaben"));
-            jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
-
-            JPanel jpAnrede = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlAnrede = new JLabel("Anrede:");
-            String[] Anrede = {"Firma", "Frau", "Herr"};
-            JComboBox jcAnredeListe = new JComboBox(Anrede);
+        JPanel jpAdressdaten = new JPanel();
+        jpAdressdaten.setBorder(new TitledBorder("Adressdaten"));
+        jpAdressdaten.setLayout(new BoxLayout(jpAdressdaten, BoxLayout.Y_AXIS));
 
 
+        JPanel jpSonstigeAngaben = new JPanel();
+        jpSonstigeAngaben.setBorder(new TitledBorder("Sonstige Angaben"));
+        jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
 
-            JPanel jpName = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlName = new JLabel("Name:");
-            JTextField jtName = new JTextField(20);
-
-            jpName.add(jlName);
-            jpName.add(jtName);
-
-            JPanel jpVorname = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlVorname = new JLabel("Vorname:");
-            JTextField jtVorname = new JTextField(20);
-
-            jpVorname.add(jlVorname);
-            jpVorname.add(jtVorname);
-
-            JPanel jpGeburtstag = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlGeburtstag = new JLabel("Geburtstag:");
-            JTextField jtGeburtstag = new JTextField(20);
+        JPanel jpAnrede = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlAnrede = new JLabel("Anrede:");
+        String[] Anrede = {"Firma", "Frau", "Herr"};
+        JComboBox jcAnredeListe = new JComboBox(Anrede);
 
 
-            jpGeburtstag.add(jlGeburtstag);
-            jpGeburtstag.add(jtGeburtstag);
+        JPanel jpName = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlName = new JLabel("Name:");
+        JTextField jtName = new JTextField(20);
 
-            JPanel jpAnschrift = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlAnschrift = new JLabel("Anschrift:");
-            JTextField jtAnschrift = new JTextField(20);
+        jpName.add(jlName);
+        jpName.add(jtName);
 
-            jpAnschrift.add(jlAnschrift);
-            jpAnschrift.add(jtAnschrift);
+        JPanel jpVorname = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlVorname = new JLabel("Vorname:");
+        JTextField jtVorname = new JTextField(20);
 
-            JPanel jpPlz = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlPlz = new JLabel("Postleitzahl:");
-            JTextField jtPlz = new JTextField(20);
+        jpVorname.add(jlVorname);
+        jpVorname.add(jtVorname);
 
-            jpPlz.add(jlPlz);
-            jpPlz.add(jtPlz);
-
-            JPanel jpOrt = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlOrt = new JLabel("Ort:");
-            JTextField jtOrt = new JTextField(20);
-
-            jpOrt.add(jlOrt);
-            jpOrt.add(jtOrt);
-
-            JPanel jpUst = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlUst = new JLabel("UST-ID:");
-            JTextField jtUst = new JTextField(20);
-
-            jpUst.add(jlUst);
-            jpUst.add(jtUst);
-
-            jpAnrede.add(jlAnrede);
-            jpAnrede.add(jcAnredeListe);
-
-            jpPersonenAngaben.add(jpAnrede);
-            jpPersonenAngaben.add(jpVorname);
-            jpPersonenAngaben.add(jpName);
-            jpPersonenAngaben.add(jpGeburtstag);
-
-            jpAdressdaten.add(jpAnschrift);
-            jpAdressdaten.add(jpPlz);
-            jpAdressdaten.add(jpOrt);
+        JPanel jpGeburtstag = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlGeburtstag = new JLabel("Geburtstag:");
+        JTextField jtGeburtstag = new JTextField(20);
 
 
-            JPanel jpButton = new JPanel();
-            JButton jbSpeichern = new JButton("Speichern");
-            JButton jbAbbrechen = new JButton("Abbrechen");
-            jpButton.add(jbSpeichern);
-            jpButton.add(jbAbbrechen);
+        jpGeburtstag.add(jlGeburtstag);
+        jpGeburtstag.add(jtGeburtstag);
+
+        JPanel jpAnschrift = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlAnschrift = new JLabel("Anschrift:");
+        JTextField jtAnschrift = new JTextField(20);
+
+        jpAnschrift.add(jlAnschrift);
+        jpAnschrift.add(jtAnschrift);
+
+        JPanel jpPlz = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlPlz = new JLabel("Postleitzahl:");
+        JTextField jtPlz = new JTextField(20);
+
+        jpPlz.add(jlPlz);
+        jpPlz.add(jtPlz);
+
+        JPanel jpOrt = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlOrt = new JLabel("Ort:");
+        JTextField jtOrt = new JTextField(20);
+
+        jpOrt.add(jlOrt);
+        jpOrt.add(jtOrt);
+
+        JPanel jpUst = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlUst = new JLabel("UST-ID:");
+        JTextField jtUst = new JTextField(20);
+
+        jpUst.add(jlUst);
+        jpUst.add(jtUst);
+
+        jpAnrede.add(jlAnrede);
+        jpAnrede.add(jcAnredeListe);
+
+        jpPersonenAngaben.add(jpAnrede);
+        jpPersonenAngaben.add(jpVorname);
+        jpPersonenAngaben.add(jpName);
+        jpPersonenAngaben.add(jpGeburtstag);
+
+        jpAdressdaten.add(jpAnschrift);
+        jpAdressdaten.add(jpPlz);
+        jpAdressdaten.add(jpOrt);
+
+
+        JPanel jpButton = new JPanel();
+        JButton jbSpeichern = new JButton("Speichern");
+        JButton jbAbbrechen = new JButton("Abbrechen");
+        jpButton.add(jbSpeichern);
+        jpButton.add(jbAbbrechen);
         ActionListener alSpeichern = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Person temp = null;
                 try {
-                    if("".equals(jtVorname.getText())||jtVorname.getText()==null){
-                        temp = new Person(jcAnredeListe.getSelectedItem().toString(),jtName.getText(),umwandeln((jtGeburtstag.getText())));
+                    if ("".equals(jtVorname.getText()) || jtVorname.getText() == null) {
+                        temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), umwandeln((jtGeburtstag.getText())));
                         okfzsInstanz.getDatenbank().insertPerson(temp);
 
 
-                    }
-                    else{
+                    } else {
                         temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), Integer.parseInt(jtPlz.getText()), jtOrt.getText(), jtUst.getText());
                         okfzsInstanz.getDatenbank().insertOrUpdatePerson(temp);
                     }
@@ -601,9 +663,8 @@ public class PersonenEditor extends Ansicht {
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
-                selectedPers=temp;
+                selectedPers = temp;
                 okfzsInstanz.anzeigen("personAend");
-
 
 
             }
@@ -612,40 +673,38 @@ public class PersonenEditor extends Ansicht {
         jbSpeichern.addActionListener(alSpeichern);
 
 
-
-            ActionListener alAbbrechen = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    okfzsInstanz.anzeigen("personAnz");
-                }
-            };
-            jbAbbrechen.addActionListener(alAbbrechen);
-
-
-            jpSonstigeAngaben.add(jpUst);
-            jpSonstigeAngaben.add(jpButton);
-
-            jpWest.add(jpPersonenAngaben);
-            jpWest.add(jpAdressdaten);
-            jpWest.add(jpSonstigeAngaben);
+        ActionListener alAbbrechen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                okfzsInstanz.anzeigen("personAnz");
+            }
+        };
+        jbAbbrechen.addActionListener(alAbbrechen);
 
 
-            jfPersonEdit.add(jpWest, BorderLayout.WEST);
+        jpSonstigeAngaben.add(jpUst);
+        jpSonstigeAngaben.add(jpButton);
+
+        jpWest.add(jpPersonenAngaben);
+        jpWest.add(jpAdressdaten);
+        jpWest.add(jpSonstigeAngaben);
 
 
-
-            //JFrame jf Größe mitgeben
-            jfPersonEdit.setSize(1024, 768);
+        jfPersonEdit.add(jpWest, BorderLayout.WEST);
 
 
-            //JFrame jf auf Bildschirm plazieren
-            jfPersonEdit.setLocation(200, 400);
-
-            //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
+        //JFrame jf Größe mitgeben
+        jfPersonEdit.setSize(1024, 768);
 
 
-            //JFrame jf anzeigen
-            jfPersonEdit.setVisible(true);
+        //JFrame jf auf Bildschirm plazieren
+        jfPersonEdit.setLocation(200, 400);
+
+        //JFrame jf, beim Klicken auf X ist Fenster nicht sichtbar, Programm wird erst geschlossen wenn alle geschlossen sind
+
+
+        //JFrame jf anzeigen
+        jfPersonEdit.setVisible(true);
 
 
     }
@@ -669,15 +728,15 @@ public class PersonenEditor extends Ansicht {
         return sDate;
     }
 
-    static class ErrListRenderer extends JLabel implements ListCellRenderer<Erreichbarkeit>{
+    static class ErrListRenderer extends JLabel implements ListCellRenderer<Erreichbarkeit> {
 
         @Override
         public Component getListCellRendererComponent(JList<? extends Erreichbarkeit> list, Erreichbarkeit value, int index, boolean isSelected, boolean cellHasFocus) {
 
-            setText("<html>"+value.getDetails()+"<br>"
-                    +"Telefon: "+value.getTelefonNummer()+"<br>"
-                    +"Handy: "+value.getHandyNummer()+"<br>"
-                    +"E-Mail: "+value.getEmail()+"</html>");
+            setText("<html>" + value.getDetails() + "<br>"
+                    + "Telefon: " + value.getTelefonNummer() + "<br>"
+                    + "Handy: " + value.getHandyNummer() + "<br>"
+                    + "E-Mail: " + value.getEmail() + "</html>");
 
             if (isSelected) {
                 setOpaque(true);
@@ -689,7 +748,7 @@ public class PersonenEditor extends Ansicht {
                 setBackground(Color.WHITE);
                 setForeground(Color.BLACK);
             }
-            this.setSize(300,300);
+            this.setSize(300, 300);
             return this;
         }
     }
