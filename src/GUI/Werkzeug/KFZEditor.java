@@ -258,6 +258,7 @@ public class KFZEditor extends Ansicht {
             JCheckBoxList list = new JCheckBoxList();
             list.setModel(ausstattungsListModel);
 
+
             for(Sonderausstattung s:ausstattungen){
                 JCheckboxWithObject jcbwo=new JCheckboxWithObject(s);
                 if (k.getSonderausstattung().contains(s)){
@@ -271,11 +272,13 @@ public class KFZEditor extends Ansicht {
             jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
             JPanel jpSonderAusstattungsListe = new JPanel(new GridLayout(2,1));
             JComponent jList = list;
+            list.setVisibleRowCount(20);
             JScrollPane jsp = new JScrollPane(jList);
             jpSonderAusstattungsListe.add(jsp);
 
             JPanel jpListFahrzeugbestand = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JList jtFahrzeugbestand = new JList(kfzs.toArray(new KFZ[kfzs.size()]));
+            jtFahrzeugbestand.setVisibleRowCount(20);
             jpListFahrzeugbestand.add(jtFahrzeugbestand);
 
             jpSonderausstattung.add(jpSonderAusstattungsListe);
@@ -293,7 +296,8 @@ public class KFZEditor extends Ansicht {
             JPanel jpButton = new JPanel();
             JButton jbFahrzeugSave = new JButton("Fahrzeug speichern");
             JButton jbFahrzeugBearbeiten = new JButton("Fahrzeug bearbeiten");
-            JButton jbNeueAktion = new JButton("Fahrzeugaktion hinzufügen");
+            JButton jbNeueAktion = new JButton("Aktion hinzufügen");
+            JButton jbAktionEdit = new JButton("Aktion bearbeiten");
             JButton jbNeueAusstattung = new JButton("Fahrzeugausstattung hinzufügen");
             JButton jbVerkauf = new JButton("Fahrzeugverkauf vorbereiten");
 
@@ -377,20 +381,28 @@ public class KFZEditor extends Ansicht {
             ActionListener alNeueAktion = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    jbNeueAktion.setEnabled(false);
-                    System.out.println("test");
+                    AktionEditor ae = new AktionEditor(okfzsInstanz,k);
 
+                }
+            };
+
+            ActionListener alAktionEdit = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  AktionEditor ae = new AktionEditor((Aktion)jtAktionen.getSelectedValue(),okfzsInstanz);
                 }
             };
 
             jbFahrzeugSave.addActionListener(alFahrzeugSave);
             jbFahrzeugBearbeiten.addActionListener(alFahrzeugBearbeiten);
             jbNeueAktion.addActionListener(alNeueAktion);
+            jbAktionEdit.addActionListener(alAktionEdit);
             jbNeueAusstattung.addActionListener(alNeueAusstattung);
 
             jpButton.add(jbFahrzeugSave);
             jpButton.add(jbFahrzeugBearbeiten);
             jpButton.add(jbNeueAktion);
+            jpButton.add(jbAktionEdit);
             jpButton.add(jbNeueAusstattung);
             jpButton.add(jbVerkauf);
 
@@ -618,6 +630,7 @@ public class KFZEditor extends Ansicht {
 
         DefaultListModel ausstattungsListModel = new DefaultListModel();
         JCheckBoxList list = new JCheckBoxList();
+        list.setVisibleRowCount(15);
         list.setModel(ausstattungsListModel);
 
         for(Sonderausstattung s:ausstattungen){
@@ -736,6 +749,12 @@ public class KFZEditor extends Ansicht {
 
     public KFZEditor(OKFZS okfzsInstanz) {
         super(okfzsInstanz);
+        List<KFZ> kfzs= null;
+        try {
+            kfzs = okfzsInstanz.getDatenbank().alleKfz();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         List<Sonderausstattung> ausstattungen= null;
         try {
             ausstattungen = okfzsInstanz.getDatenbank().ausstattungslisteSortiert();
@@ -929,21 +948,45 @@ public class KFZEditor extends Ansicht {
         for(Sonderausstattung s:ausstattungen){
             ausstattungsListModel.addElement(new JCheckboxWithObject(s));
         }
+        JPanel jpSonderAusstattungsListe = new JPanel(new BorderLayout());
+        JComponent jList = list;
+        list.setVisibleRowCount(12);
+        JScrollPane jsp = new JScrollPane(jList);
+        jpSonderAusstattungsListe.add(jsp);
+        jpSonderausstattung.add(jpSonderAusstattungsListe,BorderLayout.CENTER);
 
         JPanel jpAutoliste = new JPanel();
         jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
         jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
-        JPanel jpSonderAusstattungsListe = new JPanel(new GridLayout(2,1));
-        JComponent jList = list;
-        JScrollPane jsp = new JScrollPane(jList);
-        jpSonderAusstattungsListe.add(jsp);
 
-        JPanel jpListFahrzeugbestand = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JTextArea jtFahrzeugbestand = new JTextArea(20, 20);
-        jpListFahrzeugbestand.add(jtFahrzeugbestand);
+        JPanel jpListFahrzeugbestand = new JPanel(new BorderLayout());
+        JList jtFahrzeugbestand = new JList(kfzs.toArray(new KFZ[kfzs.size()]));
+        jtFahrzeugbestand.setVisibleRowCount(12);
+        JScrollPane jspFahrzeugBestand = new JScrollPane(jtFahrzeugbestand);
+        jpListFahrzeugbestand.add(jspFahrzeugBestand);
+        jpAutoliste.add(jpListFahrzeugbestand, BorderLayout.CENTER);
 
-        jpSonderausstattung.add(jpSonderAusstattungsListe);
-        jpAutoliste.add(jpListFahrzeugbestand);
+        JButton jbKfzDatenLaden = new JButton("KFZ Daten Laden");
+
+        ActionListener alKfzDatenladen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                KFZ k = (KFZ) jtFahrzeugbestand.getSelectedValue();
+                jtHersteller.setText(k.getHersteller());
+                jtModell.setText(k.getModell());
+                jtFarbe.setText(k.getFarbe());
+                jtFin.setText(k.getFin());
+                jtKfzBriefNr.setText(k.getKfzBriefNr());
+                jtEZ.setText(String.valueOf(k.getEz()));
+                jtLeistungInKw.setText(String.valueOf(k.getLeistungInKw()));
+                jtKraftstoff.setText(k.getKraftstoff());
+                jtUmweltplakette.setText(String.valueOf(k.getUmweltPlakette()));
+
+            }
+        };
+
+        jbKfzDatenLaden.addActionListener(alKfzDatenladen);
+        jpListFahrzeugbestand.add(jbKfzDatenLaden,BorderLayout.SOUTH);
 
         jpKfzEast.add(jpSonderausstattung);
         jpKfzEast.add(jpAutoliste);
@@ -1071,7 +1114,7 @@ public class KFZEditor extends Ansicht {
                 } catch (SQLException e1) {
                     System.out.println(e1.getMessage());
                 }
-//                okfzsInstanz.anzeigen("autoAend");
+                okfzsInstanz.anzeigen("autoAend");
                 jfKfzEdit.dispose();
 
             }
