@@ -40,13 +40,13 @@ public class AktionEditor extends Ansicht {
         jpAktionen.setLayout(new BoxLayout(jpAktionen, BoxLayout.Y_AXIS));
 
         JPanel jpDatumAktion = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlDatumAktion = new JLabel("Datum:");
+        JLabel jlDatumAktion = new JLabel("Datum: * ");
         JTextField jtDatumAktion = new JTextField(20);
         jpDatumAktion.add(jlDatumAktion);
         jpDatumAktion.add(jtDatumAktion);
 
         JPanel jpDurchfuehrender = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlDurchfuehrender = new JLabel("Durchführender:");
+        JLabel jlDurchfuehrender = new JLabel("Durchführender: * ");
         Person[] persons=null;
 
         try {
@@ -61,7 +61,7 @@ public class AktionEditor extends Ansicht {
         jpDurchfuehrender.add(jcDurchfuehrender);
 
         JPanel jpBeschreibung = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlBeschreibung = new JLabel("Beschreibung:");
+        JLabel jlBeschreibung = new JLabel("Beschreibung: * ");
         JTextArea jtBeschreibung = new JTextArea(20, 20);
 
         jpBeschreibung.add(jlBeschreibung);

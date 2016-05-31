@@ -4,6 +4,7 @@ import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ public class Anmeldung extends Ansicht {
 
     public Anmeldung(OKFZS instanz) {
         super(instanz);
+
         if(instanz.getDatenbank().adminDa()) {
 
 
@@ -120,6 +122,7 @@ public class Anmeldung extends Ansicht {
         Verkaeufer v = null;
         try {
             v = getOKFZSInstanz().getDatenbank().einVerkaufer(name);
+            if (v==null)return null;
             if (passwortHash.equals(v.getPasswortHash())) {
                 System.out.println(passwortHash);
                 return v;}

@@ -48,7 +48,7 @@ public class KFZEditor extends Ansicht {
             jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
 
             JPanel jpFin = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlFin = new JLabel("Fin:");
+            JLabel jlFin = new JLabel("Fin: * ");
             JTextField jtFin = new JTextField(20);
             jtFin.setText(k.getFin());
             jtFin.setEditable(false);
@@ -56,7 +56,7 @@ public class KFZEditor extends Ansicht {
             jpFin.add(jtFin);
 
             JPanel jpHersteller = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlHersteller = new JLabel("Hersteller:");
+            JLabel jlHersteller = new JLabel("Hersteller: * ");
             JTextField jtHersteller = new JTextField(20);
             jtHersteller.setText(k.getHersteller());
             jtHersteller.setEditable(false);
@@ -64,7 +64,7 @@ public class KFZEditor extends Ansicht {
             jpHersteller.add(jtHersteller);
 
             JPanel jpModell = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlModell = new JLabel("Modell:");
+            JLabel jlModell = new JLabel("Modell: * ");
             JTextField jtModell = new JTextField(20);
             jtModell.setText(k.getModell());
             jtModell.setEditable(false);
@@ -72,7 +72,7 @@ public class KFZEditor extends Ansicht {
             jpModell.add(jtModell);
 
             JPanel jpKfzBriefNr = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlKfzBriefNr = new JLabel("KFZ-Brief-Nr.:");
+            JLabel jlKfzBriefNr = new JLabel("KFZ-Brief-Nr.: * ");
             JTextField jtKfzBriefNr = new JTextField(20);
             jtKfzBriefNr.setText(k.getKfzBriefNr());
             jtKfzBriefNr.setEditable(false);
@@ -80,7 +80,7 @@ public class KFZEditor extends Ansicht {
             jpKfzBriefNr.add(jtKfzBriefNr);
 
             JPanel jpLeistungInKw = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlLeistungInKw = new JLabel("Leistung in KW:");
+            JLabel jlLeistungInKw = new JLabel("Leistung in KW: * ");
             JTextField jtLeistungInKw = new JTextField(20);
             jtLeistungInKw.setText(String.valueOf(k.getLeistungInKw()));
             jtLeistungInKw.setEditable(false);
@@ -88,7 +88,7 @@ public class KFZEditor extends Ansicht {
             jpLeistungInKw.add(jtLeistungInKw);
 
             JPanel jpFarbe = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlFarbe = new JLabel("Farbe:");
+            JLabel jlFarbe = new JLabel("Farbe: * ");
             JTextField jtFarbe = new JTextField(20);
             jtFarbe.setText(k.getFarbe());
             jtFarbe.setEditable(false);
@@ -96,7 +96,7 @@ public class KFZEditor extends Ansicht {
             jpFarbe.add(jtFarbe);
 
             JPanel jpEZ = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlEZ = new JLabel("Erstzulassung:");
+            JLabel jlEZ = new JLabel("Erstzulassung: * ");
             JTextField jtEZ = new JTextField(20);
             jtEZ.setText(k.getEz().toString());
             jtEZ.setEditable(false);
@@ -104,7 +104,7 @@ public class KFZEditor extends Ansicht {
             jpEZ.add(jtEZ);
 
             JPanel jpUmweltplakette = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlUmweltplakette = new JLabel("Umweltplakette:");
+            JLabel jlUmweltplakette = new JLabel("Umweltplakette: * ");
             JTextField jtUmweltplakette = new JTextField(20);
             jtUmweltplakette.setText(String.valueOf(k.getUmweltPlakette()));
             jtUmweltplakette.setEditable(false);
@@ -112,7 +112,7 @@ public class KFZEditor extends Ansicht {
             jpUmweltplakette.add(jtUmweltplakette);
 
             JPanel jpKraftstoff = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlKraftstoff = new JLabel("Kraftstoff:");
+            JLabel jlKraftstoff = new JLabel("Kraftstoff: * ");
             JTextField jtKraftstoff = new JTextField(20);
             jtKraftstoff.setText(k.getKraftstoff());
             jtKraftstoff.setEditable(false);
@@ -165,14 +165,14 @@ public class KFZEditor extends Ansicht {
             jpEinkaeufer.add(jtEinkaeufer);
 
             JPanel jpEK = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlEK = new JLabel("Einkaufspreis:");
+            JLabel jlEK = new JLabel("Einkaufspreis: * ");
             JTextField jtEK = new JTextField(20);
             jtEK.setText(String.valueOf(vorgang.getePreis()));
             jpEK.add(jlEK);
             jpEK.add(jtEK);
 
             JPanel jpVKP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlVKP = new JLabel("geplanter Verkaufspreis:");
+            JLabel jlVKP = new JLabel("gepl. Verkaufspreis:");
             JTextField jtVKP = new JTextField(20);
             if(vorgang.getvPreis()==0.0) {
                 jtVKP.setText(String.valueOf(vorgang.getePreis()*1.2));
@@ -188,7 +188,7 @@ public class KFZEditor extends Ansicht {
             jpEKDat.add(jtEKDat);
 
             JPanel jpSchaeden = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlSchaeden = new JLabel("Bekannte Schäden:");
+            JLabel jlSchaeden = new JLabel("Schäden:");
             JTextArea jtSchaeden = new JTextArea(3, 20);
             jtSchaeden.setText(vorgang.getSchaeden());
             jpSchaeden.add(jlSchaeden);
@@ -209,6 +209,13 @@ public class KFZEditor extends Ansicht {
             jpKennzeichen.add(jlKennzeichen);
             jpKennzeichen.add(jtKennzeichen);
 
+            JPanel jpKm = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JLabel jlKm = new JLabel("KM:");
+            JTextField jtKm = new JTextField(20);
+            jtKm.setText(String.valueOf(vorgang.getKilometer()));
+            jpKm.add(jlKm);
+            jpKm.add(jtKm);
+
             jpVKAngaben.add(jpEinkaeufer);
             jpVKAngaben.add(jpEKDat);
             jpVKAngaben.add(jpEK);
@@ -217,6 +224,7 @@ public class KFZEditor extends Ansicht {
             jpMerkmale.add(jpSchaeden);
             jpMerkmale.add(jpTuev);
             jpMerkmale.add(jpKennzeichen);
+            jpMerkmale.add(jpKm);
 
             jpKfzCenter.add(jpMerkmale);
             jpKfzCenter.add(jpVKAngaben);
@@ -394,55 +402,55 @@ public class KFZEditor extends Ansicht {
         jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
 
         JPanel jpFin = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlFin = new JLabel("Fin:");
+        JLabel jlFin = new JLabel("Fin: * ");
         JTextField jtFin = new JTextField(20);
         jpFin.add(jlFin);
         jpFin.add(jtFin);
 
         JPanel jpHersteller = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlHersteller = new JLabel("Hersteller:");
+        JLabel jlHersteller = new JLabel("Hersteller: * ");
         JTextField jtHersteller = new JTextField(20);
         jpHersteller.add(jlHersteller);
         jpHersteller.add(jtHersteller);
 
         JPanel jpModell = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlModell = new JLabel("Modell:");
+        JLabel jlModell = new JLabel("Modell: * ");
         JTextField jtModell = new JTextField(20);
         jpModell.add(jlModell);
         jpModell.add(jtModell);
 
         JPanel jpKfzBriefNr = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlKfzBriefNr = new JLabel("KFZ-Brief-Nr.:");
+        JLabel jlKfzBriefNr = new JLabel("KFZ-Brief-Nr.: * ");
         JTextField jtKfzBriefNr = new JTextField(20);
         jpKfzBriefNr.add(jlKfzBriefNr);
         jpKfzBriefNr.add(jtKfzBriefNr);
 
         JPanel jpLeistungInKw = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlLeistungInKw = new JLabel("Leistung in KW:");
+        JLabel jlLeistungInKw = new JLabel("Leistung in KW: * ");
         JTextField jtLeistungInKw = new JTextField(20);
         jpLeistungInKw.add(jlLeistungInKw);
         jpLeistungInKw.add(jtLeistungInKw);
 
         JPanel jpFarbe = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlFarbe = new JLabel("Farbe:");
+        JLabel jlFarbe = new JLabel("Farbe: * ");
         JTextField jtFarbe = new JTextField(20);
         jpFarbe.add(jlFarbe);
         jpFarbe.add(jtFarbe);
 
         JPanel jpEZ = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlEZ = new JLabel("Erstzulassung:");
+        JLabel jlEZ = new JLabel("Erstzulassung: * ");
         JTextField jtEZ = new JTextField(20);
         jpEZ.add(jlEZ);
         jpEZ.add(jtEZ);
 
         JPanel jpUmweltplakette = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlUmweltplakette = new JLabel("Umweltplakette:");
+        JLabel jlUmweltplakette = new JLabel("Umweltplakette: * ");
         JTextField jtUmweltplakette = new JTextField(20);
         jpUmweltplakette.add(jlUmweltplakette);
         jpUmweltplakette.add(jtUmweltplakette);
 
         JPanel jpKraftstoff = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlKraftstoff = new JLabel("Kraftstoff:");
+        JLabel jlKraftstoff = new JLabel("Kraftstoff: * ");
         JTextField jtKraftstoff = new JTextField(20);
         jpKraftstoff.add(jlKraftstoff);
         jpKraftstoff.add(jtKraftstoff);
@@ -481,7 +489,7 @@ public class KFZEditor extends Ansicht {
         jpVKAngaben.setLayout(new BoxLayout(jpVKAngaben, BoxLayout.Y_AXIS));
 
         JPanel jpMerkmale = new JPanel();
-        jpMerkmale.setBorder(new TitledBorder("Merkmale"));
+        jpMerkmale.setBorder(new TitledBorder("KFZ-Merkmale"));
         jpMerkmale.setLayout(new BoxLayout(jpMerkmale, BoxLayout.Y_AXIS));
 
         JPanel jpEinkaeufer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -491,13 +499,13 @@ public class KFZEditor extends Ansicht {
         jpEinkaeufer.add(jtEinkaeufer);
 
         JPanel jpEK = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlEK = new JLabel("Einkaufspreis:");
+        JLabel jlEK = new JLabel("Einkaufspreis: * ");
         JTextField jtEK = new JTextField(20);
         jpEK.add(jlEK);
         jpEK.add(jtEK);
 
         JPanel jpVKP = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlVKP = new JLabel("geplanter Verkaufspreis:");
+        JLabel jlVKP = new JLabel("gepl. Verkaufspreis:");
         JTextField jtVKP = new JTextField(20);
         jpVKP.add(jlVKP);
         jpVKP.add(jtVKP);
@@ -509,7 +517,7 @@ public class KFZEditor extends Ansicht {
         jpEKDat.add(jtEKDat);
 
         JPanel jpSchaeden = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlSchaeden = new JLabel("Bekannte Schäden:");
+        JLabel jlSchaeden = new JLabel("Schäden:");
         JTextField jtSchaeden = new JTextField(20);
         jpSchaeden.add(jlSchaeden);
         jpSchaeden.add(jtSchaeden);
@@ -526,6 +534,12 @@ public class KFZEditor extends Ansicht {
         jpKennzeichen.add(jlKennzeichen);
         jpKennzeichen.add(jtKennzeichen);
 
+        JPanel jpKm = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel jlKm = new JLabel("KM:");
+        JTextField jtKm = new JTextField(20);
+        jpKm.add(jlKm);
+        jpKm.add(jtKm);
+
         jpVKAngaben.add(jpEinkaeufer);
         jpVKAngaben.add(jpEKDat);
         jpVKAngaben.add(jpEK);
@@ -534,6 +548,8 @@ public class KFZEditor extends Ansicht {
         jpMerkmale.add(jpSchaeden);
         jpMerkmale.add(jpTuev);
         jpMerkmale.add(jpKennzeichen);
+        jpMerkmale.add(jpKm);
+
 
         jpKfzCenter.add(jpMerkmale);
         jpKfzCenter.add(jpVKAngaben);
@@ -597,10 +613,10 @@ public class KFZEditor extends Ansicht {
             public void actionPerformed(ActionEvent e) {
 
                 try {
-
                     KFZ kfz = new KFZ(jtFin.getText(),jtHersteller.getText(),jtModell.getText(),jtKfzBriefNr.getText(),Integer.parseInt(jtLeistungInKw.getText()),jtFarbe.getText(),umwandeln(jtEZ.getText()),Byte.parseByte(jtUmweltplakette.getText()),jtKraftstoff.getText());
                     okfzsInstanz.getDatenbank().insertOrUpdateKfz(kfz);
                     Vorgang v=new Vorgang(kfz,okfzsInstanz.getBenutzer(),Double.parseDouble(jtEK.getText()));
+                    v.setKilometer(Integer.parseInt(jtKm.getText()));
                     okfzsInstanz.getDatenbank().insertOrUpdateVorgang(v);
                     vorgang=v;
                     okfzsInstanz.anzeigen("autoAend");
