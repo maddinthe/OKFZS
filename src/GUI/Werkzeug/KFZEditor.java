@@ -124,9 +124,10 @@ public class KFZEditor extends Ansicht {
 
             JPanel jpAktionen = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JLabel jlAktionen = new JLabel("Aktionen:");
-            JTextArea jtAktionen = new JTextArea(3,20);
-//            jtAktionen.setText(okfzsInstanz.getDatenbank().eineAktion(k,));
-            jtAktionen.setEditable(false);
+//            JTextArea jtAktionen = new JTextArea(3,20);
+            JList jtAktionen = new JList(k.getAktionen().toArray(new Aktion[k.getAktionen().size()]));
+
+//            jtAktionen.setEditable(false);
             jtAktionen.setOpaque(false);
             jtAktionen.setBorder(new TitledBorder(""));
             jpAktionen.add(jlAktionen);
@@ -313,7 +314,7 @@ public class KFZEditor extends Ansicht {
                     jtEZ.setEditable(false);
                     jtUmweltplakette.setEditable(false);
                     jtKraftstoff.setEditable(false);
-                    jtAktionen.setEditable(false);
+//                    jtAktionen.setEditable(false);
                     jtAktionen.setOpaque(false);
                     jtSchaeden.setEditable(false);
                     jtSchaeden.setOpaque(false);
@@ -352,7 +353,7 @@ public class KFZEditor extends Ansicht {
                     jtEZ.setEditable(true);
                     jtUmweltplakette.setEditable(true);
                     jtKraftstoff.setEditable(true);
-                    jtAktionen.setEditable(true);
+//                    jtAktionen.setEditable(true);
                     jtAktionen.setOpaque(true);
                     jtSchaeden.setEditable(true);
                     jtSchaeden.setOpaque(true);

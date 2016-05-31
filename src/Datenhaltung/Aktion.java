@@ -51,6 +51,9 @@ public class Aktion {
         this.kfz = kfz;
     }
 
+    public String toString(){
+        return durchfuehrung+" "+beschreibung;
+    }
 
 }
 

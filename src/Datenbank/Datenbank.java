@@ -447,8 +447,19 @@ public class Datenbank {
 
         }
         r.close();
+        kfz.setAktionen(aktionenZuKFZ(kfz));
         kfz.setSonderausstattung(sonderausstattungKFZ(kfz));
         return kfz;
+    }
+
+    private List<Aktion> aktionenZuKFZ(KFZ kfz) throws SQLException {
+        List<Aktion> ret=new ArrayList<>();
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT * FROM t_aktion WHERE fk_t_kfz_fin='"+kfz.getFin()+"'");
+        while (rs.next()){
+            ret.add(new Aktion(rs.getDate("datum"),einePerson(rs.getLong("fk_t_person_pid")),rs.getString("text"),kfz));
+        }
+        return ret;
     }
 
     private List<Sonderausstattung> sonderausstattungKFZ(KFZ kfz) throws SQLException {
