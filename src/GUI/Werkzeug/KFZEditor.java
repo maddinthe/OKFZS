@@ -7,9 +7,7 @@ import GUI.OKFZS;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -18,7 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Created by tkertz on 23.05.2016.
@@ -260,10 +258,13 @@ public class KFZEditor extends Ansicht {
             list.setModel(ausstattungsListModel);
 
             for(Sonderausstattung s:ausstattungen){
-                ausstattungsListModel.addElement(new JCheckboxWithObject(s));
+                JCheckboxWithObject jcbwo=new JCheckboxWithObject(s);
+                if (k.getSonderausstattung().contains(s)){
+                    jcbwo.setSelected(true);
+                }else
+                jcbwo.setSelected(false);
+                ausstattungsListModel.addElement(jcbwo);
             }
-
-
             JPanel jpAutoliste = new JPanel();
             jpAutoliste.setBorder(new TitledBorder("Fahrzeugbestand"));
             jpAutoliste.setLayout(new BoxLayout(jpAutoliste, BoxLayout.Y_AXIS));
@@ -328,6 +329,9 @@ public class KFZEditor extends Ansicht {
                     try {
 
                         KFZ kfz = new KFZ(jtFin.getText(),jtHersteller.getText(),jtModell.getText(),jtKfzBriefNr.getText(),Integer.parseInt(jtLeistungInKw.getText()),jtFarbe.getText(),umwandeln(jtEZ.getText()),Byte.parseByte(jtUmweltplakette.getText()),jtKraftstoff.getText());
+                        for(Object o:list.getSelectedObjects()){
+                            kfz.addSonderstattung((Sonderausstattung)o);
+                        }
                         okfzsInstanz.getDatenbank().insertOrUpdateKfz(kfz);
 
                     } catch (SQLException e1) {
@@ -1208,6 +1212,15 @@ public class KFZEditor extends Ansicht {
                     return checkbox;
                 }
             }
+            public List<Object> getSelectedObjects(){
+                List<Object> ret =new ArrayList<>();
+                int size=this.getModel().getSize();
+                for (int i = 0; i < size ; i++) {
+                    if(((JCheckboxWithObject)this.getModel().getElementAt(i)).isSelected())
+                        ret.add(((JCheckboxWithObject)this.getModel().getElementAt(i)).getObject());
+                }
+                return ret;
+            }
 
             public void selectAll() {
                 int size = this.getModel().getSize();
@@ -1263,7 +1276,12 @@ public class KFZEditor extends Ansicht {
                 this.object = object;
                 this.setText(object.toString());
             }
+
+        @Override
+        public String toString() {
+            return object.toString();
         }
+    }
     }
 
 

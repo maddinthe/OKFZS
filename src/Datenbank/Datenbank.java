@@ -73,7 +73,7 @@ public class Datenbank {
                 conn = DriverManager.getConnection(url + database, props);
 
             } catch (SQLException e) {
-                getInstance("db_okfzs",host,port);
+                getInstance("db_okfzs", host, port);
                 //throw new SQLException("Datenbank existiert nicht", e.getSQLState(), e);
             }
 
@@ -263,6 +263,22 @@ public class Datenbank {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        insertOrUpdateAusstattung(kfz);
+    }
+    public void insertOrUpdateAusstattung(KFZ kfz) throws SQLException{
+        Statement stmt=conn.createStatement();
+        List<Sonderausstattung> alteSA=sonderausstattungKFZ(kfz);
+        List<Sonderausstattung> neueSA=kfz.getSonderausstattung();
+        for (Sonderausstattung s:alteSA){
+            if (!neueSA.contains(s)){
+                stmt.executeUpdate("DELETE  FROM t_ausstattungsliste WHERE fk_t_sonderausstattung_sid="+s.getSid()+" AND fk_t_kfz_fin='"+kfz.getFin()+"'");
+            }
+        }
+        for (Sonderausstattung s:neueSA){
+            if(!alteSA.contains(s)){
+                stmt.executeUpdate("INSERT INTO t_ausstattungsliste(fk_t_sonderausstattung_sid, fk_t_kfz_fin) VALUES ("+s.getSid()+",'"+ kfz.getFin()+"')");
+            }
+        }
     }
 
     public void insertOrUpdateAktion(Aktion aktion) throws SQLException {
@@ -427,14 +443,24 @@ public class Datenbank {
             Date ez = r.getDate("ez");
             byte plakette = r.getByte("plakette");
             String kraftstoff = r.getString("kraftstoff");
-
-
             kfz = new KFZ(fin, hersteller, modell, kfz_brief, leistung, farbe, ez, plakette, kraftstoff);
 
         }
         r.close();
+        kfz.setSonderausstattung(sonderausstattungKFZ(kfz));
         return kfz;
     }
+
+    private List<Sonderausstattung> sonderausstattungKFZ(KFZ kfz) throws SQLException {
+        List<Sonderausstattung> ret=new ArrayList<>();
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT fk_t_sonderausstattung_sid FROM t_ausstattungsliste WHERE fk_t_kfz_fin='"+kfz.getFin()+"'");
+        while (rs.next()){
+            ret.add(eineSonderausstattung(rs.getLong("fk_t_sonderausstattung_sid")));
+        }
+        return ret;
+    }
+
 
     public Verkaeufer einVerkaufer(long id) throws SQLException {
         Statement stmt = conn.createStatement();

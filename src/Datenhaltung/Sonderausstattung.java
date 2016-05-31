@@ -26,4 +26,24 @@ public class Sonderausstattung {
     public String toString(){
         return beschreibung;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Sonderausstattung that = (Sonderausstattung) o;
+
+        if (sid != that.sid) return false;
+        return beschreibung.equals(that.beschreibung);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (sid ^ (sid >>> 32));
+        result = 31 * result + beschreibung.hashCode();
+        return result;
+    }
 }
