@@ -32,16 +32,18 @@ public class KFZListe extends Ansicht {
         if (items.get(0).getClass().equals(Vorgang.class)) {
             List<Vorgang> vorgaenge = items.getClass().cast(items);
             Map<String, Vorgang> finVorgaenge = new TreeMap<>();
-            String[] thead = {"FIN", "Hersteller", "Modell", "Geplanter Verkaufspreis", "Einkaufsdatum"};
-            String[][] data = new String[vorgaenge.size()][5];
+            String[] thead = {"FIN", "Hersteller", "Modell", "Ankaufspreis", "Einkaufsdatum","Kraftstoff","Leistung"};
+            String[][] data = new String[vorgaenge.size()][8];
             for (int i = 0; i < vorgaenge.size(); i++) {
                 Vorgang v = vorgaenge.get(i);
                 finVorgaenge.put(v.getKfz().getFin(), v);
                 data[i][0] = v.getKfz().getFin();
                 data[i][1] = v.getKfz().getHersteller();
                 data[i][2] = v.getKfz().getModell();
-                data[i][3] = v.getvPreisPlan() + " €";
+                data[i][3] = v.getePreis() + " €";
                 data[i][4] = v.getEinkaufsDatum().toString();
+                data[i][5] = v.getKfz().getKraftstoff();
+                data[i][6] = v.getKfz().getLeistungInKw()+" KW";
             }
 
 
@@ -56,6 +58,7 @@ public class KFZListe extends Ansicht {
             tabelle.addRowSelectionInterval(0, 0);
             selectedVorg = vorgaenge.get(0);
             this.add(BorderLayout.SOUTH, new JScrollPane(quickInfo));
+
 
             tabelle.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                 @Override
@@ -96,7 +99,7 @@ public class KFZListe extends Ansicht {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
                     selectedKFZ = finKFZ.get(tabelle.getValueAt(tabelle.getSelectedRow(), 0));
-                    quickInfo.setText(selectedVorg.toString());
+                    quickInfo.setText(selectedKFZ.toString());
                 }
             });
         }

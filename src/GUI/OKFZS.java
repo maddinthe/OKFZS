@@ -149,6 +149,7 @@ public class OKFZS extends JFrame {
                 beenden();
                 break;
             }
+
             case "sucheKFZ": {
                 aktuelleAnsicht = new Suche(this, true);
                 anzeige.add(aktuelleAnsicht, "sucheKFZ");
@@ -173,6 +174,9 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "impexp": {
+                aktuelleAnsicht=new ImportExport(this);
+                anzeige.add(aktuelleAnsicht,"impexp");
+                cards.show(anzeige,"impexp");
                 break;
             }
             case "autoAnz": {

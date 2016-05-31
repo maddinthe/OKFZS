@@ -666,12 +666,12 @@ public class PersonenEditor extends Ansicht {
                 try {
                     if ("".equals(jtVorname.getText()) || jtVorname.getText() == null) {
                         temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), umwandeln((jtGeburtstag.getText())));
-                        okfzsInstanz.getDatenbank().insertPerson(temp);
+                        selectedPers=okfzsInstanz.getDatenbank().insertPerson(temp);
 
 
                     } else {
                         temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), Integer.parseInt(jtPlz.getText()), jtOrt.getText(), jtUst.getText());
-                        okfzsInstanz.getDatenbank().insertOrUpdatePerson(temp);
+                        selectedPers=okfzsInstanz.getDatenbank().insertOrUpdatePerson(temp);
                     }
 
                 } catch (SQLException e1) {

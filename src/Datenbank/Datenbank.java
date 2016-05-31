@@ -165,18 +165,22 @@ public class Datenbank {
         return person;
     }
 
-    public void insertOrUpdatePerson(Person person) throws SQLException {
+    public Person insertOrUpdatePerson(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
             int count = stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',vorname='" + person.getVorname() + "',anschrift='" + person.getAnschrift() + "',plz=" + person.getPostleitzahl() + ",ort='" + person.getOrt() + "', ust_id='" + person.getUstID() + "'WHERE pid=" + person.getPid() + "");
-            if (count < 1)
+            if (count < 1) {
+                ResultSet rs = null;
                 stmt.executeUpdate("INSERT  INTO t_Person(anrede,name,vorname,gebtag,Anschrift,plz,ort,ust_id)" +
                         " VALUES ('" + person.getAnrede() + "', '" + person.getName() + "','" + person.getVorname() + "','" + person.getGeburtstag() + "','" + person.getAnschrift() + "'," + person.getPostleitzahl() + ",'" + person.getOrt() + "','" + person.getUstID() + "')");
-
+                if ((rs = stmt.executeQuery("SELECT max(pid) FROM t_person")).next())
+                    person.setPid(rs.getLong(1));
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
 
         }
+        return person;
     }
 
     public void insertOrUpdatePersonAdmin(Person person) throws SQLException {
@@ -246,37 +250,40 @@ public class Datenbank {
                 stmt.executeUpdate("UPDATE t_admins SET fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + " WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid() + "");
         }
     }
+
     public void deleteAdmin(Verkaeufer verkaeufer) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("DELETE FROM t_admins WHERE fk_t_verkaeufer_fk_t_person_pid="+verkaeufer.getPerson().getPid());
-        }catch (SQLException e){
-        System.out.println(e.getMessage());
+            stmt.executeUpdate("DELETE FROM t_admins WHERE fk_t_verkaeufer_fk_t_person_pid=" + verkaeufer.getPerson().getPid());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     public void insertOrUpdateKfz(KFZ kfz) throws SQLException {
         Statement stmt = conn.createStatement();
         try {
-            int i=stmt.executeUpdate("UPDATE t_kfz SET fin='" + kfz.getFin() + "',hersteller='" + kfz.getHersteller() + "',modell='" + kfz.getModell() + "',kfz_brief='" + kfz.getKfzBriefNr() + "',leistung=" + kfz.getLeistungInKw() + ",farbe='" + kfz.getFarbe() + "',ez='" + kfz.getEz() + "', plakette='" + kfz.getUmweltPlakette() + "',kraftstoff='" + kfz.getKraftstoff() + "'WHERE fin='" + kfz.getFin() + "'");
-            if(i<1)stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
+            int i = stmt.executeUpdate("UPDATE t_kfz SET fin='" + kfz.getFin() + "',hersteller='" + kfz.getHersteller() + "',modell='" + kfz.getModell() + "',kfz_brief='" + kfz.getKfzBriefNr() + "',leistung=" + kfz.getLeistungInKw() + ",farbe='" + kfz.getFarbe() + "',ez='" + kfz.getEz() + "', plakette='" + kfz.getUmweltPlakette() + "',kraftstoff='" + kfz.getKraftstoff() + "'WHERE fin='" + kfz.getFin() + "'");
+            if (i < 1)
+                stmt.executeUpdate("INSERT  INTO t_kfz(fin,hersteller,modell,kfz_brief,leistung,farbe,ez,plakette,kraftstoff) VALUES ('" + kfz.getFin() + "','" + kfz.getHersteller() + "', '" + kfz.getModell() + "','" + kfz.getKfzBriefNr() + "'," + kfz.getLeistungInKw() + ",'" + kfz.getFarbe() + "','" + kfz.getEz() + "','" + kfz.getUmweltPlakette() + "','" + kfz.getKraftstoff() + "')");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         insertOrUpdateAusstattung(kfz);
     }
-    public void insertOrUpdateAusstattung(KFZ kfz) throws SQLException{
-        Statement stmt=conn.createStatement();
-        List<Sonderausstattung> alteSA=sonderausstattungKFZ(kfz);
-        List<Sonderausstattung> neueSA=kfz.getSonderausstattung();
-        for (Sonderausstattung s:alteSA){
-            if (!neueSA.contains(s)){
-                stmt.executeUpdate("DELETE  FROM t_ausstattungsliste WHERE fk_t_sonderausstattung_sid="+s.getSid()+" AND fk_t_kfz_fin='"+kfz.getFin()+"'");
+
+    public void insertOrUpdateAusstattung(KFZ kfz) throws SQLException {
+        Statement stmt = conn.createStatement();
+        List<Sonderausstattung> alteSA = sonderausstattungKFZ(kfz);
+        List<Sonderausstattung> neueSA = kfz.getSonderausstattung();
+        for (Sonderausstattung s : alteSA) {
+            if (!neueSA.contains(s)) {
+                stmt.executeUpdate("DELETE  FROM t_ausstattungsliste WHERE fk_t_sonderausstattung_sid=" + s.getSid() + " AND fk_t_kfz_fin='" + kfz.getFin() + "'");
             }
         }
-        for (Sonderausstattung s:neueSA){
-            if(!alteSA.contains(s)){
-                stmt.executeUpdate("INSERT INTO t_ausstattungsliste(fk_t_sonderausstattung_sid, fk_t_kfz_fin) VALUES ("+s.getSid()+",'"+ kfz.getFin()+"')");
+        for (Sonderausstattung s : neueSA) {
+            if (!alteSA.contains(s)) {
+                stmt.executeUpdate("INSERT INTO t_ausstattungsliste(fk_t_sonderausstattung_sid, fk_t_kfz_fin) VALUES (" + s.getSid() + ",'" + kfz.getFin() + "')");
             }
         }
     }
@@ -302,25 +309,26 @@ public class Datenbank {
     }
 
     public void insertOrUpdateVorgang(Vorgang vorgang) throws SQLException {
-        Long kPid=(vorgang.getKauefer()!=null)?vorgang.getKauefer().getPid():null;
-        Long vkPid=(vorgang.getVerkaeufer()!=null)?vorgang.getVerkaeufer().getPerson().getPid():null;
-        Long ekPid=vorgang.getEinkaeufer().getPerson().getPid();
-        KFZ kfz=vorgang.getKfz();
-        Double vPreis=(vorgang.getvPreis()==0)?null:vorgang.getvPreis();
-        Double ePreis=(vorgang.getePreis()==0)?null:vorgang.getePreis();
-        Double vPreisPlan=(vorgang.getvPreisPlan()==0)?null:vorgang.getvPreisPlan();;
-        String vkDatum=(vorgang.getVerkaufsDatum()==null)?null:vorgang.getVerkaufsDatum().toString();
-        String rabbatGrund=(vorgang.getRabattGrund()==null)?"":vorgang.getRabattGrund();
-        String sonstVereinbarung=(vorgang.getSonstvereinbarungen()==null)?"":vorgang.getSonstvereinbarungen();
-        String ekDatum=vorgang.getEinkaufsDatum().toString();
-        String scheaden=(vorgang.getSchaeden()==null)?"":vorgang.getSchaeden();
-        String tuev=(vorgang.getTuev()==null)?null:vorgang.getTuev().toString();
-        String kenzeichen=(vorgang.getKennzeichen()==null)?"":vorgang.getKennzeichen();
-        Integer km=(vorgang.getKilometer()==0)?null:vorgang.getKilometer();
+        Long kPid = (vorgang.getKauefer() != null) ? vorgang.getKauefer().getPid() : null;
+        Long vkPid = (vorgang.getVerkaeufer() != null) ? vorgang.getVerkaeufer().getPerson().getPid() : null;
+        Long ekPid = vorgang.getEinkaeufer().getPerson().getPid();
+        KFZ kfz = vorgang.getKfz();
+        Double vPreis = (vorgang.getvPreis() == 0) ? null : vorgang.getvPreis();
+        Double ePreis = (vorgang.getePreis() == 0) ? null : vorgang.getePreis();
+        Double vPreisPlan = (vorgang.getvPreisPlan() == 0) ? null : vorgang.getvPreisPlan();
+        ;
+        String vkDatum = (vorgang.getVerkaufsDatum() == null) ? null : vorgang.getVerkaufsDatum().toString();
+        String rabbatGrund = (vorgang.getRabattGrund() == null) ? "" : vorgang.getRabattGrund();
+        String sonstVereinbarung = (vorgang.getSonstvereinbarungen() == null) ? "" : vorgang.getSonstvereinbarungen();
+        String ekDatum = vorgang.getEinkaufsDatum().toString();
+        String scheaden = (vorgang.getSchaeden() == null) ? "" : vorgang.getSchaeden();
+        String tuev = (vorgang.getTuev() == null) ? null : vorgang.getTuev().toString();
+        String kenzeichen = (vorgang.getKennzeichen() == null) ? "" : vorgang.getKennzeichen();
+        Integer km = (vorgang.getKilometer() == 0) ? null : vorgang.getKilometer();
 
         Statement stmt = conn.createStatement();
         try {
-            stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES ("+ kPid + "," + ekPid + ", " + vkPid + ",'" + kfz.getFin() + "'," + ePreis + "," + vPreis + ","+ km + ",'" + scheaden + "'," + vkDatum + ",'" + ekDatum + "','" + kenzeichen + "','" + rabbatGrund + "'," + tuev + ",'" + sonstVereinbarung + "'," + vPreisPlan+ ")");
+            stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + kPid + "," + ekPid + ", " + vkPid + ",'" + kfz.getFin() + "'," + ePreis + "," + vPreis + "," + km + ",'" + scheaden + "'," + vkDatum + ",'" + ekDatum + "','" + kenzeichen + "','" + rabbatGrund + "'," + tuev + ",'" + sonstVereinbarung + "'," + vPreisPlan + ")");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + vorgang.getKauefer().getPid() + ", fk_t_verkaeufer_pid_ek=" + vorgang.getEinkaeufer().getPerson().getPid() + ",fk_t_verkaeufer_pid_vk=" + vorgang.getVerkaeufer().getPerson().getPid() + ",fk_t_kfz_fin='" + vorgang.getKfz().getFin() + "',epreis=" + vorgang.getePreis() + ",vpreis=" + vorgang.getvPreis() + ",km=" + vorgang.getKilometer() + ",schaeden='" + vorgang.getSchaeden() + "',vkdatum='" + vorgang.getVerkaufsDatum() + "',ekdatum='" + vorgang.getEinkaufsDatum() + "',kennz='" + vorgang.getKennzeichen() + "',rabattgrund='" + vorgang.getRabattGrund() + "',tuev=" + vorgang.getTuev() + ",sonstvereinb='" + vorgang.getSonstvereinbarungen() + "',vpreisplan=" + vorgang.getvPreisPlan() + " WHERE vid=" + vorgang.getVid() + "");
@@ -453,20 +461,20 @@ public class Datenbank {
     }
 
     private List<Aktion> aktionenZuKFZ(KFZ kfz) throws SQLException {
-        List<Aktion> ret=new ArrayList<>();
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM t_aktion WHERE fk_t_kfz_fin='"+kfz.getFin()+"'");
-        while (rs.next()){
-            ret.add(new Aktion(rs.getDate("datum"),einePerson(rs.getLong("fk_t_person_pid")),rs.getString("text"),kfz));
+        List<Aktion> ret = new ArrayList<>();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM t_aktion WHERE fk_t_kfz_fin='" + kfz.getFin() + "'");
+        while (rs.next()) {
+            ret.add(new Aktion(rs.getDate("datum"), einePerson(rs.getLong("fk_t_person_pid")), rs.getString("text"), kfz));
         }
         return ret;
     }
 
     private List<Sonderausstattung> sonderausstattungKFZ(KFZ kfz) throws SQLException {
-        List<Sonderausstattung> ret=new ArrayList<>();
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT fk_t_sonderausstattung_sid FROM t_ausstattungsliste WHERE fk_t_kfz_fin='"+kfz.getFin()+"'");
-        while (rs.next()){
+        List<Sonderausstattung> ret = new ArrayList<>();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT fk_t_sonderausstattung_sid FROM t_ausstattungsliste WHERE fk_t_kfz_fin='" + kfz.getFin() + "'");
+        while (rs.next()) {
             ret.add(eineSonderausstattung(rs.getLong("fk_t_sonderausstattung_sid")));
         }
         return ret;
@@ -651,6 +659,7 @@ public class Datenbank {
         return personenListe;
 
     }
+
     public List<Person> allePersonenSortiert() throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_person ORDER BY name");
@@ -859,6 +868,7 @@ public class Datenbank {
         r.close();
         return sonderausstattungsListe;
     }
+
     public List<Sonderausstattung> ausstattungslisteSortiert() throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT sid,art FROM t_sonderausstattung ORDER BY art");
