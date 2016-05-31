@@ -588,6 +588,31 @@ public class Datenbank {
         }
         r.close();
         return personenListe;
+
+    }
+    public List<Person> allePersonenSortiert() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_person ORDER BY name");
+        Person person = null;
+        List<Person> personenListe = new ArrayList<>();
+
+
+        while (r.next()) {
+            long pid = r.getLong("pid");
+            String anrede = r.getString("anrede");
+            String name = r.getString("name");
+            String vorname = r.getString("vorname");
+            Date gebtag = r.getDate("gebtag");
+            String anschrift = r.getString("anschrift");
+            int plz = r.getInt("plz");
+            String ort = r.getString("ort");
+            String ust_id = r.getString("ust_id");
+            person = new Person(pid, anrede, name, vorname, gebtag, anschrift, plz, ort, ust_id);
+            personenListe.add(person);
+
+        }
+        r.close();
+        return personenListe;
     }
 
     public List<Vorgang> unverkaufteVorgaenge() throws SQLException {
