@@ -1,5 +1,6 @@
 package Datenhaltung;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,8 +21,8 @@ public class KFZ {
     private Date ez;
     private Byte umweltPlakette;
     private String kraftstoff;
-    private List<Aktion> aktionen;
-    private List<Sonderausstattung> sonderausstattung;
+    private List<Aktion> aktionen=new ArrayList<>();
+    private List<Sonderausstattung> sonderausstattung=new ArrayList<>();
 
     public KFZ(String fin, String hersteller, String modell, String kfzBriefNr, int leistungInKw, String farbe, Date ez, Byte umweltPlakette, String kraftstoff) {
         this.fin = fin;
