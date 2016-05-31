@@ -55,7 +55,7 @@ public class PersonenEditor extends Ansicht {
             jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
 
             JPanel jpAnrede = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlAnrede = new JLabel("Anrede:");
+            JLabel jlAnrede = new JLabel("Anrede: * ");
             String[] Anrede = {"Firma", "Frau", "Herr"};
             JComboBox jcAnredeListe = new JComboBox(Anrede);
             for (int i = 0; i < Anrede.length; i++) {
@@ -66,7 +66,7 @@ public class PersonenEditor extends Ansicht {
                 jcAnredeListe.setEnabled(false);
 
             JPanel jpName = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlName = new JLabel("Name:");
+            JLabel jlName = new JLabel("Name: * ");
             JTextField jtName = new JTextField(20);
             jtName.setText(person.getName());
             if (!okfzsInstanz.getBenutzer().istAdmin())
@@ -82,7 +82,7 @@ public class PersonenEditor extends Ansicht {
             jpVorname.add(jtVorname);
 
             JPanel jpGeburtstag = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JLabel jlGeburtstag = new JLabel("Geburtstag:");
+            JLabel jlGeburtstag = new JLabel("Geburtstag: * ");
             JTextField jtGeburtstag = new JTextField(20);
             jtGeburtstag.setText(person.getGeburtstag().toString());
             if (!okfzsInstanz.getBenutzer().istAdmin())
@@ -173,7 +173,10 @@ public class PersonenEditor extends Ansicht {
             ActionListener alSpeichern = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Person temp = new Person(p.getPid(), jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), Integer.parseInt(jtPlz.getText()), jtOrt.getText(), jtUst.getText());
+                    int plz = 0;
+                    if(jtPlz.getText().length()>plz)
+                        plz=Integer.parseInt(jtPlz.getText());
+                    Person temp = new Person(p.getPid(), jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), plz, jtOrt.getText(), jtUst.getText());
                     if (okfzsInstanz.getBenutzer().istAdmin()) {
                         String password=String.copyValueOf(jtPasswort.getPassword()).hashCode()+"";
                         Verkaeufer verkaeufer =v;
@@ -253,79 +256,87 @@ public class PersonenEditor extends Ansicht {
             ActionListener alErreichbarkeitEdit = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JFrame jfErreichbarkeit = new JFrame("Erreichbarkeit Ändern");
-                    JPanel jpErreichbarkeiten = new JPanel();
-                    JPanel jpDetails = new JPanel();
-                    JPanel jpTel = new JPanel();
-                    JPanel jpMob = new JPanel();
-                    JPanel jpMail = new JPanel();
-                    JLabel jlDetails = new JLabel("Details:");
-                    JLabel jlTel = new JLabel("Telefonnummer:");
-                    JLabel jlMob = new JLabel("Mobil:");
-                    JLabel jlMail = new JLabel("E-Mail:");
-                    JTextField jtDetails = new JTextField(10);
-                    JTextField jtTel = new JTextField(10);
-                    JTextField jtMob = new JTextField(10);
-                    JTextField jtMail = new JTextField(10);
-                    jtDetails.setText(jlErreichbarkeitsListe.getSelectedValue().getDetails());
-                    jtTel.setText(jlErreichbarkeitsListe.getSelectedValue().getTelefonNummer());
-                    jtMob.setText(jlErreichbarkeitsListe.getSelectedValue().getHandyNummer());
-                    jtMail.setText(jlErreichbarkeitsListe.getSelectedValue().getEmail());
-                    JPanel jpButton = new JPanel();
-                    JButton jbSpeichern = new JButton("Speichern");
-                    JButton jbAbbrechen = new JButton("Abbrechen");
-                    ActionListener alSpeichernErreichbarkeit = new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            jlErreichbarkeitsListe.getSelectedValue().setDetails(jtDetails.getText());
-                            jlErreichbarkeitsListe.getSelectedValue().setTelefonNummer(jtTel.getText());
-                            jlErreichbarkeitsListe.getSelectedValue().setHandyNummer(jtMob.getText());
-                            jlErreichbarkeitsListe.getSelectedValue().setEmail(jtMail.getText());
-                            try {
-                                okfzsInstanz.getDatenbank().insertOrUpdateErreichbarkeit(jlErreichbarkeitsListe.getSelectedValue());
+                    if (jlErreichbarkeitsListe.getSelectedValue() != null) {
+                        JFrame jfErreichbarkeit = new JFrame("Erreichbarkeit Ändern");
+                        JPanel jpErreichbarkeiten = new JPanel();
+                        JPanel jpDetails = new JPanel();
+                        JPanel jpTel = new JPanel();
+                        JPanel jpMob = new JPanel();
+                        JPanel jpMail = new JPanel();
+                        JLabel jlDetails = new JLabel("Details:");
+                        JLabel jlTel = new JLabel("Telefonnummer:");
+                        JLabel jlMob = new JLabel("Mobil:");
+                        JLabel jlMail = new JLabel("E-Mail:");
+                        JTextField jtDetails = new JTextField(10);
+                        JTextField jtTel = new JTextField(10);
+                        JTextField jtMob = new JTextField(10);
+                        JTextField jtMail = new JTextField(10);
+                        jtDetails.setText(jlErreichbarkeitsListe.getSelectedValue().getDetails());
+                        jtTel.setText(jlErreichbarkeitsListe.getSelectedValue().getTelefonNummer());
+                        jtMob.setText(jlErreichbarkeitsListe.getSelectedValue().getHandyNummer());
+                        jtMail.setText(jlErreichbarkeitsListe.getSelectedValue().getEmail());
+                        JPanel jpButton = new JPanel();
+                        JButton jbSpeichern = new JButton("Speichern");
+                        JButton jbAbbrechen = new JButton("Abbrechen");
+                        ActionListener alSpeichernErreichbarkeit = new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                jlErreichbarkeitsListe.getSelectedValue().setDetails(jtDetails.getText());
+                                jlErreichbarkeitsListe.getSelectedValue().setTelefonNummer(jtTel.getText());
+                                jlErreichbarkeitsListe.getSelectedValue().setHandyNummer(jtMob.getText());
+                                jlErreichbarkeitsListe.getSelectedValue().setEmail(jtMail.getText());
+                                try {
+                                    okfzsInstanz.getDatenbank().insertOrUpdateErreichbarkeit(jlErreichbarkeitsListe.getSelectedValue());
 
-                            } catch (SQLException e1) {
-                                e1.printStackTrace();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+                                okfzsInstanz.anzeigen("personAend");
+                                jfErreichbarkeit.dispose();
+
                             }
-                            okfzsInstanz.anzeigen("personAend");
-                            jfErreichbarkeit.dispose();
-
-                        }
-                    };
-                    ActionListener alAbbrechenErreichbarkeit = new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            okfzsInstanz.anzeigen("personAend");
-                            jfErreichbarkeit.dispose();
-                        }
-                    };
-                    jbSpeichern.addActionListener(alSpeichernErreichbarkeit);
-                    jbAbbrechen.addActionListener(alAbbrechenErreichbarkeit);
-                    jpButton.add(jbSpeichern);
-                    jpButton.add(jbAbbrechen);
-                    jpDetails.add(jlDetails);
-                    jpDetails.add(jtDetails);
-                    jpTel.add(jlTel);
-                    jpTel.add(jtTel);
-                    jpMob.add(jlMob);
-                    jpMob.add(jtMob);
-                    jpMail.add(jlMail);
-                    jpMail.add(jtMail);
 
 
-                    jpErreichbarkeiten.add(jpDetails);
-                    jpErreichbarkeiten.add(jpTel);
-                    jpErreichbarkeiten.add(jpMob);
-                    jpErreichbarkeiten.add(jpMail);
-                    jpErreichbarkeiten.add(jpButton);
-                    jfErreichbarkeit.add(jpErreichbarkeiten);
-                    jfErreichbarkeit.setSize(800, 150);
-                    jfErreichbarkeit.setLocation(500, 500);
-                    jfErreichbarkeit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    jfErreichbarkeit.setVisible(true);
+                        };
+                        ActionListener alAbbrechenErreichbarkeit = new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                okfzsInstanz.anzeigen("personAend");
+                                jfErreichbarkeit.dispose();
+                            }
+                        };
+                        jbSpeichern.addActionListener(alSpeichernErreichbarkeit);
+                        jbAbbrechen.addActionListener(alAbbrechenErreichbarkeit);
+                        jpButton.add(jbSpeichern);
+                        jpButton.add(jbAbbrechen);
+                        jpDetails.add(jlDetails);
+                        jpDetails.add(jtDetails);
+                        jpTel.add(jlTel);
+                        jpTel.add(jtTel);
+                        jpMob.add(jlMob);
+                        jpMob.add(jtMob);
+                        jpMail.add(jlMail);
+                        jpMail.add(jtMail);
 
+
+                        jpErreichbarkeiten.add(jpDetails);
+                        jpErreichbarkeiten.add(jpTel);
+                        jpErreichbarkeiten.add(jpMob);
+                        jpErreichbarkeiten.add(jpMail);
+                        jpErreichbarkeiten.add(jpButton);
+                        jfErreichbarkeit.add(jpErreichbarkeiten);
+                        jfErreichbarkeit.setSize(800, 150);
+                        jfErreichbarkeit.setLocation(500, 500);
+                        jfErreichbarkeit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        jfErreichbarkeit.setVisible(true);
+
+                    }else{
+                        JOptionPane.showMessageDialog(null,"Nichts Ausgewählt!");
+                    }
                 }
+
             };
+
 
 
             ActionListener alErreichbarkeitNeu = new ActionListener() {
@@ -425,48 +436,51 @@ public class PersonenEditor extends Ansicht {
             ActionListener alNotizEdit = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JFrame jfNotiz = new JFrame("Notiz Ändern");
-                    JPanel jpNotiz = new JPanel();
-                    JPanel jpText = new JPanel();
-                    JTextField jtNotiz = new JTextField(25);
-                    jtNotiz.setText(jlNotizListe.getSelectedValue().getBeschreibung());
-                    JPanel jpButton = new JPanel();
-                    JButton jbSpeichern = new JButton("Speichern");
-                    JButton jbAbbrechen = new JButton("Abbrechen");
-                    ActionListener alSpeichernNotiz = new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            jlNotizListe.getSelectedValue().setBeschreibung(jtNotiz.getText());
-                            try {
-                                okfzsInstanz.getDatenbank().insertOrUpdateNotiz(jlNotizListe.getSelectedValue());
+                    if (jlNotizListe.getSelectedValue() != null) {
+                        JFrame jfNotiz = new JFrame("Notiz Ändern");
+                        JPanel jpNotiz = new JPanel();
+                        JPanel jpText = new JPanel();
+                        JTextField jtNotiz = new JTextField(25);
+                        jtNotiz.setText(jlNotizListe.getSelectedValue().getBeschreibung());
+                        JPanel jpButton = new JPanel();
+                        JButton jbSpeichern = new JButton("Speichern");
+                        JButton jbAbbrechen = new JButton("Abbrechen");
+                        ActionListener alSpeichernNotiz = new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                jlNotizListe.getSelectedValue().setBeschreibung(jtNotiz.getText());
+                                try {
+                                    okfzsInstanz.getDatenbank().insertOrUpdateNotiz(jlNotizListe.getSelectedValue());
 
-                            } catch (SQLException e1) {
-                                e1.printStackTrace();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+                                okfzsInstanz.anzeigen("personAend");
+                                jfNotiz.dispose();
+
                             }
-                            okfzsInstanz.anzeigen("personAend");
-                            jfNotiz.dispose();
+                        };
+                        ActionListener alAbbrechenNotiz = new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                jfNotiz.dispose();
+                            }
+                        };
+                        jbSpeichern.addActionListener(alSpeichernNotiz);
+                        jbAbbrechen.addActionListener(alAbbrechenNotiz);
+                        jpButton.add(jbSpeichern);
+                        jpButton.add(jbAbbrechen);
+                        jpText.add(jtNotiz);
+                        jpNotiz.add(jpText);
+                        jpNotiz.add(jpButton);
+                        jfNotiz.add(jpNotiz);
+                        jfNotiz.setSize(300, 150);
+                        jfNotiz.setLocation(500, 500);
+                        jfNotiz.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        jfNotiz.setVisible(true);
 
-                        }
-                    };
-                    ActionListener alAbbrechenNotiz = new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            jfNotiz.dispose();
-                        }
-                    };
-                    jbSpeichern.addActionListener(alSpeichernNotiz);
-                    jbAbbrechen.addActionListener(alAbbrechenNotiz);
-                    jpButton.add(jbSpeichern);
-                    jpButton.add(jbAbbrechen);
-                    jpText.add(jtNotiz);
-                    jpNotiz.add(jpText);
-                    jpNotiz.add(jpButton);
-                    jfNotiz.add(jpNotiz);
-                    jfNotiz.setSize(300, 150);
-                    jfNotiz.setLocation(500, 500);
-                    jfNotiz.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    jfNotiz.setVisible(true);
-
+                    }else
+                        JOptionPane.showMessageDialog(null,"Nichts Ausgewählt!");
                 }
             };
 
@@ -572,13 +586,13 @@ public class PersonenEditor extends Ansicht {
         jpSonstigeAngaben.setLayout(new BoxLayout(jpSonstigeAngaben, BoxLayout.Y_AXIS));
 
         JPanel jpAnrede = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlAnrede = new JLabel("Anrede:");
+        JLabel jlAnrede = new JLabel("Anrede: * ");
         String[] Anrede = {"Firma", "Frau", "Herr"};
         JComboBox jcAnredeListe = new JComboBox(Anrede);
 
 
         JPanel jpName = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlName = new JLabel("Name:");
+        JLabel jlName = new JLabel("Name: * ");
         JTextField jtName = new JTextField(20);
 
         jpName.add(jlName);
@@ -592,7 +606,7 @@ public class PersonenEditor extends Ansicht {
         jpVorname.add(jtVorname);
 
         JPanel jpGeburtstag = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel jlGeburtstag = new JLabel("Geburtstag:");
+        JLabel jlGeburtstag = new JLabel("Geburtstag: * ");
         JTextField jtGeburtstag = new JTextField(20);
 
 
