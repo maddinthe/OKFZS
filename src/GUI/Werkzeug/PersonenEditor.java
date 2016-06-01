@@ -18,18 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-/**
- * @author cdreher
- */
-
-
-/**
- * @author  cdreher on 16.05.2016
+/**@author cdreher on 16.05.2016
  * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
  * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
- */
-
-/**
+ *
+ *
  * Der Personen-Editor dient zur Bearbeitung von Personen, Erreichbarkeiten und Notizen.
  * Hier können neue Personen, Erreichbarkeiten und Notizen hinzugefügt werden sowie neue
  * Personen, Erreichbarkeiten und Notizen angelegt werden. Die Eingabe-Maske in der GUI der OKFZ zeigt alle

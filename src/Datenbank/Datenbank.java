@@ -16,9 +16,7 @@ import java.util.Date;
  * @author cdreher on 23.05.2016.
  * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
  * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
- */
-
-/**
+ *
  * Die Klasse Datenbank dient dazu eine Datenbank für die OKFZS anzulegen.
  * Außerdem stellt Sie Methoden bereit, die die grundlegende Kommunikation zwischen Programm und Datenbank aufbaut.
  * Weiterhin bietet Sie Methoden an, um Daten aus dem Programm in die Datenbank hinzuzufügen und Datensätze aus der
