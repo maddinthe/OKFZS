@@ -273,7 +273,6 @@ public class PersonenEditor extends Ansicht {
             jpErreichbarkeit.setLayout(new BoxLayout(jpErreichbarkeit, BoxLayout.Y_AXIS));
             JPanel jpErreichbarkeiten = new JPanel(new GridLayout(1,1));
             JList<Erreichbarkeit> jlErreichbarkeitsListe = new JList<>(erreichbarkeiten.toArray(new Erreichbarkeit[erreichbarkeiten.size()]));
-             jlErreichbarkeitsListe.setPreferredSize(new Dimension(500,300));
             jlErreichbarkeitsListe.setCellRenderer(new ErrListRenderer());
             JScrollPane jsErreichbarkeitsListe = new JScrollPane(jlErreichbarkeitsListe);
             jpErreichbarkeiten.add(jsErreichbarkeitsListe);
@@ -442,7 +441,6 @@ public class PersonenEditor extends Ansicht {
             jpErreichbarkeitButton.add(jbErreichbarkeitNeu);
             jpErreichbarkeitButton.add(jbErreichbarkeitEdit);
             jpButtonCenter.add(jpErreichbarkeitButton);
-            jpErreichbarkeiten.add(jpButtonCenter);
             jpErreichbarkeit.add(jpErreichbarkeiten);
             jpCenter.add(jpErreichbarkeit);
 
@@ -563,8 +561,8 @@ public class PersonenEditor extends Ansicht {
             };
             jbNotizNeu.addActionListener(alNotizNeu);
             jbNotizEdit.addActionListener(alNotizEdit);
-            jpNotizButton.add(jbNotizEdit);
             jpNotizButton.add(jbNotizNeu);
+            jpNotizButton.add(jbNotizEdit);
             jpNotiz.add(jpNotizListe);
             jpNotiz.add(jpNotizButton);
             jpEast.add(jpNotiz);
@@ -793,12 +791,19 @@ public class PersonenEditor extends Ansicht {
     }
 
     /**
-     * @author mtheilen
-     * eine statische Klasse
+     * Private Klasse um die Erreichbarkeiten schöner darzustellen
      */
-    //todo maddin doku
-    static class ErrListRenderer extends JLabel implements ListCellRenderer<Erreichbarkeit> {
+    private class ErrListRenderer extends JLabel implements ListCellRenderer<Erreichbarkeit> {
 
+        /**
+         * Baut eine Component zur anzeige in einer liste
+         * @param list JList in der die Komponente dargestellt werden soll
+         * @param value Wert der in der Komponente Dargestellt werden soll
+         * @param index Index an dem die Komponente Dargestellt werden soll
+         * @param isSelected Switch ob Selected oder nicht
+         * @param cellHasFocus Switch ob Zelle fokus hat oder nicht
+         * @return
+         */
         @Override
         public Component getListCellRendererComponent(JList<? extends Erreichbarkeit> list, Erreichbarkeit value, int index, boolean isSelected, boolean cellHasFocus) {
 

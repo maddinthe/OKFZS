@@ -32,8 +32,6 @@ public class KaufvertragEditor extends Ansicht {
      */
     private SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
 
-    //todo:formatieren der anzeige
-
     /**
      * Editor des Vorgans zum Ändern und Drucken/Anzeigen des Kaufvertrags
      *
@@ -126,6 +124,7 @@ public class KaufvertragEditor extends Ansicht {
             //erstellen des Layouts und einfüllen der daten aus  Vorgang/Datenbank
             JPanel jpMaster = this;
             JPanel jpKvEdit = new JPanel(new GridLayout(2,3));
+
 
             JPanel jpKvAngaben = new JPanel();
             jpKvAngaben.setBorder(new TitledBorder("Personendaten für den Verkauf"));
@@ -235,7 +234,6 @@ public class KaufvertragEditor extends Ansicht {
      * @param entwurf gibt an ob der Kaufvertrag ein Entwurf ist oder die finale form hat true=entwurf
      */
     private void kaufvertragDrucken(Vorgang vorgang,boolean entwurf) {
-        //todo:fertig machen
         try {
             File f = File.createTempFile("Vertrag_" + vorgang.getVid() + "-", ".html");
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));
