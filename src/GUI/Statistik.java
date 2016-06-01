@@ -14,12 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author mtheilen
- * Created by tkertz on 23.05.2016.
- */
-
-/**
  * Die Klasse die Für das Anzeigen der Statistik zuständig ist
+ * @author Martin Theilen
  */
 public class Statistik extends Ansicht {
     /**

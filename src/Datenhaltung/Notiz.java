@@ -3,9 +3,10 @@ package Datenhaltung;
 import java.util.Date;
 
 /**
- * @author cdreher on 23.05.2016.
+ *
  *
  * Datenhaltungsklasse für die Notizen
+ * @author cdreher on 23.05.2016.
  */
 public class Notiz {
     /**

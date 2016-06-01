@@ -3,6 +3,7 @@ package Datenbank;
 import Datenhaltung.*;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
@@ -12,7 +13,7 @@ import java.util.*;
 import java.util.Date;
 
 /**
- * @author cdreher on 23.05.2016.
+ *
  * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
  * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
  *
@@ -20,6 +21,8 @@ import java.util.Date;
  * Außerdem stellt Sie Methoden bereit, die die grundlegende Kommunikation zwischen Programm und Datenbank aufbaut.
  * Weiterhin bietet Sie Methoden an, um Daten aus dem Programm in die Datenbank hinzuzufügen und Datensätze aus der
  * Datenbank mittels Abfrage-Methoden im Programm sichtbar zu machen.
+ *
+ * @author cdreher on 23.05.2016
  */
 public class Datenbank {
     /**
@@ -164,6 +167,7 @@ public class Datenbank {
             }
 
         } catch (IOException e) {
+            System.out.println(e);
         }
 
     }

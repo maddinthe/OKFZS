@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author  cdreher on 23.05.2016.
+ *
  *
  * Klasse Suche: hier wird die vorhanden Datenbank durchsucht.
  * Anhand einer Dropdown-Auswahl in der GUI kann man auswählen nach welchen Parametern (Hersteller,Modell... bei Kfz
@@ -22,7 +22,7 @@ import java.util.List;
  * kann nun gestartet werden. Werden Datensätze zu der spezifischen Suche gefunden, dann werden diese in der GUI angezeigt.
  * Sollte die Suche keine Ergebnisse liefern öffnet sich in der GUI je nachdem ob man nach KFZ oder Personen gesucht hat,
  * der KFZ-Editor bzw. Personen-Editor
- *
+ *@author  cdreher on 23.05.2016.
  */
 public class Suche extends Ansicht {
     /**

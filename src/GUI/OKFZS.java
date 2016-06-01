@@ -20,8 +20,7 @@ import java.util.*;
 
 /**
  * Created by mtheilen on 23.05.2016.
- *
- * @author mtheilen
+ * @author Martin Theilen
  */
 public class OKFZS extends JFrame {
     /**
@@ -230,13 +229,17 @@ public class OKFZS extends JFrame {
                         vorgList = datenbank.unverkaufteVorgaenge();
                     } catch (SQLException e) {
                     }
-                if (vorgList == null && kfzList.size() == 0) {
+                if ((vorgList == null) && kfzList.size() == 0) {
                     anzeigen("autoAnl");
                     break;
                 }
                 if (vorgList != null && vorgList.size() > 0) {
                     aktuelleAnsicht = new KFZListe(this, vorgList);
-                } else aktuelleAnsicht = new KFZListe(this, kfzList);
+                } else if(kfzList!=null)aktuelleAnsicht = new KFZListe(this, kfzList);
+                else{
+                    anzeigen("autoAnl");
+                    break;
+                }
                 anzeige.add(aktuelleAnsicht, "autoAnz");
                 cards.show(anzeige, "autoAnz");
 
@@ -334,10 +337,10 @@ public class OKFZS extends JFrame {
                 cards.show(anzeige, "statstik");
                 break;
             }
-            case "ueber": {
-                break;
-            }
             case "hilfe": {
+                aktuelleAnsicht=new Hilfe(this);
+                anzeige.add(aktuelleAnsicht,"hilfe");
+                cards.show(anzeige,"hilfe");
                 break;
             }
             default:

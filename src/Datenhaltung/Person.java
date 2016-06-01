@@ -4,9 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author cdreher on 23.05.2016.
+ *
  *
  * Datenhaltungsklasse für die Personen
+ * @author cdreher on 23.05.2016.
  */
 public class Person {
     /**
