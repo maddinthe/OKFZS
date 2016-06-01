@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Created by  on 23.05.2016.
+ * Created by tkertz on 23.05.2016.
  * Der Aktioneneditor erweitert die Ansicht und stellt die Möglichkeit bereit, eine Fahrzeugaktion
  * z.B. Probefahrt hinzuzufügen
  * @author tkertz

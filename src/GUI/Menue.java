@@ -16,9 +16,6 @@ import java.util.Map;
 /**
  * @author mtheilen
  * Created by mtheilen on 23.05.2016.
- */
-
-/**
  * Klasse zum Anzeigen des Menüs
  */
 public class Menue extends JMenuBar {
@@ -89,10 +86,6 @@ public class Menue extends JMenuBar {
                         okfzsInstanz.anzeigen("statstik");
                         break;
                     }
-                    case "Über": {
-                        okfzsInstanz.anzeigen("ueber");
-                        break;
-                    }
                     case "Hilfe": {
                         okfzsInstanz.anzeigen("hilfe");
                         break;
@@ -152,9 +145,6 @@ public class Menue extends JMenuBar {
 
 
         JMenu frageZeichen = new JMenu("?");
-        JMenuItem ueber = new JMenuItem("Über");
-        ueber.addActionListener(al);
-        frageZeichen.add(ueber);
         JMenuItem help = new JMenuItem("Hilfe");
         help.addActionListener(al);
         frageZeichen.add(help);
@@ -166,11 +156,11 @@ public class Menue extends JMenuBar {
         this.add(stats);
         this.add(frageZeichen);
 
-        menues.put("immerAn", new JMenuItem[]{ueber, help, end});
-        menues.put("uebersicht", new JMenuItem[]{uebersichAnz, ueber, help, end , statsAnz, autoAnz, autoAnl, persAnz, persAnl,sucheKFZ,suchePers});
-        menues.put("autolist", new JMenuItem[]{sucheKFZ,suchePers,uebersichAnz, ueber, help, end,  statsAnz, autoAnz, autoAnl, persAnz, persAnl, autoAendern, autoVerkaufen});
-        menues.put("perslist", new JMenuItem[]{sucheKFZ,suchePers,uebersichAnz, ueber, help, end,  statsAnz, autoAnz, autoAnl, persAnz, persAnl, persAendern});
-        menues.put("alle", new JMenuItem[]{sucheKFZ,suchePers,ueber, help, end,  statsAnz, autoAnz, autoAnl, persAnz, persAnl, persAendern, autoAendern, autoVerkaufen, uebersichAnz});
+        menues.put("immerAn", new JMenuItem[]{ help, end});
+        menues.put("uebersicht", new JMenuItem[]{uebersichAnz,  help, end , statsAnz, autoAnz, autoAnl, persAnz, persAnl,sucheKFZ,suchePers});
+        menues.put("autolist", new JMenuItem[]{sucheKFZ,suchePers,uebersichAnz,  help, end,  statsAnz, autoAnz, autoAnl, persAnz, persAnl, autoAendern, autoVerkaufen});
+        menues.put("perslist", new JMenuItem[]{sucheKFZ,suchePers,uebersichAnz,  help, end,  statsAnz, autoAnz, autoAnl, persAnz, persAnl, persAendern});
+        menues.put("alle", new JMenuItem[]{sucheKFZ,suchePers, help, end,  statsAnz, autoAnz, autoAnl, persAnz, persAnl, persAendern, autoAendern, autoVerkaufen, uebersichAnz});
 
         menueUmschalten("anmeldung");
 

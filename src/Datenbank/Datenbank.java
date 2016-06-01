@@ -3,6 +3,7 @@ package Datenbank;
 import Datenhaltung.*;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
@@ -166,6 +167,7 @@ public class Datenbank {
             }
 
         } catch (IOException e) {
+            System.out.println(e);
         }
 
     }
