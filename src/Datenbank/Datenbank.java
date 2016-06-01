@@ -2,10 +2,7 @@ package Datenbank;
 
 import Datenhaltung.*;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -152,7 +149,7 @@ public class Datenbank {
      * @throws SQLException
      */
     private static void einlesenScript() throws SQLException {
-        try (BufferedReader br = new BufferedReader(new FileReader(Datenbank.class.getResource("init.sql").getFile()))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(Datenbank.class.getResourceAsStream("init.sql")))) {
             String sqlInstruction = "";
             String zeile;
             while ((zeile = br.readLine()) != null) {
