@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.Date;
 
 /**
- * @author  cdreher on 23.05.2016.
+ * @author cdreher on 23.05.2016.
  * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
  * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
  */

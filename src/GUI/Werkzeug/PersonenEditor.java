@@ -703,6 +703,9 @@ public class PersonenEditor extends Ansicht {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Person temp = null;
+                int plz = 0;
+                if(jtPlz.getText().length()>plz)
+                    plz=Integer.parseInt(jtPlz.getText());
                 try {
                     if ("".equals(jtVorname.getText()) || jtVorname.getText() == null) {
                         temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), umwandeln((jtGeburtstag.getText())));
@@ -710,7 +713,7 @@ public class PersonenEditor extends Ansicht {
 
 
                     } else {
-                        temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), Integer.parseInt(jtPlz.getText()), jtOrt.getText(), jtUst.getText());
+                        temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), plz, jtOrt.getText(), jtUst.getText());
                         selectedPers=okfzsInstanz.getDatenbank().insertOrUpdatePerson(temp);
                     }
 
