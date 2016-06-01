@@ -2,9 +2,10 @@ package Datenhaltung;
 
 
 /**
- * @author  cdreher on 23.05.2016.
+ *
  *
  * Datenhaltungsklasse für die Verkaeufer
+ * @author  cdreher on 23.05.2016.
  */
 public class Verkaeufer {
     /**
