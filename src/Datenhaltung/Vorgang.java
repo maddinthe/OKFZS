@@ -1,4 +1,6 @@
 package Datenhaltung;
+import com.sun.istack.internal.NotNull;
+
 import java.util.Date;
 
 /**
@@ -9,22 +11,70 @@ import java.util.Date;
  * Datenhaltungsklasse für die Vorgänge
  */
 public class Vorgang {
-    private long vid;  //VorgangsID
-    private Person kauefer; //Der Käufer in diesem Vorgang
-    private Verkaeufer verkaeufer; //Der Verkäufer in diesem Vorgang
-    private Verkaeufer einkauefer; //Der Einkäufer in diesem Vorgang
-    private KFZ kfz; //Das KFZ um das es in diesem Vorgang geht, nie null
-    private double vPreis; //der Tatsächliche Verkaufspreis
-    private double ePreis; //Der Einkaufspreis nie null
-    private double vPreisPlan; //der Geplante Einkaufspreis
-    private Date verkaufsDatum; //das tatsächliche Verkuafsdatum
-    private String rabattGrund; //der Grund für einen Evtl Rabatt
-    private String sonstvereinbarungen; //Sondervereinbarungen zum Vertrag
-    private Date einkaufsDatum;  //Das Einkaufsdatum nie null
-    private String schaeden; // evtl Schäden
-    private Date tuev; //Das datum an dem die HU abläuft
-    private String kennzeichen; //das aktuelle kennzeichen des KFZ beim verkauf
-    private int kilometer; //der Kilometerstand des KFZ beim Verkauf
+    /**
+     * VorgangsID
+     */
+    private long vid;
+    /**
+     * Der Käufer in diesem Vorgang
+     */
+    private Person kauefer;
+    /**
+     * Der Verkäufer in diesem Vorgang
+     */
+    private Verkaeufer verkaeufer;
+    /**
+     * Der Einkäufer in diesem Vorgang
+     */
+    private Verkaeufer einkauefer;
+    /**
+     * Das KFZ um das es in diesem Vorgang geht, nie null
+     */
+    private KFZ kfz;
+    /**
+     * der Tatsächliche Verkaufspreis
+     */
+    private double vPreis;
+    /**
+     * Der Einkaufspreis nie null
+     */
+    private double ePreis;
+    /**
+     * der Geplante Einkaufspreis
+     */
+    private double vPreisPlan;
+    /**
+     * das tatsächliche Verkuafsdatum
+     */
+    private Date verkaufsDatum;
+    /**
+     * der Grund für einen Evtl Rabatt
+     */
+    private String rabattGrund;
+    /**
+     * Sondervereinbarungen zum Vertrag
+     */
+    private String sonstvereinbarungen;
+    /**
+     * Das Einkaufsdatum nie null
+     */
+    private Date einkaufsDatum;
+    /**
+     * evtl Schäden
+     */
+    private String schaeden;
+    /**
+     * Das datum an dem die HU abläuft
+     */
+    private Date tuev;
+    /**
+     * das aktuelle kennzeichen des KFZ beim verkauf
+     */
+    private String kennzeichen;
+    /**
+     * der Kilometerstand des KFZ beim Verkauf
+     */
+    private int kilometer;
 
     /**
      * Minimalconstruktor für den Vorgang hier ermittelt sich der geplante Verkaufspreis automatisch genause wie das Einkaufsdatum welches auf die aktuelle zeit gesetzt wird
@@ -32,7 +82,7 @@ public class Vorgang {
      * @param einkauefer Verkäufer der das KFz in diesem vorgang eingekauft hat
      * @param ePreis Einkaufspreis des Fahrzeugs in €
      */
-    public Vorgang(KFZ kfz, Verkaeufer einkauefer, double ePreis) {
+    public Vorgang(@NotNull KFZ kfz,@NotNull Verkaeufer einkauefer,@NotNull double ePreis) {
         this.kfz = kfz;
         this.einkauefer = einkauefer;
         this.ePreis = ePreis;
@@ -43,23 +93,23 @@ public class Vorgang {
     /**
      * maximaler Konstruktor der z.b. für eine erstellung aus der Datenbak verwendet wird
      * @param vid Vorgangsid
-     * @param kauefer @Nullable der Käufer des Fahrzeugs
-     * @param verkaeufer  @Nullable der Verkäufer des Fahrzeugs
-     * @param einkaeufer @NotNull der Verkäufer der das Fahrzeug eingekauft hat
-     * @param kfz @NotNull das Fahrzeug um das es in diesem Vorgang geht
+     * @param kauefer  der Käufer des Fahrzeugs
+     * @param verkaeufer   der Verkäufer des Fahrzeugs
+     * @param einkaeufer  der Verkäufer der das Fahrzeug eingekauft hat
+     * @param kfz  das Fahrzeug um das es in diesem Vorgang geht
      * @param vPreis der Verkaufspreis
      * @param ePreis der Einkaufspreis
      * @param vPreisPlan der geplante Verkaufspreis
-     * @param verkaufsDatum @Nullable das Verkaufsdatum
-     * @param rabattGrund @Nullable der Rabattgrund
-     * @param sonstvereinbarungen @Nullable sonstige vereinbarungen zum Kauf
-     * @param einkaufsDatum @NotNull das Einkaufsdatum
-     * @param schaeden @Nullable evtl Schäden am Fahrzeug
-     * @param tuev @Nullable Zeitpunkt an dem HU/AU ablaufen
-     * @param kennzeichen @Nullable das aktuelle Kennzeichen
+     * @param verkaufsDatum  das Verkaufsdatum
+     * @param rabattGrund  der Rabattgrund
+     * @param sonstvereinbarungen  sonstige vereinbarungen zum Kauf
+     * @param einkaufsDatum  das Einkaufsdatum
+     * @param schaeden  evtl Schäden am Fahrzeug
+     * @param tuev  Zeitpunkt an dem HU/AU ablaufen
+     * @param kennzeichen  das aktuelle Kennzeichen
      * @param kilometer der Aktuelle Kilometerstand
      */
-    public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer, Verkaeufer einkaeufer, KFZ kfz, double vPreis, double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen, Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen,int kilometer) {
+    public Vorgang(long vid, Person kauefer, Verkaeufer verkaeufer,@NotNull Verkaeufer einkaeufer,@NotNull KFZ kfz,double vPreis,@NotNull double ePreis, double vPreisPlan, Date verkaufsDatum, String rabattGrund, String sonstvereinbarungen,@NotNull Date einkaufsDatum, String schaeden, Date tuev, String kennzeichen,int kilometer) {
         this.vid = vid;
         this.kauefer = kauefer;
         this.verkaeufer = verkaeufer;

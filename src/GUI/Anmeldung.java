@@ -2,6 +2,7 @@ package GUI;
 
 import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
+import com.sun.istack.internal.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by cdreher on 23.05.2016.
+ * by mtheilen on 01.06.2016
  */
 public class Anmeldung extends Ansicht {
 
@@ -38,6 +39,24 @@ public class Anmeldung extends Ansicht {
                         JOptionPane.showMessageDialog(null, "Bitte Benutzername und Passwort eingeben", "Anmeldefehler", JOptionPane.ERROR_MESSAGE);
                     } else {
                         Verkaeufer v = anmelden(name.getText(), String.copyValueOf(passwort.getPassword()).hashCode() + "");
+                        if(String.copyValueOf(passwort.getPassword()).equals("password")){
+                            JPanel pwpanel = new JPanel();
+                            JLabel pwlabel = new JLabel("Neues passwort Eingeben:");
+                            JPasswordField pass = new JPasswordField(10);
+                            pwpanel.add(pwlabel);
+                            pwpanel.add(pass);
+                            String[] optionen = new String[]{"OK"};
+                            JOptionPane.showOptionDialog(getOKFZSInstanz(), pwpanel, "The title",
+                                    JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                    null, optionen, optionen[0]);
+                            String passwort=String.copyValueOf(pass.getPassword());
+                            v.setPasswortHash(""+passwort.hashCode());
+                            try {
+                                getOKFZSInstanz().getDatenbank().insertOrUpdateVerkaeufer(v);
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
 
                         if (v == null) {
                             JOptionPane.showMessageDialog(null, "Benutzername und/oder Passwort falsch", "Anmeldefehler", JOptionPane.ERROR_MESSAGE);
@@ -116,10 +135,15 @@ public class Anmeldung extends Ansicht {
 
     }
 
-    //todo: datenbank abfrage für benutzer einbauen
-    public Verkaeufer anmelden(String name, String passwortHash) {
+    /**
+     * Überprüft ob ein Nutzer mit Anmeldenam name und Passwort-Hash passwortHash vorhanden ist und liefert ihn aus der DB zurück
+     * @param name  Der Anmeldename des gewollten Nutzers
+     * @param passwortHash Der PasswortHash des gewollten Nutzers
+     * @return VERKAEUFER Der Gewollte Nutzer oder NULL wenn PW falsch/Nutzer nicht Vorhanden
+     */
+    private Verkaeufer anmelden(@NotNull String name,@NotNull String passwortHash) {
         System.out.println(passwortHash);
-        Verkaeufer v = null;
+        Verkaeufer v;
         try {
             v = getOKFZSInstanz().getDatenbank().einVerkaufer(name);
             if (v==null)return null;
