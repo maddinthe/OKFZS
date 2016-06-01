@@ -12,18 +12,24 @@ import java.util.*;
 import java.util.Date;
 
 /**
- * Created by cdreher on 23.05.2016.
+ * @author  cdreher on 23.05.2016.
  */
-//todo: stub
+
+/**
+ * Die Klasse Datenbank dient dazu eine Datenbank für die anzulegen
+ */
 public class Datenbank {
+    /**
+     *
+     */
     private static Datenbank datenbank;
     private static Connection conn;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    private Datenbank() {
-    }
+//    private Datenbank() {
+//    }
 
-    public static void schließen() {
+    public static void closeDBConnection() {
         if (conn != null) {
             try {
                 conn.close();
@@ -128,28 +134,10 @@ public class Datenbank {
 
     }
 
-    /**
-     * Diese Methode löscht eine Tabelle, falls sie
-     * existiert, andernfalls tut sie nichts.
-     *
-     * @param tablename Der Name der Tabelle, die gelöscht werden soll.
-     * @throws SQLException Wenn beim Erstellen der Verbindung ein Fehler passiert.
-     */
-    public void dropIfExists(String tablename) throws SQLException {
-        Statement stmt = conn.createStatement();
-        try {
-            stmt.executeUpdate("DROP TABLE " + tablename);
-        } catch (SQLException e) {
-            if (!e.getSQLState().equals("42P01"))
-                e.printStackTrace();
-        }
-
-    }
 
 
-    public void closeDBConnection() throws SQLException {
-        conn.close();
-    }
+
+
 
     public Person insertPerson(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
@@ -335,51 +323,7 @@ public class Datenbank {
         }
     }
 
-    public void insertOrUpdateAusstattungsliste(Sonderausstattung sonderausstattung, KFZ kfz) throws SQLException {
-        Statement stmt = conn.createStatement();
-        try {
-            stmt.executeUpdate("INSERT  INTO t_ausstattungsliste(fk_t_sonderausstattung_sid,fk_t_kfz_fin) VALUES (" + sonderausstattung.getSid() + ",'" + kfz.getFin() + "')");
-        } catch (SQLException e) {
-            stmt.executeUpdate("UPDATE t_ausstattungsliste SET fk_t_sonderausstattung_sid=" + sonderausstattung.getSid() + ",fk_t_kfz_fin='" + kfz.getFin() + "' WHERE fk_t_sonderausstattung_sid=" + sonderausstattung.getSid() + " AND fk_t_kfz_fin='" + kfz.getFin() + "' ");
-        }
-    }
 
-
-    public void printTable(String tableName) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM " + tableName);
-        ResultSetMetaData rm = r.getMetaData();
-        //Tabellenkopf ->Spaltennamem
-        int col = rm.getColumnCount();
-        int[] max = new int[col];
-        List<List<String>> tabelle = new ArrayList<>(col);
-        for (int i = 0; i < col; i++) {
-            List<String> spalte = new ArrayList<>();
-            String s = rm.getColumnLabel(i + 1);
-            spalte.add(s);
-            tabelle.add(spalte);
-            max[i] = s.length();
-        }
-        //Tabelleneinträge
-        if (r.next())
-            do {
-                for (int i = 0; i < col; i++) {
-                    String s = r.getString(i + 1);
-                    if (s == null) s = "null";
-                    tabelle.get(i).add(s);
-                    max[i] = Math.max(max[i], s.length());
-
-                }
-            } while (r.next());
-        r.close();
-        //Ausgabe
-        for (int i = 0; i < tabelle.get(0).size(); i++) {
-            String s = "";
-            for (int j = 0; j < col; j++)
-                s += "|" + String.format("%-" + max[j] + "s", tabelle.get(j).get(i));
-            System.out.println(s + "|");
-        }
-    }
 
     //Abfragen
     public List<Vorgang> VorgaengeZuVerkaeufer(Verkaeufer verkaeufer) throws SQLException {
