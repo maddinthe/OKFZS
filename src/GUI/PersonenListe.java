@@ -14,9 +14,6 @@ import java.util.TreeMap;
 /**
  * @author mtheilen
  * Created by mtheilen on 23.05.2016.
- */
-
-/**
  * Personenliste sorgt für eine Anzeige von einer Liste aus Personen
  */
 public class PersonenListe extends Ansicht {
