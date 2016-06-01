@@ -31,7 +31,7 @@ public class Suche extends Ansicht {
         JPanel jpEingabe = new JPanel();
         JPanel jpButton = new JPanel();
         String[] kfz = {"Fin", "Hersteller", "Modell","KFZ-Brief","Leistung","Farbe","EZ","Plakette","Kraftstoff"};
-        String[] person = {"PID", "Anrede", "Name","Vorname","Geburtstag","Anschrift","PLZ","Ort","Ust-ID"};
+        String[] person = {"PID", "Anrede", "Name","Vorname","Telefonnummer","Geburtstag","Anschrift","PLZ","Ort","Ust-ID"};
         JComboBox jcKfz = new JComboBox(kfz);
         JComboBox jcPerson = new JComboBox(person);
         JTextField jtSuche = new JTextField(20);
@@ -219,8 +219,13 @@ public class Suche extends Ansicht {
                 case ("Ust-ID"):
                     for (Person person : personenListe) {
                         if (begriff.equals(person.getUstID()))
-                           personen.add(person);
+                            personen.add(person);
                     }
+                    break;
+                case ("Telefonnummer"):
+                    for (Person person : getOKFZSInstanz().getDatenbank().eineTelefonunner(begriff))
+                         personen.add(person);
+
                     break;
                 default:
                     System.out.println("Fehler");

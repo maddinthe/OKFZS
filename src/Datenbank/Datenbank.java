@@ -159,7 +159,6 @@ public class Datenbank {
             if (rs.next())
                 person.setPid(rs.getLong(1));
         } catch (SQLException e) {
-            //stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"' WHERE pid=" + person.getPid() + "");
             System.out.println(e.getMessage());
         }
 
@@ -563,6 +562,18 @@ public class Datenbank {
         r.close();
         return erreichbarkeit;
     }
+    public List<Person> eineTelefonunner(String s) throws SQLException {
+        Statement stmt = conn.createStatement();
+        List<Person> personen = new ArrayList<>();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE tel LIKE '%" + s + "%'");
+        Erreichbarkeit erreichbarkeit = null;
+        while (r.next()) {
+            long pid = r.getLong("fk_t_person_pid");
+            personen.add(einePerson(pid));
+        }
+        r.close();
+        return personen;
+    }
 
     public Aktion eineAktion(KFZ kfz, Person person) throws SQLException {
         Statement stmt = conn.createStatement();
@@ -635,7 +646,7 @@ public class Datenbank {
     }
     public List<KFZ> alleKfzNichtImVerkauf() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz LEFT JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vid ISNULL OR (fk_t_verkaeufer_pid_vk NOTNULL AND fk_t_person_pid NOTNULL AND vpreis NOTNULL AND vkdatum<now())" );
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz LEFT JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vid ISNULL OR (fk_t_verkaeufer_pid_vk NOTNULL AND fk_t_person_pid NOTNULL AND vpreis NOTNULL AND vkdatum<now())");
         List<KFZ> kfzListe = new ArrayList<>();
         KFZ kfz = null;
 
