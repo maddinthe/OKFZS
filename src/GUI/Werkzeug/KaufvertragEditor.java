@@ -127,6 +127,7 @@ public class KaufvertragEditor extends Ansicht {
             JPanel jpMaster = this;
             JPanel jpKvEdit = new JPanel(new GridLayout(2,3));
 
+
             JPanel jpKvAngaben = new JPanel();
             jpKvAngaben.setBorder(new TitledBorder("Personendaten für den Verkauf"));
             jpKvAngaben.setLayout(new BoxLayout(jpKvAngaben, BoxLayout.Y_AXIS));

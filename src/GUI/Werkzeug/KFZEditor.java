@@ -1273,13 +1273,13 @@ public class KFZEditor extends Ansicht {
     }
 
     /**
-     * Diese Methode wandelt einen String in das SQL Format um zur weiteren Verarbeitung innerhalb der DB
+     * Diese Methode wandelt einen String in das SQL Format zur weiteren Verarbeitung innerhalb der DB
      * @author Christian Dreher
      * @param datum - Datum im Stringformat, welches übergeben wird
      * @return sDate - gibt den übergebenen String als SQL Date zurück
      */
     public static java.sql.Date umwandeln(String datum) {
-        SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
             date = format.parse(datum);
