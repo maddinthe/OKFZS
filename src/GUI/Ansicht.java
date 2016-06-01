@@ -4,10 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * @author mtheilen
  * Created by mtheilen on 23.05.2016.
  */
-//todo:stub
+
+/**
+ * Die Oberklasse Ansicht ist dafür da damit in OKFZS nur Ansichten verwaltet werden müssen statt X unterschiedliche Klassen von JPanlels
+ */
 public class Ansicht extends JPanel{
+    /**
+     * instanz von OKFZS in der diese Ansicht angezeigt werden soll
+     */
     private OKFZS instanz;
 
 
@@ -20,11 +27,20 @@ public class Ansicht extends JPanel{
         this.instanz=instanz;
     }
 
+    /**
+     * Legt die Ansicht an
+     * @param instanz die Instanz von OKFZ in der diese Ansicht angezeigt werden soll
+     * @param layout das zu verwendende Layout
+     */
     public Ansicht(LayoutManager layout, OKFZS instanz) {
         super(layout);
         this.instanz = instanz;
     }
 
+    /**
+     * liefert die OKFZS Instanz zurück in der diese ansicht ausgeführt wird
+     * @return OKFZS Instanz in der diese ansicht ausgeführt wird
+     */
     public OKFZS getOKFZSInstanz() {
         return instanz;
     }

@@ -85,6 +85,10 @@ public class KaufvertragEditor extends Ansicht {
             this.add(kennz);
             JTextField kfz = new JTextField(vorgang.getKfz().toString());
             this.add(kfz);
+            this.add(new JLabel("Entwurf"));
+            JCheckBox entwurf=new JCheckBox();
+            entwurf.setSelected(vorgang.getVerkaeufer()==null||vorgang.getKauefer()==null||vorgang.getVerkaufsDatum().after(new Date())||vorgang.getvPreis()<=0);
+            this.add(entwurf);
 
             JButton speichern = new JButton("Speichern");
             this.add(speichern);
@@ -116,7 +120,10 @@ public class KaufvertragEditor extends Ansicht {
                         e1.printStackTrace();
                     }
                     if (e.getActionCommand().equals("Vertrag Drucken")) {
-                        kaufvertragDrucken(vorgang);
+                        if(vorgang.getvPreis()!=vorgang.getvPreisPlan()&&(vorgang.getRabattGrund()==null||vorgang.getRabattGrund().equals(""))){
+                            JOptionPane.showMessageDialog(okfzsInstanz,"Bitte Rabattgrund eingeben","Kein Rabattgrund",JOptionPane.ERROR_MESSAGE);
+                        }else
+                        kaufvertragDrucken(vorgang,entwurf.isSelected());
                     }
 
                 }
@@ -137,8 +144,9 @@ public class KaufvertragEditor extends Ansicht {
      * Generiert ein temporäres HTML-Dokument aus dem vorgang welches den Kaufvertrag darstellen soll
      *
      * @param vorgang Vorgang zu dem der Vertrag generiert werden soll
+     * @param entwurf gibt an ob der Kaufvertrag ein Entwurf ist oder die finale form hat true=entwurf
      */
-    private void kaufvertragDrucken(Vorgang vorgang) {
+    private void kaufvertragDrucken(Vorgang vorgang,boolean entwurf) {
         //todo:fertig machen
         try {
             File f = File.createTempFile("Vertrag_" + vorgang.getVid() + "-", ".html");
@@ -174,6 +182,9 @@ public class KaufvertragEditor extends Ansicht {
             String zeile3 = "" + ((zeilen.size() > 2) ? zeilen.get(2) : "");
             String zeile4 = "" + ((zeilen.size() > 3) ? zeilen.get(3) : "");
 
+            String entwurfString="";
+            if(entwurf)
+                entwurfString=" Entwurf";
 
             bw.append("<!DOCTYPE html>\n" +
                     "<html lang=\"de\">\n" +
@@ -189,7 +200,7 @@ public class KaufvertragEditor extends Ansicht {
                     "                <tbody>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <h1>Kaufvertrag</h1>\n" +
+                    "                        <h1>Kaufvertrag"+entwurfString+"</h1>\n" +
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>&nbsp;<img src=\"http://www.ostsee-kfz-service.de/images/template-content/2Logo-Ostsee-Kfz-Service-GmbH.jpg\" alt=\"Logo\" style=\"float: right;\" /></td>\n" +
