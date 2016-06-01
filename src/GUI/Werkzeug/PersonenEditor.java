@@ -197,6 +197,7 @@ public class PersonenEditor extends Ansicht {
                         plz=Integer.parseInt(jtPlz.getText());
                     Person temp = new Person(p.getPid(), jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), plz, jtOrt.getText(), jtUst.getText());
                     if (okfzsInstanz.getBenutzer().istAdmin()) {
+                        if(jtAnmeldename.getText().length()>0){
                         String password=String.copyValueOf(jtPasswort.getPassword()).hashCode()+"";
                         Verkaeufer verkaeufer =v;
                         if(verkaeufer==null) {
@@ -218,7 +219,7 @@ public class PersonenEditor extends Ansicht {
                         } catch (SQLException e1) {
                             e1.printStackTrace();
                         }
-                    }
+                    }}
                     try {
                         if (okfzsInstanz.getBenutzer().istAdmin())
                             okfzsInstanz.getDatenbank().insertOrUpdatePersonAdmin(temp);
