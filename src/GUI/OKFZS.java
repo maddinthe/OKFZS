@@ -22,15 +22,34 @@ import java.util.*;
  * Created by mtheilen on 23.05.2016.
  * @author mtheilen
  */
-//todo:Doku
 public class OKFZS extends JFrame {
+    /**
+     * Die Datenbank Instanz
+     */
     private Datenbank datenbank;
-    private Map<String, Ansicht> ansichten;
+    /**
+     * der angemeldete Verkäufer
+     */
     private Verkaeufer benutzer;
+    /**
+     * Die Programmfensterhöhe (nicht unbedingt nötig)
+     */
     private int hoehe = 786;
+    /**
+     * die Programmfensterbreite (nicht unbedingt nötig)
+     */
     private int breite = 1024;
+    /**
+     * Das Panel in dem Alles Stattfindet
+     */
     private JPanel anzeige;
+    /**
+     * Das Cardlayout des Panels zum umschalten der Views (In aktueller version nicht mehr so notwendig es fehlte jedoch die zeit es wieder auszubauen)
+     */
     private CardLayout cards;
+    /**
+     * Die Aktuelle ansicht wird benötigt um der nachfolgenden ansicht evtl daten übergeben zu können Personenliste --> Personeneditor z.b. die vorhergehende Selektierte Person
+     */
     private Ansicht aktuelleAnsicht;
 
     /**
@@ -70,8 +89,8 @@ public class OKFZS extends JFrame {
                 try(BufferedWriter bw=new BufferedWriter(new FileWriter(new File("OKFZS.cfg")))) {
                     bw.append("dbhost:"+server.getText());
                     bw.newLine();
-                    bw.append("dbport:"+port.getText());
-                    config.put("dbhost",server.getText());
+                    bw.append("dbport:" + port.getText());
+                    config.put("dbhost", server.getText());
                     config.put("dbport",port.getText());
 
                 } catch (IOException e1) {
@@ -119,7 +138,7 @@ public class OKFZS extends JFrame {
     /**
      * Beendet das Programm und gibt Ressourcen frei(z.b. DB-Conn schließen
      */
-    private void beenden() {
+    public void beenden() {
         System.out.println("ende");
         try {
             datenbank.closeDBConnection();
@@ -130,34 +149,26 @@ public class OKFZS extends JFrame {
     }
 
 
+    /**
+     * Gibt die Datenbankinstanz zurück die die Aktuelle OKFZS instanz nutzt
+     * @return Instanz von Datenbank die die Aktuelle OKFZS instanz nutzt
+     */
     public Datenbank getDatenbank() {
         return datenbank;
     }
 
-    public Map<String, Ansicht> getAnsichten() {
-        return ansichten;
-    }
-
+    /**
+     * Gibt den aktuell Angemeldeten benutzer raus
+     * @return Verkäufer aktuell Angemeldeter Benutzer
+     */
     public Verkaeufer getBenutzer() {
         return benutzer;
     }
 
-    public int getHoehe() {
-        return hoehe;
-    }
-
-    public int getBreite() {
-        return breite;
-    }
-
-    public JPanel getAnzeige() {
-        return anzeige;
-    }
-
-    public CardLayout getCards() {
-        return cards;
-    }
-
+    /**
+     * Setzt den aktuell angemeldeten Benutzer
+     * @param benutzer Verkäufer der den Aktuell angemeldeten benutzer darstellt
+     */
     public void setBenutzer(Verkaeufer benutzer) {
         this.benutzer = benutzer;
     }
@@ -212,8 +223,13 @@ public class OKFZS extends JFrame {
             case "autoAnz": {
                 java.util.List<Vorgang> vorgList = null;
                 java.util.List<KFZ> kfzList=null;
-                if (aktuelleAnsicht.getClass().equals(Suche.class)&&((Suche) aktuelleAnsicht).getKfzs().size()>0) {
+                if (aktuelleAnsicht.getClass().equals(Suche.class)) {
+                    if(((Suche) aktuelleAnsicht).getKfzs().size()>0)
                     kfzList = ((Suche) aktuelleAnsicht).getKfzs();
+                    else{
+                        anzeigen("autoAnl");
+                        break;
+                    }
                 } else
                     try {
                         vorgList = datenbank.unverkaufteVorgaenge();
@@ -349,6 +365,10 @@ public class OKFZS extends JFrame {
 
     }
 
+    /**
+     * Lässt eine Vorgegebene ansicht anzeigen und Setzt die OFZS eigenen variablen entsprechen
+     * @param a Anzuzeigende ansicht muss instanz von PersonenEditor, KFZEditor oder Kaufvertrageditor sein
+     */
     public void anzeigen(Ansicht a){
         Menue menue = (Menue) getJMenuBar();
         switch (a.getClass().getSimpleName()){
@@ -377,6 +397,10 @@ public class OKFZS extends JFrame {
     }
 
 
+    /**
+     * Main Methode die ausschließlich new OKFZS() aufruft
+     * @param args wird nicht genutzt
+     */
     public static void main(String[] args) {
         new OKFZS();
 

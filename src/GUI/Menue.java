@@ -14,13 +14,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @author mtheilen
  * Created by mtheilen on 23.05.2016.
  */
-//todo:doku und hinterlegen der listener das die entsprechenden ansichten geladen werden
+
+/**
+ * Klasse zum Anzeigen des Menüs
+ */
 public class Menue extends JMenuBar {
+    /**
+     * Instanz von OKFZS in der das menü angezeigt wird
+     */
     private OKFZS okfzsInstanz;
+    /**
+     * Speicher zur leichteren anzeige der Ensprechenden Menüansichten
+     */
     private Map<String, JMenuItem[]> menues = new HashMap<>();
 
+    /**
+     * Legt das Menü für die Übergebene OKFZS instanz an
+     * @param okfzsInstanz OKFZS instanz inder das Menü angezeigt wird
+     */
     public Menue(OKFZS okfzsInstanz) {
         super();
         this.okfzsInstanz = okfzsInstanz;
@@ -28,7 +42,7 @@ public class Menue extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switch (e.getActionCommand()) {
-                    case "KFZ suchen":
+                    case "Auto suchen":
                         okfzsInstanz.anzeigen("sucheKFZ");
                         break;
                     case"Person suchen":
@@ -59,7 +73,7 @@ public class Menue extends JMenuBar {
                         okfzsInstanz.anzeigen("autoAnl");
                         break;
                     }
-                    case "Auto Verkaufen":{
+                    case "Auto verkaufen":{
                         okfzsInstanz.anzeigen("autoVerk");
                         break;
                     }
@@ -75,7 +89,7 @@ public class Menue extends JMenuBar {
                         okfzsInstanz.anzeigen("personAend");
                         break;
                     }
-                    case "Statistik Anzeigen": {
+                    case "Statistik anzeigen": {
                         okfzsInstanz.anzeigen("statstik");
                         break;
                     }
@@ -111,13 +125,13 @@ public class Menue extends JMenuBar {
         autos.add(autoAnl);
         JMenuItem autoAendern = new JMenuItem("Auto ändern");
         autoAendern.addActionListener(al);
-        JMenuItem sucheKFZ=new JMenuItem("KFZ suchen");
+        JMenuItem sucheKFZ=new JMenuItem("Auto suchen");
         sucheKFZ.addActionListener(al);
         autos.add(sucheKFZ);
 
 
         autos.add(autoAendern);
-        JMenuItem autoVerkaufen = new JMenuItem("Auto Verkaufen");
+        JMenuItem autoVerkaufen = new JMenuItem("Auto verkaufen");
         autoVerkaufen.addActionListener(al);
         autos.add(autoVerkaufen);
 
@@ -139,7 +153,7 @@ public class Menue extends JMenuBar {
 
 
         JMenu stats = new JMenu("Statistik");
-        JMenuItem statsAnz = new JMenuItem("Statistik Anzeigen");
+        JMenuItem statsAnz = new JMenuItem("Statistik anzeigen");
         statsAnz.addActionListener(al);
         stats.add(statsAnz);
 
@@ -171,7 +185,6 @@ public class Menue extends JMenuBar {
 
     /**
      * Lässt die entsprechenden Menüs aktiv/inaktiv werden
-     *
      * @param cardID Mögliche Werte["anmeldung","ende","uebersicht","impexp","autoAnz","autoAnl","personAnz","personAnl","statstik","ueber","hilfe"]
      */
     public void menueUmschalten(String cardID) {

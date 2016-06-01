@@ -1,6 +1,7 @@
 package GUI;
 
 import Datenhaltung.Person;
+import com.sun.istack.internal.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,15 +12,25 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * @author mtheilen
  * Created by mtheilen on 23.05.2016.
  */
-//todo:unfertig
+
+/**
+ * Personenliste sorgt für eine Anzeige von einer Liste aus Personen
+ */
 public class PersonenListe extends Ansicht {
+    /**
+     * Die Person die in der Liste ausgewählt ist
+     */
     private Person selectedPers;
 
-
-    //todo: fertigstellen und doku
-    public PersonenListe(OKFZS okfzsInstanz, List<Person> personen) {
+    /**
+     * Grundkonstruktor der die Übergebene Liste von Personen ind der OKFZS instanz zur anzeige bringen kann
+     * @param okfzsInstanz OKFZS in der diese Liste angezeigt wird
+     * @param personen Person liste die Anzuzeigen ist
+     */
+    public PersonenListe(@NotNull OKFZS okfzsInstanz,@NotNull List<Person> personen) {
         super(new BorderLayout(), okfzsInstanz);
         Map<String, Person> personMap = new TreeMap<>();
 
@@ -58,6 +69,10 @@ public class PersonenListe extends Ansicht {
 
     }
 
+    /**
+     * Gibt die Aktuell ausgewählte person zurück
+     * @return Person die ausgewählt wurde oder NULL wenn keine ausgewählt wurde
+     */
     public Person getSelectedPers() {
         return selectedPers;
     }

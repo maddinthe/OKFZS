@@ -4,6 +4,7 @@ import Datenhaltung.Vorgang;
 import GUI.Werkzeug.KFZEditor;
 import GUI.Werkzeug.KaufvertragEditor;
 import GUI.Werkzeug.PersonenEditor;
+import com.sun.istack.internal.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,13 +13,21 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
+ * @author mtheilen
  * Created by mtheilen on 23.05.2016.
  */
-//todo: stub
+
+/**
+ * Die Übersichtsanzeige in der die Liste der von Angemeldeten benutzer Verkauften Autos angezeigt wird und aus der die KFZs Verträge und Benutzer dieser beobachtet und bearbeitet werden können
+ */
 public class Uebersicht extends Ansicht {
 
-    //todo: unfertig und doku
-    public Uebersicht(OKFZS okfzsInstanz, List<Vorgang> vorgaenge) {
+    /**
+     * der Basiskonstruktor der Übersicht
+     * @param okfzsInstanz die OKFZS instanz in der diese Ansicht angeziegt werden soll
+     * @param vorgaenge die vorgänge des Angemeldeten benutzers zu denen die Daten angezeigt werden sollen
+     */
+    public Uebersicht(OKFZS okfzsInstanz,@NotNull List<Vorgang> vorgaenge) {
         super(okfzsInstanz);
         this.setLayout(new BorderLayout());
         JTextArea welkom = new JTextArea();

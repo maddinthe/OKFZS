@@ -17,16 +17,24 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * @author mtheilen
  * Created by mtheilen on 23.05.2016.
  */
-//todo: stub
 public class KFZListe extends Ansicht {
-
-
+    /**
+     * Der aktuell ausgewählte vorgang
+     */
     private Vorgang selectedVorg;
+    /**
+     * das Aktuell ausgewählte KFZ
+     */
     private KFZ selectedKFZ;
 
-    //todo:doku und weiter bauen
+    /**
+     * Bring eine liste von autos oder vorgängen als Autoliste zur Anzeige
+     * @param okfzsInstanz Die OKFZS instanz inder die Liste angezeigt werden soll
+     * @param items Muss eine Liste von KFZ oder Vorgang sein
+     */
     public KFZListe(OKFZS okfzsInstanz, List<? extends Object> items) {
         super(new BorderLayout(), okfzsInstanz);
         if (items.get(0).getClass().equals(Vorgang.class)) {
@@ -105,8 +113,17 @@ public class KFZListe extends Ansicht {
         }
     }
 
+    /**
+     * Gibt den aktuell angewählten Vorgang zurück;
+     * @return Aktuell ausgewählter Vorgang oder NULL wenn keiner Ausgewählt ist
+     */
     public Vorgang getSelectedVorg() {
         return selectedVorg;
     }
+
+    /**
+     * gibt das Aktuell ausgewählte KFZ zurück
+     * @return Aktuell Ausgewähltes KFZ oder NULL wenn keins ausgewählt ist
+     */
     public KFZ getSelectedKFZ(){return selectedKFZ;}
 }

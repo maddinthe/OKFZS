@@ -16,11 +16,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * @author mtheilen
  * by mtheilen on 01.06.2016
  */
 public class Anmeldung extends Ansicht {
 
-    public Anmeldung(OKFZS instanz) {
+    /**
+     * Stellt die Anmeldemaske bereit in der auch der erste datenbankbenutzer angelegt werden kann und auch passwortänderunge etc abgefangen werden
+     * @param instanz die Instanz von OKFZ für die die anmeldung gilt
+     */
+    public Anmeldung(@NotNull OKFZS instanz) {
         super(instanz);
 
         if(instanz.getDatenbank().adminDa()) {
@@ -39,6 +44,7 @@ public class Anmeldung extends Ansicht {
                         JOptionPane.showMessageDialog(null, "Bitte Benutzername und Passwort eingeben", "Anmeldefehler", JOptionPane.ERROR_MESSAGE);
                     } else {
                         Verkaeufer v = anmelden(name.getText(), String.copyValueOf(passwort.getPassword()).hashCode() + "");
+
                         if(String.copyValueOf(passwort.getPassword()).equals("password")){
                             JPanel pwpanel = new JPanel();
                             JLabel pwlabel = new JLabel("Neues passwort Eingeben:");
@@ -61,6 +67,10 @@ public class Anmeldung extends Ansicht {
                         if (v == null) {
                             JOptionPane.showMessageDialog(null, "Benutzername und/oder Passwort falsch", "Anmeldefehler", JOptionPane.ERROR_MESSAGE);
                         } else {
+                            if(!v.istAktiv()){
+                                JOptionPane.showConfirmDialog(getOKFZSInstanz(),"Benutzer dektiviert, Programm wird beendet","Benutzer inaktiv",JOptionPane.OK_OPTION);
+                                getOKFZSInstanz().beenden();
+                            }
                             instanz.setBenutzer(v);
                             getOKFZSInstanz().anzeigen("uebersicht");
                         }
@@ -102,9 +112,7 @@ public class Anmeldung extends Ansicht {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(anrede.getSelectedItem()!=null&&!name.getText().equals("")&&!geburtstag.getText().equals("")&&!anmeldeName.getText().equals("")){
-                        System.out.println(String.copyValueOf(passwort.getPassword()));
-                        System.out.println(String.copyValueOf(paswortBest.getPassword()));
-                        if ((String.copyValueOf(passwort.getPassword()).hashCode()==String.copyValueOf(paswortBest.getPassword()).hashCode())&&passwort.getPassword().length>=4){
+                         if ((String.copyValueOf(passwort.getPassword()).hashCode()==String.copyValueOf(paswortBest.getPassword()).hashCode())&&passwort.getPassword().length>=4){
                             try {
                                 SimpleDateFormat sdf=new SimpleDateFormat("DD.MM.YYYY");
                                 Person p=getOKFZSInstanz().getDatenbank().insertPerson(new Person((String)anrede.getSelectedItem(),name.getText(),sdf.parse(geburtstag.getText())));
@@ -142,13 +150,12 @@ public class Anmeldung extends Ansicht {
      * @return VERKAEUFER Der Gewollte Nutzer oder NULL wenn PW falsch/Nutzer nicht Vorhanden
      */
     private Verkaeufer anmelden(@NotNull String name,@NotNull String passwortHash) {
-        System.out.println(passwortHash);
+
         Verkaeufer v;
         try {
             v = getOKFZSInstanz().getDatenbank().einVerkaufer(name);
             if (v==null)return null;
             if (passwortHash.equals(v.getPasswortHash())) {
-                System.out.println(passwortHash);
                 return v;}
         } catch (SQLException e) {
 
