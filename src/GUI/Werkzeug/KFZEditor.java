@@ -799,6 +799,7 @@ public class KFZEditor extends Ansicht {
                     Vorgang v=new Vorgang(kfz,okfzsInstanz.getBenutzer(),Double.parseDouble(jtEK.getText()));
                     if (jtKm.getText().length()>0)
                     v.setKilometer(Integer.parseInt(jtKm.getText()));
+                    if(jtTuev.getText().length()>0)v.setTuev(KFZEditor.umwandeln(jtTuev.getText()));
                     okfzsInstanz.getDatenbank().insertOrUpdateVorgang(v);
                     vorgang=v;
                     okfzsInstanz.anzeigen("autoAend");
@@ -1184,7 +1185,8 @@ public class KFZEditor extends Ansicht {
                     KFZ kfz = new KFZ(jtFin.getText(),jtHersteller.getText(),jtModell.getText(),jtKfzBriefNr.getText(),Integer.parseInt(jtLeistungInKw.getText()),jtFarbe.getText(),umwandeln(jtEZ.getText()),Byte.parseByte(jtUmweltplakette.getText()),jtKraftstoff.getText());
                     okfzsInstanz.getDatenbank().insertOrUpdateKfz(kfz);
                     Vorgang v=new Vorgang(kfz,okfzsInstanz.getBenutzer(),Double.parseDouble(jtEK.getText()));
-                    v.setKilometer(Integer.parseInt(jtKm.getText()));
+                    if(jtKm.getText().length()>0)v.setKilometer(Integer.parseInt(jtKm.getText()));
+                    if(jtTuev.getText().length()>0)v.setTuev(KFZEditor.umwandeln(jtTuev.getText()));
                     okfzsInstanz.getDatenbank().insertOrUpdateVorgang(v);
                     vorgang=v;
                     okfzsInstanz.anzeigen("autoAend");
