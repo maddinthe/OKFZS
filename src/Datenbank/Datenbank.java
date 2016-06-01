@@ -633,6 +633,29 @@ public class Datenbank {
         r.close();
         return kfzListe;
     }
+    public List<KFZ> alleKfzNichtImVerkauf() throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz LEFT JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vid ISNULL OR (fk_t_verkaeufer_pid_vk NOTNULL AND fk_t_person_pid NOTNULL AND vpreis NOTNULL AND vkdatum<now())" );
+        List<KFZ> kfzListe = new ArrayList<>();
+        KFZ kfz = null;
+
+        while (r.next()) {
+            String fin = r.getString("fin");
+            String hersteller = r.getString("hersteller");
+            String modell = r.getString("modell");
+            String kfz_brief = r.getString("kfz_brief");
+            int leistung = r.getInt("leistung");
+            String farbe = r.getString("farbe");
+            Date ez = r.getDate("ez");
+            byte plakette = r.getByte("plakette");
+            String kraftstoff = r.getString("kraftstoff");
+            kfz = new KFZ(fin, hersteller, modell, kfz_brief, leistung, farbe, ez, plakette, kraftstoff);
+            kfzListe.add(kfz);
+
+        }
+        r.close();
+        return kfzListe;
+    }
 
     public List<Person> allePersonen() throws SQLException {
         Statement stmt = conn.createStatement();
@@ -687,7 +710,7 @@ public class Datenbank {
 
     public List<Vorgang> unverkaufteVorgaenge() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz INNER JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE fk_t_verkaeufer_pid_vk IS NULL");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz INNER JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE fk_t_verkaeufer_pid_vk ISNULL OR fk_t_person_pid ISNULL OR vpreis ISNULL OR vkdatum>now()");
         List<Vorgang> vorgaenge = new ArrayList<>();
 
 
