@@ -260,7 +260,7 @@ public class Suche extends Ansicht {
                     }
                     break;
                 case ("Telefonnummer"):
-                    for (Person person : getOKFZSInstanz().getDatenbank().eineTelefonunner(begriff))
+                    for (Person person : getOKFZSInstanz().getDatenbank().eineTelefonummer(begriff))
                          personen.add(person);
 
                     break;
