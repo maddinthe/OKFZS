@@ -764,9 +764,15 @@ public class Datenbank {
         return sonderausstattungsListe;
     }
 
+    /**
+     * Diese Methode liefert alle KFZ.
+     * Dazu wird aus dem ResultSet eine Liste mit KFZ erstellt und übergeben.
+     * @return Liste mit KFZ
+     * @throws SQLException
+     */
     public List<KFZ> alleKfz() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz");//Alle Daten aus der Tabelle
         List<KFZ> kfzListe = new ArrayList<>();
         KFZ kfz = null;
 
@@ -788,9 +794,15 @@ public class Datenbank {
         return kfzListe;
     }
 
+    /**Diese Methode liefert eine Liste aus KFZs die sich aktuell nicht im Verkauf befinden
+     * (das heißt keinen Vorgang haben oder schon verkauft wurden)
+     * Dazu wird aus dem ResultSet eine Liste mit KFZs erstellt und übergeben.
+     * @return eine Liste mit KFZs
+     * @throws SQLException
+     */
     public List<KFZ> alleKfzNichtImVerkauf() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz LEFT JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vid ISNULL OR (fk_t_verkaeufer_pid_vk NOTNULL AND fk_t_person_pid NOTNULL AND vpreis NOTNULL AND vkdatum<now())");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz LEFT JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vid ISNULL OR (fk_t_verkaeufer_pid_vk NOTNULL AND fk_t_person_pid NOTNULL AND vpreis NOTNULL AND vkdatum<now())");//Alle Daten zweier Tabellen die keine vid haben oder (wo fk_t_verkaeufer_pid_vk nicht null und vpreis nicht null und vkdatum in der Vergangenheit)
         List<KFZ> kfzListe = new ArrayList<>();
         KFZ kfz = null;
 
@@ -812,9 +824,15 @@ public class Datenbank {
         return kfzListe;
     }
 
+    /**
+     * Diese Methode liefert alle Personen.
+     * Dazu wird aus dem ResultSet eine Liste mit Personen erstellt und übergeben.
+     * @return eine Liste mit Personen
+     * @throws SQLException
+     */
     public List<Person> allePersonen() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_person");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_person");//Alle Daten aus der Tabelle
         Person person = null;
         List<Person> personenListe = new ArrayList<>();
 
@@ -838,9 +856,15 @@ public class Datenbank {
 
     }
 
+    /**
+     * Diese Methode liefert alle Personen alphabetisch sortiert nach dem Nachnamen.
+     * Dazu wird aus dem ResultSet eine Liste mit Personen erstellt und übergeben.
+     * @return eine Liste mit Persoen
+     * @throws SQLException
+     */
     public List<Person> allePersonenSortiert() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_person ORDER BY name");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_person ORDER BY name");//Alle Daten einer Tabelle sortiert Alphabetisch nach dem Namen
         Person person = null;
         List<Person> personenListe = new ArrayList<>();
 
@@ -863,9 +887,14 @@ public class Datenbank {
         return personenListe;
     }
 
+    /** Diese Methode liefert alle unverkauften Vorgänge.
+     * Dazu wird aus dem ResultSet eine Liste mit Vorgängen erstellt und übergeben.
+     * @return eine Liste mit Vorgängen
+     * @throws SQLException
+     */
     public List<Vorgang> unverkaufteVorgaenge() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz INNER JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE fk_t_verkaeufer_pid_vk ISNULL OR fk_t_person_pid ISNULL OR vpreis ISNULL OR vkdatum>now()");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz INNER JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE fk_t_verkaeufer_pid_vk ISNULL OR fk_t_person_pid ISNULL OR vpreis ISNULL OR vkdatum>now()");//Alle Daten zweier Tabellen wo der fk_t_verkaeufer_pid_vk null oder fk_t_person_pid null oder vpreis null oder vkdatum in der Zukunft
         List<Vorgang> vorgaenge = new ArrayList<>();
 
 
@@ -946,9 +975,16 @@ public class Datenbank {
         return vorgaenge;
     }
 
+    /**
+     * Diese Methode liefert einen Vorgang zu einem KFZ anhand des übergebenen KFZs.
+     * Dazu wird aus dem ResultSet ein Vorgang erstellt und übergeben.
+     * @param kfz ein KFZ
+     * @return ein Vorgang zu ein KFZ
+     * @throws SQLException
+     */
     public Vorgang einVorgang(KFZ kfz) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_kfz_fin='" + kfz.getFin() + "'");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_kfz_fin='" + kfz.getFin() + "'");//Alle Daten die zu der FIN des übergebenen KFZ passen
         Vorgang vorgang = null;
         while (r.next()) {
             long id = r.getLong("vid");
@@ -975,10 +1011,15 @@ public class Datenbank {
         return vorgang;
     }
 
-
+    /**
+     * Diese Methode liefert eine Liste mit allen Verkaeufern.
+     * Dazu wird aus dem ResultSet eine Liste mit Verkaeufern erstellt und übergeben.
+     * @return eine Liste mit Verkaeufer
+     * @throws SQLException
+     */
     public List<Verkaeufer> alleVerkaeufer() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_verkaeufer");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_verkaeufer");//Alle Daten einer Tabelle
         List<Verkaeufer> verkaeufer = new ArrayList<>();
         while (r.next()) {
             long pid = r.getLong("fk_t_person_pid");
@@ -994,9 +1035,17 @@ public class Datenbank {
         return verkaeufer;
     }
 
+    /**
+     * Diese Methode liefert eine Liste mit allen Notizen einer Person.
+     * Dazu wird aus dem ResultSet eine Liste mit Notizen erstellt und übergeben.
+     * Außderdem werdem die gerade erstellten Notizen der übergebenen Person hinzugefügt.
+     * @param person eine Person
+     * @return eine Liste mit Notizen
+     * @throws SQLException
+     */
     public List<Notiz> alleNotizen(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_notiz WHERE fk_t_person_pid=" + person.getPid() + "");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_notiz WHERE fk_t_person_pid=" + person.getPid() + "");//Alle Daten einer Tabelle die zu der PID der übergebenen Person passen
         List<Notiz> notizen = new ArrayList<>();
         Notiz notiz = null;
         while (r.next()) {
@@ -1011,9 +1060,17 @@ public class Datenbank {
         return notizen;
     }
 
+    /**Diese Methode liefert eine Liste mit allen Erreichbarkeiten einer Person.
+     * Dazu wird aus dem ResultSet eine Liste mit Erreichbarkeiten erstellt und übergeben.
+     * Außderdem werdem die gerade erstellten Erreichbarkeiten der übergebenen Person hinzugefügt.
+     *
+     * @param person eine Person
+     * @return eine Liste mit Erreichbarkeiten
+     * @throws SQLException
+     */
     public List<Erreichbarkeit> alleErreichbarkeiten(Person person) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE fk_t_person_pid=" + person.getPid() + "");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE fk_t_person_pid=" + person.getPid() + "");//Alle Daten einer Tabelle die zu der PID der übergebenen Person passen
         List<Erreichbarkeit> erreichbarkeiten = new ArrayList<>();
         Erreichbarkeit erreichbarkeit = null;
         while (r.next()) {
@@ -1047,9 +1104,16 @@ public class Datenbank {
         return sonderausstattungsListe;
     }
 
+    /**Diese Methode liefert eine Liste mit allen Sonderausstattungen alphabetisch sortiert nach der Art.
+     * Dazu wird aus dem ResultSet eine Liste mit Sonderausstattungen erstellt und übergeben.
+     *
+     *
+     * @return eine Liste mit Sonderausstattungen
+     * @throws SQLException
+     */
     public List<Sonderausstattung> ausstattungslisteSortiert() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT sid,art FROM t_sonderausstattung ORDER BY art");
+        ResultSet r = stmt.executeQuery("SELECT sid,art FROM t_sonderausstattung ORDER BY art");//Alle Daten einer Tabelle alphabetisch sortiert nach der Art
         List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
 
 
@@ -1064,10 +1128,14 @@ public class Datenbank {
         return sonderausstattungsListe;
     }
 
+    /**
+     *
+     * @return true oder false
+     */
     public boolean adminDa() {
         try {
             Statement stmt = conn.createStatement();
-            ResultSet r = stmt.executeQuery("SELECT count(fk_t_verkaeufer_fk_t_person_pid) FROM t_admins");
+            ResultSet r = stmt.executeQuery("SELECT count(fk_t_verkaeufer_fk_t_person_pid) FROM t_admins");//Zähle alle Einträge in einer Tabelle
             if (r.next())
                 return (r.getInt(1) > 0);
         } catch (SQLException e) {
@@ -1078,8 +1146,6 @@ public class Datenbank {
     }
 
     public Verkaeufer insertVerkaeufer(Verkaeufer verkaeufer) {
-
-
         try {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
@@ -1088,6 +1154,43 @@ public class Datenbank {
             return null;
         }
         return verkaeufer;
+    }
+    /**
+     * Diese Methode liefert alle Vorgänge eines Verkaeufers anhand des übergebenen Verkaeufers zurück.
+     * Dazu wird aus dem ResultSet eine Liste von Vorgängen erstellt und übergeben
+     * @param verkaeufer ein Verkaeufer
+     * @return eine Liste mit Vorgängen
+     * @throws SQLException
+     */
+    public List<Vorgang> alleVorgaengeZuVerkaeufer(Verkaeufer verkaeufer) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_ek="+verkaeufer.getPerson().getPid()+" OR fk_t_verkaeufer_pid_vk="+verkaeufer.getPerson().getPid());//Alle Daten zu einem Vorgang an dem der Verkaeufer beteiligt ist
+        List<Vorgang> vorgaenge = new ArrayList<>();
+
+
+        while (r.next()) {
+            long id = r.getLong("vid");
+            String fin = r.getString("fk_t_kfz_fin");
+            long pid = r.getLong("fk_t_person_pid");
+            long ek = r.getLong("fk_t_verkaeufer_pid_ek");
+            long vk = r.getLong("fk_t_verkaeufer_pid_vk");
+            double epreis = r.getDouble("epreis");
+            double vpreis = r.getDouble("vpreis");
+            int km = r.getInt("km");
+            String schaeden = r.getString("Schaeden");
+            Date vkdatum = r.getDate("vkdatum");
+            Date ekdatum = r.getDate("ekdatum");
+            String kennz = r.getString("kennz");
+            String rabattgrund = r.getString("rabattgrund");
+            Date tuev = r.getDate("tuev");
+            String sonstvereinb = r.getString("sonstvereinb");
+            double vpreisplan = r.getDouble("vpreisplan");
+            Vorgang vorgang = new Vorgang(id, einePerson(pid), einVerkaufer(vk), einVerkaufer(ek), einKfz(fin), vpreis, epreis, vpreisplan, vkdatum, rabattgrund, sonstvereinb, ekdatum, schaeden, tuev, kennz, km);
+            vorgaenge.add(vorgang);
+
+        }
+        r.close();
+        return vorgaenge;
     }
 
 }
