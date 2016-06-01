@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="OKFZS:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/OKFZS_jar</output-path>
+    <root id="archive" name="OKFZS.jar">
+      <element id="module-output" name="OKFZS" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/ExterneJars/postgresql-9.4.1208.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
