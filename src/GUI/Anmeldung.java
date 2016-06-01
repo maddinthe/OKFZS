@@ -114,7 +114,7 @@ public class Anmeldung extends Ansicht {
                     if(anrede.getSelectedItem()!=null&&!name.getText().equals("")&&!geburtstag.getText().equals("")&&!anmeldeName.getText().equals("")){
                          if ((String.copyValueOf(passwort.getPassword()).hashCode()==String.copyValueOf(paswortBest.getPassword()).hashCode())&&passwort.getPassword().length>=4){
                             try {
-                                SimpleDateFormat sdf=new SimpleDateFormat("DD.MM.YYYY");
+                                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
                                 Person p=getOKFZSInstanz().getDatenbank().insertPerson(new Person((String)anrede.getSelectedItem(),name.getText(),sdf.parse(geburtstag.getText())));
                                 Verkaeufer v=getOKFZSInstanz().getDatenbank().insertVerkaeufer(new Verkaeufer(anmeldeName.getText(),String.copyValueOf(passwort.getPassword()).hashCode()+"",p,true,true));
                                 getOKFZSInstanz().getDatenbank().insertOrUpdateAdmins(v);
@@ -123,7 +123,7 @@ public class Anmeldung extends Ansicht {
                             } catch (SQLException e1) {
                                 e1.printStackTrace();
                             } catch (ParseException e1) {
-                                e1.printStackTrace();
+                                JOptionPane.showMessageDialog(getOKFZSInstanz(), "Datum falsch angegeben Format: JJJJ-MM-TT z.B. 1999-01-17", "Datumsfehler", JOptionPane.ERROR_MESSAGE);
                             }
 
                         }else{
