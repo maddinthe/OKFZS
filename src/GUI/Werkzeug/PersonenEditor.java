@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-/**@author cdreher on 16.05.2016
+/**
  * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
  * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
  *
@@ -29,6 +29,8 @@ import java.util.List;
  * Möglichkeiten zur Dateneingabe und Änderung. Der Verkaeufer kann neue Personen anlegen und alle nicht gesperrten Elemente
  * neu zu setzen. Der Admin hat eine erweitere Ansicht, er kann Verkaeufer-Daten setzen(Anmeldename,Passwort,
  * istAktiv und istAdmin) und hat die Möglichkeit alle Elemente zu verändern(keine gesperrten Elemente).
+ *
+ * @author cdreher on 16.05.2016
  */
 public class PersonenEditor extends Ansicht {
     /**
