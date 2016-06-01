@@ -18,14 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-
-/**
- * @author  cdreher on 16.05.2016
+/**@author cdreher on 16.05.2016
  * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
  * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
- */
-
-/**
+ *
+ *
  * Der Personen-Editor dient zur Bearbeitung von Personen, Erreichbarkeiten und Notizen.
  * Hier können neue Personen, Erreichbarkeiten und Notizen hinzugefügt werden sowie neue
  * Personen, Erreichbarkeiten und Notizen angelegt werden. Die Eingabe-Maske in der GUI der OKFZ zeigt alle
@@ -703,6 +700,9 @@ public class PersonenEditor extends Ansicht {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Person temp = null;
+                int plz = 0;
+                if(jtPlz.getText().length()>plz)
+                    plz=Integer.parseInt(jtPlz.getText());
                 try {
                     if ("".equals(jtVorname.getText()) || jtVorname.getText() == null) {
                         temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), umwandeln((jtGeburtstag.getText())));
@@ -710,7 +710,7 @@ public class PersonenEditor extends Ansicht {
 
 
                     } else {
-                        temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), Integer.parseInt(jtPlz.getText()), jtOrt.getText(), jtUst.getText());
+                        temp = new Person(jcAnredeListe.getSelectedItem().toString(), jtName.getText(), jtVorname.getText(), umwandeln(jtGeburtstag.getText()), jtAnschrift.getText(), plz, jtOrt.getText(), jtUst.getText());
                         selectedPers=okfzsInstanz.getDatenbank().insertOrUpdatePerson(temp);
                     }
 

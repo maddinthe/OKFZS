@@ -5,9 +5,7 @@ import java.util.List;
 
 /**
  * @author cdreher on 23.05.2016.
- */
-
-/**
+ *
  * Datenhaltungsklasse für die Personen
  */
 public class Person {

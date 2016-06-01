@@ -2,9 +2,7 @@ package Datenhaltung;
 
 /**
  * @author cdreher on 23.05.2016.
- */
-
-/**
+ *
  * Datenhaltungsklasse für die Erreichbarkeiten
  */
 public class Erreichbarkeit {

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by tkertz on 23.05.2016.
  * Diese Klasse dient der Datenhaltung für eine Aktion, die einem Auto hinzugefügt werden kann
- * @author Toni Kertz
+ * @author  Toni Kertz
  *
  */
 

@@ -12,12 +12,10 @@ import java.util.*;
 import java.util.Date;
 
 /**
- * @author  cdreher on 23.05.2016.
+ * @author cdreher on 23.05.2016.
  * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
  * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
- */
-
-/**
+ *
  * Die Klasse Datenbank dient dazu eine Datenbank für die OKFZS anzulegen.
  * Außerdem stellt Sie Methoden bereit, die die grundlegende Kommunikation zwischen Programm und Datenbank aufbaut.
  * Weiterhin bietet Sie Methoden an, um Daten aus dem Programm in die Datenbank hinzuzufügen und Datensätze aus der
@@ -52,9 +50,7 @@ public class Datenbank {
     }
 
     /**
-     * @author majorkrebs
-     *
-     * wurde abgeändert:
+     * wurde abgeändert: autor Major Krebs
      * @param host der Host wo die Datenbank gespeichert ist
      * @param port der Port auf dem der Datenbank-Server lauscht
      *  Die Parameter Host und Port werden jetzt mit übergeben um diese dynamisch zu halten.
@@ -113,8 +109,8 @@ public class Datenbank {
     }
 
     /**
-     * @author majorkrebs
-     * wurde abgeändert:
+     *
+     * wurde abgeändert: autor Major Krebs
      * @param database Name der anzulegenden Datenbank
      * @param host der Host wo die Datenbank gespeichert wird
      * @param port der Port auf dem der Datenserver lauscht
@@ -149,11 +145,11 @@ public class Datenbank {
     }
 
     /**keine Änderungen
-     * @author majorkrebs
+     * autor majorkrebs
      * @throws SQLException
      */
     private static void einlesenScript() throws SQLException {
-        try (BufferedReader br = new BufferedReader(new FileReader(Datenbank.class.getResource("dblaeuft.sql").getFile()))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(Datenbank.class.getResource("init.sql").getFile()))) {
             String sqlInstruction = "";
             String zeile;
             while ((zeile = br.readLine()) != null) {
@@ -661,37 +657,7 @@ public class Datenbank {
         return isAdmin;
     }
 
-    public Notiz eineNotiz(Person person) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_notiz WHERE fk_t_person_pid=" + person.getPid() + "");
-        Notiz notiz = null;
-        while (r.next()) {
-            long nid = r.getLong("nid");
-            String text = r.getString("text");
-            Date datum = r.getDate("datum");
-            notiz = new Notiz(nid, person, datum, text);
-            person.addNotiz(notiz);
-        }
-        r.close();
-        return notiz;
-    }
 
-    public Erreichbarkeit eineErreichbarkeit(Person person) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE fk_t_person_pid=" + person.getPid() + "");
-        Erreichbarkeit erreichbarkeit = null;
-        while (r.next()) {
-            long eid = r.getLong("eid");
-            String tel = r.getString("tel");
-            String handy = r.getString("handy");
-            String email = r.getString("email");
-            String text = r.getString("text");
-            erreichbarkeit = new Erreichbarkeit(eid, person, tel, handy, email, text);
-            person.addErreichbarkeit(erreichbarkeit);
-        }
-        r.close();
-        return erreichbarkeit;
-    }
 
     /**Diese Methode liefert eine Liste von Personen anhand des übergebenen Strings.
      * Dazu wird aus dem ResultSet eine Liste von Personen erstellt und übergeben.
@@ -711,21 +677,7 @@ public class Datenbank {
         return personen;
     }
 
-    public Aktion eineAktion(KFZ kfz, Person person) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_aktion WHERE fk_t_kfz_fin='" + kfz.getFin() + "' AND fk_t_person_pid=" + person.getPid() + "");
-        Aktion aktion = null;
-        while (r.next()) {
-            long eid = r.getLong("eid");
-            Date datum = r.getDate("datum");
-            String text = r.getString("text");
 
-            aktion = new Aktion(datum, person, text, kfz);
-            kfz.addAktion(aktion);
-        }
-        r.close();
-        return aktion;
-    }
 
     /**
      * Diese Methode liefert eine Sonderausstattung anhand der übergebenen SID.
@@ -747,22 +699,7 @@ public class Datenbank {
         return sonderausstattung;
     }
 
-    public List<Sonderausstattung> ausstattungsliste(KFZ kfz) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT sid,art from t_sonderausstattung INNER JOIN t_ausstattungsliste ON t_sonderausstattung.sid = t_ausstattungsliste.fk_t_sonderausstattung_sid INNER JOIN t_kfz ON t_kfz.fin = t_ausstattungsliste.fk_t_kfz_fin WHERE fin='" + kfz.getFin() + "'");
-        List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
 
-
-        while (r.next()) {
-            long sid = r.getLong("sid");
-            String art = r.getString("art");
-            Sonderausstattung sonderausstattung = new Sonderausstattung(sid, art);
-            sonderausstattungsListe.add(sonderausstattung);
-
-        }
-        r.close();
-        return sonderausstattungsListe;
-    }
 
     /**
      * Diese Methode liefert alle KFZ.
@@ -923,57 +860,7 @@ public class Datenbank {
         return vorgaenge;
     }
 
-    public Double statistikGewinnVerkaeufer(Verkaeufer verkaeufer) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk=" + verkaeufer.getPerson().getPid() + "");
-        Double gewinn = 0.0;
 
-
-        while (r.next()) {
-            double epreis = r.getDouble("epreis");
-            double vpreis = r.getDouble("vpreis");
-            long ek = r.getLong("fk_t_verkaeufer_pid_ek");
-            if (ek != verkaeufer.getPerson().getPid())
-                gewinn += (vpreis - epreis) / 2;
-            else
-                gewinn += vpreis - epreis;
-
-
-        }
-        r.close();
-        return gewinn;
-    }
-
-    public List<Vorgang> alleVorgaenge() throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang");
-        List<Vorgang> vorgaenge = new ArrayList<>();
-
-
-        while (r.next()) {
-            long id = r.getLong("vid");
-            String fin = r.getString("fk_t_kfz_fin");
-            long pid = r.getLong("fk_t_person_pid");
-            long ek = r.getLong("fk_t_verkaeufer_pid_ek");
-            long vk = r.getLong("fk_t_verkaeufer_pid_vk");
-            double epreis = r.getDouble("epreis");
-            double vpreis = r.getDouble("vpreis");
-            int km = r.getInt("km");
-            String schaeden = r.getString("Schaeden");
-            Date vkdatum = r.getDate("vkdatum");
-            Date ekdatum = r.getDate("ekdatum");
-            String kennz = r.getString("kennz");
-            String rabattgrund = r.getString("rabattgrund");
-            Date tuev = r.getDate("tuev");
-            String sonstvereinb = r.getString("sonstvereinb");
-            double vpreisplan = r.getDouble("vpreisplan");
-            Vorgang vorgang = new Vorgang(id, einePerson(pid), einVerkaufer(vk), einVerkaufer(ek), einKfz(fin), vpreis, epreis, vpreisplan, vkdatum, rabattgrund, sonstvereinb, ekdatum, schaeden, tuev, kennz, km);
-            vorgaenge.add(vorgang);
-
-        }
-        r.close();
-        return vorgaenge;
-    }
 
     /**
      * Diese Methode liefert einen Vorgang zu einem KFZ anhand des übergebenen KFZs.
@@ -1087,22 +974,7 @@ public class Datenbank {
         return erreichbarkeiten;
     }
 
-    public List<Sonderausstattung> ausstattungsliste() throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT sid,art FROM t_sonderausstattung");
-        List<Sonderausstattung> sonderausstattungsListe = new ArrayList<>();
 
-
-        while (r.next()) {
-            long sid = r.getLong("sid");
-            String art = r.getString("art");
-            Sonderausstattung sonderausstattung = new Sonderausstattung(sid, art);
-            sonderausstattungsListe.add(sonderausstattung);
-
-        }
-        r.close();
-        return sonderausstattungsListe;
-    }
 
     /**Diese Methode liefert eine Liste mit allen Sonderausstattungen alphabetisch sortiert nach der Art.
      * Dazu wird aus dem ResultSet eine Liste mit Sonderausstattungen erstellt und übergeben.
@@ -1128,8 +1000,8 @@ public class Datenbank {
         return sonderausstattungsListe;
     }
 
-    /**
-     *
+    /**Diese Methode liefert ein Boolean ob es einem Admin gibt.
+     *Dazu wird aus dem ResultSet abgefragt ob Eintrag vorhanden.
      * @return true oder false
      */
     public boolean adminDa() {
@@ -1145,10 +1017,16 @@ public class Datenbank {
         return false;
     }
 
+    /**Diese Methode legt einen neuen Datensatz anhand des Fremdschlüssels
+     *  des übergebenen Verkaeufers an und gibt diesen wieder zurück
+     *
+     * @param verkaeufer ein Verkaeufer
+     * @return ein Verkaeufer
+     */
     public Verkaeufer insertVerkaeufer(Verkaeufer verkaeufer) {
         try {
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
+            stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");//Anlegen eines neuen Datensatzes
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
