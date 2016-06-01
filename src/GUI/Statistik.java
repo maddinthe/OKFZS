@@ -24,50 +24,55 @@ import java.util.List;
 public class Statistik extends Ansicht {
     /**
      * Konstruktor für eine Statistik zu einem Einzelnen verkäufer (ruft nur statistikEinzel() auf)
+     *
      * @param okfzsInstanz Die OKFZS Instanz in der die Statistik angezeigt werden soll
-     * @param verkaeufer Der Verkäufer für den die Statistik generiert werden soll
+     * @param verkaeufer   Der Verkäufer für den die Statistik generiert werden soll
      */
-    public Statistik(OKFZS okfzsInstanz,Verkaeufer verkaeufer){
+    public Statistik(OKFZS okfzsInstanz, Verkaeufer verkaeufer) {
         super(okfzsInstanz);
         statistikEinzel(verkaeufer);
     }
 
     /**
      * Der Konstruktor der die Statistik anzeigt, wenn der Angemeldete nutzer ein admin ist zeigt er eine liste ansonsten zeigt er eine Einzelsatistik
+     *
      * @param okfzsInstanz die OKFZS instanz in der die statistik angezeigt wird
      */
     public Statistik(OKFZS okfzsInstanz) {
         super(okfzsInstanz);
-        if(!okfzsInstanz.getBenutzer().istAdmin()){
+        if (!okfzsInstanz.getBenutzer().istAdmin()) {
             statistikEinzel(okfzsInstanz.getBenutzer());
-        }else{
+        } else {
             try {
                 List<Verkaeufer> verkaeufer = okfzsInstanz.getDatenbank().alleVerkaeufer();
 
-
-            String[] thead = {"Verkäufer", "Verkaufte Autos", "Gewinn in €", "Gekaufte Autos", "VK ID"};
-            String[][] data = new String[verkaeufer.size()][5];
-            for (int i = 0; i < verkaeufer.size(); i++) {
-                Verkaeufer v = verkaeufer.get(i);
-                double[] stats = getStats(v);
-                data[i][0] = v.getPerson().getName() + ", " + v.getPerson().getVorname();
-                data[i][1] = "" + (int) stats[1];
-                data[i][2] = String.format("%.2f", stats[0]);
-                data[i][3] = "" + (int) stats[2];
-                data[i][4] = "" + v.getPerson().getPid();
-            }
-
-
-            JTable tabelle = new JTable(data, thead);
-            tabelle.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    super.mouseClicked(e);
-                    int row = ((JTable) e.getSource()).getSelectedRow();
-                    okfzsInstanz.anzeigen(new Statistik(okfzsInstanz,verkaeufer.get(row)));
+                this.setLayout(new BorderLayout());
+                String[] thead = {"Verkäufer", "Verkaufte Autos", "Gewinn in €", "Gekaufte Autos", "VK ID"};
+                String[][] data = new String[verkaeufer.size()][5];
+                for (int i = 0; i < verkaeufer.size(); i++) {
+                    Verkaeufer v = verkaeufer.get(i);
+                    double[] stats = getStats(v);
+                    data[i][0] = v.getPerson().getName() + ", " + v.getPerson().getVorname();
+                    data[i][1] = "" + (int) stats[1];
+                    data[i][2] = String.format("%.2f", stats[0]);
+                    data[i][3] = "" + (int) stats[2];
+                    data[i][4] = "" + v.getPerson().getPid();
                 }
-            });
-            this.add(new JScrollPane(tabelle));
+
+
+                JTable tabelle = new JTable(data, thead);
+                tabelle.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        int row = ((JTable) e.getSource()).getSelectedRow();
+                        okfzsInstanz.anzeigen(new Statistik(okfzsInstanz, verkaeufer.get(row)));
+                    }
+                });
+                this.add(new JScrollPane(tabelle), BorderLayout.CENTER);
+                JLabel statsHeader=new JLabel("Gesamtstatistik für alle Verkäufer");
+                statsHeader.setHorizontalAlignment(JLabel.CENTER);
+                this.add(statsHeader,BorderLayout.NORTH);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -78,6 +83,7 @@ public class Statistik extends Ansicht {
 
     /**
      * Generiert die Einzelstatistik für einen Verkäufer (Aus dem Konstruktor zur einfacheit ausgelagert)
+     *
      * @param verkaeufer Verkäufer für den die Statistik zu erstellen ist
      */
     private void statistikEinzel(Verkaeufer verkaeufer) {
@@ -124,6 +130,7 @@ public class Statistik extends Ansicht {
 
     /**
      * Gibt die Statistikdaten für den Übergebenen verkäufer zurück
+     *
      * @param verkaeufer Verkäufer für den die Statistik berechnet werden soll
      * @return double[] mit den pos 0=Gewinn, 1=verkaufte Autos, 2=gekaufte Autos
      */
@@ -131,6 +138,7 @@ public class Statistik extends Ansicht {
         List<Vorgang> vorgaenge = new ArrayList<>();
         try {
             vorgaenge = getOKFZSInstanz().getDatenbank().VorgaengeZuVerkaeufer(verkaeufer);
+            //todo:SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_ek=6 OR fk_t_verkaeufer_pid_vk=6
         } catch (SQLException e) {
             e.printStackTrace();
         }
