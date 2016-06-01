@@ -18,7 +18,7 @@ import java.util.Date;
 public class Datenbank {
     private static Datenbank datenbank;
     private static Connection conn;
-    private SimpleDateFormat sdf=new SimpleDateFormat("yyy-MM-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
 
     private Datenbank() {
     }
@@ -159,7 +159,6 @@ public class Datenbank {
             if (rs.next())
                 person.setPid(rs.getLong(1));
         } catch (SQLException e) {
-            //stmt.executeUpdate("UPDATE t_person SET anrede='" + person.getAnrede() + "',name='"+person.getName()+"' WHERE pid=" + person.getPid() + "");
             System.out.println(e.getMessage());
         }
 
@@ -317,23 +316,23 @@ public class Datenbank {
         Double vPreis = (vorgang.getvPreis() == 0) ? null : vorgang.getvPreis();
         Double ePreis = (vorgang.getePreis() == 0) ? null : vorgang.getePreis();
         Double vPreisPlan = (vorgang.getvPreisPlan() == 0) ? null : vorgang.getvPreisPlan();
-        String vkDatum = (vorgang.getVerkaufsDatum() == null) ? null : "'"+sdf.format(vorgang.getVerkaufsDatum())+"'";
+        String vkDatum = (vorgang.getVerkaufsDatum() == null) ? null : "'" + sdf.format(vorgang.getVerkaufsDatum()) + "'";
         String rabbatGrund = (vorgang.getRabattGrund() == null) ? "" : vorgang.getRabattGrund();
         String sonstVereinbarung = (vorgang.getSonstvereinbarungen() == null) ? "" : vorgang.getSonstvereinbarungen();
         String ekDatum = sdf.format(vorgang.getEinkaufsDatum());
         String scheaden = (vorgang.getSchaeden() == null) ? "" : vorgang.getSchaeden();
-        String tuev = (vorgang.getTuev() == null) ? null : "'"+sdf.format(vorgang.getTuev())+"'";
+        String tuev = (vorgang.getTuev() == null) ? null : "'" + sdf.format(vorgang.getTuev()) + "'";
         String kenzeichen = (vorgang.getKennzeichen() == null) ? "" : vorgang.getKennzeichen();
         Integer km = (vorgang.getKilometer() == 0) ? null : vorgang.getKilometer();
 
         Statement stmt = conn.createStatement();
         try {
-            int count=stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + kPid + ", fk_t_verkaeufer_pid_ek=" + ekPid + ",fk_t_verkaeufer_pid_vk=" + vkPid + ",fk_t_kfz_fin='" + kfz.getFin() + "',epreis=" + ePreis + ",vpreis=" + vPreis+ ",km=" + km + ",schaeden='" + scheaden + "',vkdatum=" + vkDatum + ",ekdatum='" + ekDatum + "',kennz='" + kenzeichen + "',rabattgrund='" + rabbatGrund + "',tuev=" + tuev + ",sonstvereinb='" + sonstVereinbarung + "',vpreisplan=" + vPreisPlan + " WHERE vid=" + vorgang.getVid() + "");
-            if(count<1)
-            stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + kPid + "," + ekPid + ", " + vkPid + ",'" + kfz.getFin() + "'," + ePreis + "," + vPreis + "," + km + ",'" + scheaden + "'," + vkDatum + ",'" + ekDatum + "','" + kenzeichen + "','" + rabbatGrund + "'," + tuev + ",'" + sonstVereinbarung + "'," + vPreisPlan + ")");
+            int count = stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + kPid + ", fk_t_verkaeufer_pid_ek=" + ekPid + ",fk_t_verkaeufer_pid_vk=" + vkPid + ",fk_t_kfz_fin='" + kfz.getFin() + "',epreis=" + ePreis + ",vpreis=" + vPreis + ",km=" + km + ",schaeden='" + scheaden + "',vkdatum=" + vkDatum + ",ekdatum='" + ekDatum + "',kennz='" + kenzeichen + "',rabattgrund='" + rabbatGrund + "',tuev=" + tuev + ",sonstvereinb='" + sonstVereinbarung + "',vpreisplan=" + vPreisPlan + " WHERE vid=" + vorgang.getVid() + "");
+            if (count < 1)
+                stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + kPid + "," + ekPid + ", " + vkPid + ",'" + kfz.getFin() + "'," + ePreis + "," + vPreis + "," + km + ",'" + scheaden + "'," + vkDatum + ",'" + ekDatum + "','" + kenzeichen + "','" + rabbatGrund + "'," + tuev + ",'" + sonstVereinbarung + "'," + vPreisPlan + ")");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-              }
+        }
     }
 
     public void insertOrUpdateAusstattungsliste(Sonderausstattung sonderausstattung, KFZ kfz) throws SQLException {
@@ -565,6 +564,18 @@ public class Datenbank {
         return erreichbarkeit;
     }
 
+    public List<Person> eineTelefonunner(String s) throws SQLException {
+        Statement stmt = conn.createStatement();
+        List<Person> personen = new ArrayList<>();
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_erreichbarkeit WHERE tel LIKE '%" + s + "%'");
+        while (r.next()) {
+            long pid = r.getLong("fk_t_person_pid");
+            personen.add(einePerson(pid));
+        }
+        r.close();
+        return personen;
+    }
+
     public Aktion eineAktion(KFZ kfz, Person person) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet r = stmt.executeQuery("SELECT * FROM t_aktion WHERE fk_t_kfz_fin='" + kfz.getFin() + "' AND fk_t_person_pid=" + person.getPid() + "");
@@ -634,9 +645,10 @@ public class Datenbank {
         r.close();
         return kfzListe;
     }
+
     public List<KFZ> alleKfzNichtImVerkauf() throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz LEFT JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vid ISNULL OR (fk_t_verkaeufer_pid_vk NOTNULL AND fk_t_person_pid NOTNULL AND vpreis NOTNULL AND vkdatum<now())" );
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_kfz LEFT JOIN t_vorgang ON t_kfz.fin = t_vorgang.fk_t_kfz_fin WHERE vid ISNULL OR (fk_t_verkaeufer_pid_vk NOTNULL AND fk_t_person_pid NOTNULL AND vpreis NOTNULL AND vkdatum<now())");
         List<KFZ> kfzListe = new ArrayList<>();
         KFZ kfz = null;
 
