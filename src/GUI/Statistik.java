@@ -137,8 +137,8 @@ public class Statistik extends Ansicht {
     private double[] getStats(Verkaeufer verkaeufer) {
         List<Vorgang> vorgaenge = new ArrayList<>();
         try {
-            vorgaenge = getOKFZSInstanz().getDatenbank().VorgaengeZuVerkaeufer(verkaeufer);
-            //todo:SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_ek=6 OR fk_t_verkaeufer_pid_vk=6
+            vorgaenge = getOKFZSInstanz().getDatenbank().alleVorgaengeZuVerkaeufer(verkaeufer);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
