@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -133,7 +134,30 @@ public class KaufvertragEditor extends Ansicht {
             }catch (Exception e){
 
             }
+            String vkName=vorgang.getVerkaeufer().getPerson().getAnrede() + " " + vorgang.getVerkaeufer().getPerson().getName() + ", " + vorgang.getVerkaeufer().getPerson().getVorname();
+            String kName=vorgang.getKauefer().getAnrede() + " " + vorgang.getKauefer().getName() + ", " + vorgang.getKauefer().getVorname();
+            String vkAdresse=vorgang.getVerkaeufer().getPerson().getAnschrift() + ", "+ vorgang.getVerkaeufer().getPerson().getPostleitzahl() + " " +vorgang.getVerkaeufer().getPerson().getOrt();
+            String kAdresse=vorgang.getKauefer().getAnschrift() + ", " +vorgang.getKauefer().getPostleitzahl() + " " + vorgang.getKauefer().getOrt();
+            String unfallCheck=(vorgang.getSchaeden()!=null&&vorgang.getSchaeden().length()>1)?"":"checked";
+            String maerchensteuer=""+(((vorgang.getvPreis()!=0)?vorgang.getvPreis():vorgang.getvPreisPlan())*0.1597);
+            String brutto=""+((vorgang.getvPreis()!=0)?vorgang.getvPreis():vorgang.getvPreisPlan());
+            String besonderes=vorgang.getSchaeden()+" "+vorgang.getSonstvereinbarungen()+" "+vorgang.getRabattGrund();
+            String[] alles = besonderes.split(" ");
+            List<String> zeilen = new ArrayList<>();
+            String eineZeile = "";
 
+            for (int i = 0; i < alles.length; ) {
+               while (eineZeile.length() < 200) {
+                    eineZeile += " " + alles[i++];
+                    if (i >= alles.length) break;
+                }
+                zeilen.add(eineZeile.trim());
+                eineZeile = "";
+            }
+            String zeile1=""+((zeilen.size()>0)?zeilen.get(0):"");
+            String zeile2=""+((zeilen.size()>1)?zeilen.get(1):"");
+            String zeile3=""+((zeilen.size()>2)?zeilen.get(2):"");
+            String zeile4=""+((zeilen.size()>3)?zeilen.get(3):"");
 
 
             bw.append("<!DOCTYPE html>\n" +
@@ -182,33 +206,26 @@ public class KaufvertragEditor extends Ansicht {
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>" + vorgang.getVerkaeufer().getPerson().getAnrede() + " "
-                    + vorgang.getVerkaeufer().getPerson().getName() + ", " + vorgang.getVerkaeufer().getPerson().getVorname() +
-                    "</p>\n" +
+                    "                        <p>" + vkName+ "</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Vor- und Nachname / Firma</p>\n" +
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>" + vorgang.getKauefer().getAnrede() + " "
-                    + vorgang.getKauefer().getName() + ", " + vorgang.getKauefer().getVorname() + "</p>\n" +
+                    "                        <p>" + kName + "</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Vor- und Nachname / Firma</p>\n" +
                     "                    </td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>" + vorgang.getVerkaeufer().getPerson().getAnschrift() + ", "
-                    + vorgang.getVerkaeufer().getPerson().getPostleitzahl() + " " +
-                    vorgang.getVerkaeufer().getPerson().getOrt() + "</p>\n" +
+                    "                        <p>" + vkAdresse + "</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Adresse</p>\n" +
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>\n" +
-                    "                        <p>" + vorgang.getKauefer().getAnschrift() + ", " +
-                    vorgang.getKauefer().getPostleitzahl() +
-                    " " + vorgang.getKauefer().getOrt() + "</p>\n" +
+                    "                        <p>" + kAdresse + "</p>\n" +
                     "                        <hr />\n" +
                     "                        <p>Adresse</p>\n" +
                     "                    </td>\n" +
@@ -274,7 +291,7 @@ public class KaufvertragEditor extends Ansicht {
                     "                    </td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
-                    "                    <td><input name=\"unfall\" value=\"unfall\" type=\"checkbox\" /></td>\n" +
+                    "                    <td><input name=\"unfall\" value=\"unfall\" type=\"checkbox\" "+unfallCheck+"/></td>\n" +
                     "                    <td>\n" +
                     "                        <p>Unfall nicht bekannt</p>\n" +
                     "                    </td>\n" +
@@ -299,7 +316,7 @@ public class KaufvertragEditor extends Ansicht {
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>MwSt. 19%</td>\n" +
-                    "                    <td>&nbsp;</td>\n" +
+                    "                    <td>"+maerchensteuer+"</td>\n" +
                     "                    <td>&euro;</td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
@@ -309,7 +326,7 @@ public class KaufvertragEditor extends Ansicht {
                     "                    </td>\n" +
                     "                    <td>&nbsp;</td>\n" +
                     "                    <td>Brutto</td>\n" +
-                    "                    <td>&nbsp;</td>\n" +
+                    "                    <td>"+brutto+"</td>\n" +
                     "                    <td>&euro;</td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
@@ -331,22 +348,22 @@ public class KaufvertragEditor extends Ansicht {
                     "                <tbody>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+zeile1+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+zeile2+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+zeile3+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                </tr>\n" +
                     "                <tr>\n" +
                     "                    <td>\n" +
-                    "                        <p>&nbsp;</p>\n" +
+                    "                        <p>"+zeile4+"</p>\n" +
                     "                        <hr /></td>\n" +
                     "                </tr>\n" +
                     "                </tbody>\n" +

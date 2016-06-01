@@ -327,11 +327,12 @@ public class Datenbank {
 
         Statement stmt = conn.createStatement();
         try {
+            int count=stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + kPid + ", fk_t_verkaeufer_pid_ek=" + ekPid + ",fk_t_verkaeufer_pid_vk=" + vkPid + ",fk_t_kfz_fin='" + kfz.getFin() + "',epreis=" + ePreis + ",vpreis=" + vPreis+ ",km=" + km + ",schaeden='" + scheaden + "',vkdatum=" + vkDatum + ",ekdatum='" + ekDatum + "',kennz='" + kenzeichen + "',rabattgrund='" + rabbatGrund + "',tuev=" + tuev + ",sonstvereinb='" + sonstVereinbarung + "',vpreisplan=" + vPreisPlan + " WHERE vid=" + vorgang.getVid() + "");
+            if(count<1)
             stmt.executeUpdate("INSERT  INTO t_vorgang(fk_t_person_pid,fk_t_verkaeufer_pid_ek,fk_t_verkaeufer_pid_vk,fk_t_kfz_fin,epreis,vpreis,km,schaeden,vkdatum,ekdatum,kennz,rabattgrund,tuev,sonstvereinb,vpreisplan) VALUES (" + kPid + "," + ekPid + ", " + vkPid + ",'" + kfz.getFin() + "'," + ePreis + "," + vPreis + "," + km + ",'" + scheaden + "'," + vkDatum + ",'" + ekDatum + "','" + kenzeichen + "','" + rabbatGrund + "'," + tuev + ",'" + sonstVereinbarung + "'," + vPreisPlan + ")");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            stmt.executeUpdate("UPDATE t_vorgang SET fk_t_person_pid=" + kPid + ", fk_t_verkaeufer_pid_ek=" + ekPid + ",fk_t_verkaeufer_pid_vk=" + vkPid + ",fk_t_kfz_fin='" + kfz.getFin() + "',epreis=" + ePreis + ",vpreis=" + vPreis+ ",km=" + km + ",schaeden='" + scheaden + "',vkdatum='" + vkDatum + "',ekdatum='" + ekDatum + "',kennz='" + kenzeichen + "',rabattgrund='" + rabbatGrund + "',tuev=" + tuev + ",sonstvereinb='" + sonstVereinbarung + "',vpreisplan=" + vPreisPlan + " WHERE vid=" + vorgang.getVid() + "");
-        }
+              }
     }
 
     public void insertOrUpdateAusstattungsliste(Sonderausstattung sonderausstattung, KFZ kfz) throws SQLException {
@@ -383,7 +384,7 @@ public class Datenbank {
     //Abfragen
     public List<Vorgang> VorgaengeZuVerkaeufer(Verkaeufer verkaeufer) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk=" + verkaeufer.getPerson().getPid() + "");
+        ResultSet r = stmt.executeQuery("SELECT * FROM t_vorgang WHERE fk_t_verkaeufer_pid_vk=" + verkaeufer.getPerson().getPid() + "and fk_t_person_pid NOTNULL AND vkdatum<now() AND vpreis >0 ");
         List<Vorgang> vorgaenge = new ArrayList<>();
 
 

@@ -20,10 +20,10 @@ public class Uebersicht extends Ansicht {
     //todo: unfertig und doku
     public Uebersicht(OKFZS okfzsInstanz, List<Vorgang> vorgaenge) {
         super(okfzsInstanz);
-
+        this.setLayout(new BorderLayout());
         JTextArea welkom = new JTextArea();
         welkom.setText("Wilkommen " + okfzsInstanz.getBenutzer().getPerson().getAnrede() + " " + okfzsInstanz.getBenutzer().getPerson().getName());
-        this.add(welkom);
+        this.add(welkom,BorderLayout.NORTH);
         String[][] td = new String[vorgaenge.size()][4];
         for (int i = 0; i < vorgaenge.size(); i++) {
             Vorgang v = vorgaenge.get(i);
@@ -48,7 +48,7 @@ public class Uebersicht extends Ansicht {
                 else okfzsInstanz.anzeigen(new KaufvertragEditor(okfzsInstanz,vorgaenge.get(row)));
             }
         });
-        this.add(new JScrollPane(tabelle));
+        this.add(new JScrollPane(tabelle),BorderLayout.CENTER);
 
 
     }

@@ -36,8 +36,11 @@ public class PersonenEditor extends Ansicht {
             selectedPers = p;
             List<Notiz> notizen = okfzsInstanz.getDatenbank().alleNotizen(p);
             List<Erreichbarkeit> erreichbarkeiten = okfzsInstanz.getDatenbank().alleErreichbarkeiten(p);
-            JPanel jfPersonEdit = this;
+
+
             this.setLayout(new BorderLayout());
+            JPanel jpMaster = this;
+            JPanel jfPersonEdit = new JPanel(new GridLayout(1,3));
             JPanel jpWest = new JPanel();
             jpWest.setLayout(new BoxLayout(jpWest, BoxLayout.Y_AXIS));
 
@@ -243,7 +246,7 @@ public class PersonenEditor extends Ansicht {
             JPanel jpErreichbarkeit = new JPanel();
             jpErreichbarkeit.setBorder(new TitledBorder("Erreichbarkeiten"));
             jpErreichbarkeit.setLayout(new BoxLayout(jpErreichbarkeit, BoxLayout.Y_AXIS));
-            JPanel jpErreichbarkeiten = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JPanel jpErreichbarkeiten = new JPanel(new GridLayout(1,1));
             JList<Erreichbarkeit> jlErreichbarkeitsListe = new JList<>(erreichbarkeiten.toArray(new Erreichbarkeit[erreichbarkeiten.size()]));
             jlErreichbarkeitsListe.setPreferredSize(new Dimension(400,600));
             jlErreichbarkeitsListe.setCellRenderer(new ErrListRenderer());
@@ -427,7 +430,7 @@ public class PersonenEditor extends Ansicht {
             jpNotiz.setBorder(new TitledBorder("Notizen"));
             jpNotiz.setLayout(new BoxLayout(jpNotiz, BoxLayout.Y_AXIS));
 
-            JPanel jpNotizListe = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JPanel jpNotizListe = new JPanel(new GridLayout(1,1));
             JList<Notiz> jlNotizListe = new JList<>(notizen.toArray(new Notiz[notizen.size()]));
             jpNotizListe.add(jlNotizListe);
             JPanel jpNotizButton = new JPanel();
@@ -545,7 +548,12 @@ public class PersonenEditor extends Ansicht {
             jfPersonEdit.add(jpWest, BorderLayout.WEST);
             jfPersonEdit.add(jpCenter, BorderLayout.CENTER);
             jfPersonEdit.add(jpEast, BorderLayout.EAST);
-
+            JPanel jpSouth = new JPanel(new GridLayout(1,3));
+            jpSouth.add(jpButton);
+            jpSouth.add(jpErreichbarkeitButton);
+            jpSouth.add(jpNotizButton);
+            jpMaster.add(jpSouth, BorderLayout.SOUTH);
+            jpMaster.add(jfPersonEdit);
 
             //JFrame jf Größe mitgeben
             jfPersonEdit.setSize(1024, 768);
