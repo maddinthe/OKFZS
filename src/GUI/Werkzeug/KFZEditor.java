@@ -1135,7 +1135,6 @@ public class KFZEditor extends Ansicht {
 
 // Actionlistener
 
-        //todo Daten der AL in DB speichern
         ActionListener alFahrzeugSave = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
