@@ -1,4 +1,5 @@
 /**
+ *
  * by mtheilen on 31.05.2016
  * @author mtheilen
  *
@@ -304,9 +305,9 @@ public class Vorgang {
 
     /**
      * Setzt das Verkaufsdatum
-     * @param verkaufsDatum @NotNull das datum an dem das KFZ verkauft wurde/wird
+     * @param verkaufsDatum das datum an dem das KFZ verkauft wurde/wird
      */
-    public void setVerkaufsDatum(Date verkaufsDatum) {
+    public void setVerkaufsDatum(@NotNull Date verkaufsDatum) {
         this.verkaufsDatum = verkaufsDatum;
     }
 

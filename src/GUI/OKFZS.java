@@ -49,7 +49,7 @@ public class OKFZS extends JFrame {
      */
     private CardLayout cards;
     /**
-     * Die Aktuelle ansicht wird benötigt um der nachfolgenden ansicht evtl daten übergeben zu können Personenliste --> Personeneditor z.b. die vorhergehende Selektierte Person
+     * Die Aktuelle ansicht wird benötigt um der nachfolgenden ansicht evtl daten übergeben zu können Personenliste zu Personeneditor z.b. die vorhergehende Selektierte Person
      */
     private Ansicht aktuelleAnsicht;
 
