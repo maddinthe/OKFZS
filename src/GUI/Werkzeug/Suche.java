@@ -14,9 +14,7 @@ import java.util.List;
 
 /**
  * @author  cdreher on 23.05.2016.
- */
-
-/**
+ *
  * Klasse Suche: hier wird die vorhanden Datenbank durchsucht.
  * Anhand einer Dropdown-Auswahl in der GUI kann man auswählen nach welchen Parametern (Hersteller,Modell... bei Kfz
  * bzw. Name,Telefonnummer... bei Personen) man suchen möchte. Das Drop-Down Menü ist angepasst je nachdem ob man

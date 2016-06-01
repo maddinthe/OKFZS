@@ -4,9 +4,7 @@ import java.util.Date;
 
 /**
  * @author cdreher on 23.05.2016.
- */
-
-/**
+ *
  * Datenhaltungsklasse für die Notizen
  */
 public class Notiz {
