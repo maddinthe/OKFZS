@@ -46,7 +46,7 @@ public class Anmeldung extends Ansicht {
                             pwpanel.add(pwlabel);
                             pwpanel.add(pass);
                             String[] optionen = new String[]{"OK"};
-                            JOptionPane.showOptionDialog(getOKFZSInstanz(), pwpanel, "The title",
+                            JOptionPane.showOptionDialog(getOKFZSInstanz(), pwpanel, "PW zurücksetzen",
                                     JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
                                     null, optionen, optionen[0]);
                             String passwort=String.copyValueOf(pass.getPassword());

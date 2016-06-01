@@ -20,6 +20,7 @@ import java.util.*;
 
 /**
  * Created by mtheilen on 23.05.2016.
+ * @author mtheilen
  */
 //todo:Doku
 public class OKFZS extends JFrame {
@@ -62,7 +63,7 @@ public class OKFZS extends JFrame {
             panel.add(server);
             panel.add(port);
             String[] options = new String[]{"OK", "Abbrechen"};
-            int option = JOptionPane.showOptionDialog(null, panel, "The title",
+            int option = JOptionPane.showOptionDialog(null, panel, "Config Anlegen",
                     JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, options, options[1]);
             if(option == 0) {

@@ -1,12 +1,12 @@
+/**
+ * by mtheilen on 31.05.2016
+ * @author mtheilen
+ *
+ */
 package Datenhaltung;
 import com.sun.istack.internal.NotNull;
 
 import java.util.Date;
-
-/**
- * by mtheilen on 31.05.2016
- */
-
 /**
  * Datenhaltungsklasse für die Vorgänge
  */
