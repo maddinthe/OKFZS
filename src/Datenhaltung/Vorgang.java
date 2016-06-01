@@ -271,7 +271,7 @@ public class Vorgang {
      */
     public double getGewinn(Verkaeufer verkaeufer) {
         if (verkaeufer.equals(this.einkauefer) || verkaeufer.equals(this.verkaeufer)){
-            if(this.verkaeufer.equals(this.einkauefer))return getGewinn();
+            if(this.einkauefer.equals(this.verkaeufer))return getGewinn();
             return getGewinn() / 2;
         }
         return 0;
