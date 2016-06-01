@@ -1128,8 +1128,8 @@ public class Datenbank {
         return sonderausstattungsListe;
     }
 
-    /**
-     *
+    /**Diese Methode liefert ein Boolean ob es einem Admin gibt.
+     *Dazu wird aus dem ResultSet abgefragt ob Eintrag vorhanden.
      * @return true oder false
      */
     public boolean adminDa() {
@@ -1145,10 +1145,16 @@ public class Datenbank {
         return false;
     }
 
+    /**Diese Methode legt einen neuen Datensatz anhand des Fremdschlüssels
+     *  des übergebenen Verkaeufers an und gibt diesen wieder zurück
+     *
+     * @param verkaeufer ein Verkaeufer
+     * @return ein Verkaeufer
+     */
     public Verkaeufer insertVerkaeufer(Verkaeufer verkaeufer) {
         try {
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");
+            stmt.executeUpdate("INSERT  INTO t_verkaeufer(fk_t_person_pid,anmeldename,passwort) VALUES (" + verkaeufer.getPerson().getPid() + ",'" + verkaeufer.getAnmeldeName() + "', '" + verkaeufer.getPasswortHash() + "')");//Anlegen eines neuen Datensatzes
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
