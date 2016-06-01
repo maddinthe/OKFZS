@@ -67,50 +67,98 @@ public class Erreichbarkeit {
         this.details = details;
     }
 
+    /**Liefert die PID
+     *
+     * @return Positiver Long der Erreichbarkeits-ID oder 0 wenn Erreichbarkeit nicht aus der Datenbank kommt
+     */
     public long getEid() {
         return eid;
     }
 
+    /** Liefert die Person zu den Erreichbarkeiten
+     *
+     * @return eine Person
+     */
     public Person getPerson() {
         return person;
     }
 
+    /**Setzt die Person zu den Erreichbarkeiten
+     *
+     * @param person ist eine neue Person
+     */
     public void setPerson(Person person) {
         this.person = person;
     }
 
+    /**Liefert eine Telefonnummer
+     *
+     * @return eine Telefonnummer oder Null falls nicht eingetragen
+     */
     public String getTelefonNummer() {
         return telefonNummer;
     }
 
+    /**Setzt eine Telefonnummer
+     *
+     * @param telefonNummer ist eine neue Telefonnummer
+     */
     public void setTelefonNummer(String telefonNummer) {
         this.telefonNummer = telefonNummer;
     }
 
+    /**Liefert eine Handynummer
+     *
+     * @return eine Handynummer oder Null falls nicht eingetragen
+     */
     public String getHandyNummer() {
         return handyNummer;
     }
 
+    /**Setzt eine Handynummer
+     *
+     * @param handyNummer ist eine neue Handynummer
+     */
     public void setHandyNummer(String handyNummer) {
         this.handyNummer = handyNummer;
     }
 
+    /**Liefert eine E-Mail-Addresse
+     *
+     * @return eine E-Mail-Addresse oder Null falls nicht eingetragen
+     */
     public String getEmail() {
         return email;
     }
 
+    /**Setzt eine E-Mail-Addresse
+     *
+     * @param email ist eine neue E-Mail-Addresse
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**Liefert Details zu den Erreichbarkeiten
+     *
+     * @return Details oder Null falls nicht eingetragen
+     */
     public String getDetails() {
         return details;
     }
 
+    /**Setzt Details zu den Erreichbarkeiten
+     *
+     * @param details sind neue Details zu den Erreichbarkeiten
+     */
     public void setDetails(String details) {
         this.details = details;
     }
 
+    /**Gibt die Erreichbarkeit als String zurück
+     *
+     * @return Details,Telefon,Mobil und E-Mail der Erreichbarkeit als String
+     */
     @Override
     public String toString() {
         return "Details: "+details+" \n"+

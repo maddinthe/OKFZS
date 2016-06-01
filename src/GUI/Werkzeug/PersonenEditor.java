@@ -1,14 +1,11 @@
 package GUI.Werkzeug;
 
-import Datenbank.Datenbank;
 import Datenhaltung.Erreichbarkeit;
 import Datenhaltung.Notiz;
 import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import GUI.Ansicht;
 import GUI.OKFZS;
-import GUI.PersonenListe;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
