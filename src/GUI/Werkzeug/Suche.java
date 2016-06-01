@@ -13,17 +13,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by cdreher on 23.05.2016.
+ * @author  cdreher on 23.05.2016.
+ */
+
+/**
+ * Klasse Suche: hier wird die vorhanden Datenbank durchsucht.
+ * Anhand einer Dropdown-Auswahl in der GUI kann man auswählen nach welchen Parametern (Hersteller,Modell... bei Kfz
+ * bzw. Name,Telefonnummer... bei Personen) man suchen möchte. Das Drop-Down Menü ist angepasst je nachdem ob man
+ * nach KFZ oder Personen suchen möchte. Der eigentliche Suchbegriff kann in der GUI eingegeben werden und die Suche
+ * kann nun gestartet werden. Werden Datensätze zu der spezifischen Suche gefunden, dann werden diese in der GUI angezeigt.
+ * Sollte die Suche keine Ergebnisse liefern öffnet sich in der GUI je nachdem ob man nach KFZ oder Personen gesucht hat,
+ * der KFZ-Editor bzw. Personen-Editor
+ *
  */
 public class Suche extends Ansicht {
-
+    /**
+     * Eine Liste mit KFZs
+     */
     private List<KFZ> kfzs = new ArrayList<>();
+    /**
+     * Eine Liste mit Persoen
+     */
     private List<Person> personen = new ArrayList<>();
 
 
-
-
-
+    /**Der öffentliche Suche-Konstruktor über den die Suche gestartet werden kann
+     *
+     * @param okfzsinstanz akutelle Instanz der OKFZ
+     * @param kfzOderPerson Boolean-Flag ob nach KFZ oder Person gesucht werden soll
+     */
     public Suche(OKFZS okfzsinstanz, boolean kfzOderPerson) {
         super(okfzsinstanz);
 
@@ -85,14 +103,28 @@ public class Suche extends Ansicht {
 
 
     }
+
+    /**Gibt die Liste mit KFZs zurück die den Suchbegriff entsprechen
+     *
+     * @return Liste mit KFZs
+     */
     public List<KFZ> getKfzs() {
         return kfzs;
     }
 
+    /**Gibt die Liste mit Personen zurück die den Suchbegriff entsprechen
+     *
+     * @return Liste mit Personen
+     */
     public List<Person> getPersonen() {
         return personen;
     }
 
+    /**privater Suche-Konstruktor fuer die Suche nach KFZs
+     *
+     * @param spalte ist der Parameter der festlegt nach welchem Attribut der KFZs in der Liste gesucht werden soll
+     * @param begriff ist der eigentliche Suchbegriff
+     */
     private void sucheKFZ(String spalte, String begriff) {
 
         try {
@@ -162,6 +194,11 @@ public class Suche extends Ansicht {
 
     }
 
+    /**privater Suche-Konstruktor fuer die Suche nach Personen
+     *
+     * @param spalte ist der Parameter der festlegt nach welchem Attribut der Personen in der Liste gesucht werden soll
+     * @param begriff ist der eigentliche Suchbegriff
+     */
     private void suchePerson(String spalte, String begriff) {
 
         try {
