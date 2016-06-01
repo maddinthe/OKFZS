@@ -1,17 +1,47 @@
 package Datenhaltung;
 
 /**
- * Created by cdreher on 23.05.2016.
+ * cdreher on 23.05.2016.
  */
-//todo: stub
+
+/**
+ * Datenhaltungsklasse für die Erreichbarkeiten
+ */
 public class Erreichbarkeit {
+    /**
+     * Erreichbarkeits-ID
+     */
     private long eid;
+    /**
+     * eine Person aus der Klasse Person
+     */
     private Person person;
+    /**
+     * eine Telefonnummer
+     */
     private String telefonNummer;
+    /**
+     * eine Handynummer
+     */
     private String handyNummer;
+    /**
+     * eine E-Mail-Adresse
+     */
     private String email;
+    /**
+     * Details zu den Erreichbarkeiten
+     */
     private String details;
 
+    /**
+     *
+     * @param eid
+     * @param person
+     * @param telefonNummer
+     * @param handyNummer
+     * @param email
+     * @param details
+     */
     public Erreichbarkeit(long eid, Person person, String telefonNummer, String handyNummer, String email, String details) {
         this.eid = eid;
         this.person = person;

@@ -169,6 +169,7 @@ public class PersonenEditor extends Ansicht {
 
 
             JPanel jpButton = new JPanel();
+            JButton jbPasswort = new JButton("Passwort zurücksetzen");
             JButton jbSpeichern = new JButton("Speichern");
             JButton jbAbbrechen = new JButton("Abbrechen");
             jpButton.add(jbSpeichern);
@@ -223,13 +224,21 @@ public class PersonenEditor extends Ansicht {
                 }
             };
             jbSpeichern.addActionListener(alSpeichern);
-
+            ActionListener alPasswort = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                      jtPasswort.setText("password");
+                }
+            };
+            jbPasswort.addActionListener(alPasswort);
 
             jpSonstigeAngaben.add(jpUst);
 
             if (okfzsInstanz.getBenutzer().istAdmin()) {
                 jpSonstigeAngaben.add(jpAnmeldename);
                 jpSonstigeAngaben.add(jpPasswort);
+                jpSonstigeAngaben.add(jbPasswort);
+                jpSonstigeAngaben.add(jpButton);
                 jpSonstigeAngaben.add(jpAktiv);
                 jpSonstigeAngaben.add(jpAdmin);
             }
