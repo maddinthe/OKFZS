@@ -43,7 +43,7 @@ public class Suche extends Ansicht {
                     if (!jtSuche.getText().equals("")){
                         sucheKFZ(jcKfz.getSelectedItem().toString(), jtSuche.getText());
                         okfzsinstanz.anzeigen("autoAnz");
-                    }else JOptionPane.showMessageDialog(null, "Keine Eingabe");
+                    }else JOptionPane.showMessageDialog(null, "Keine Eingabe","Eingabefehler",JOptionPane.ERROR_MESSAGE);
                 }
                 else{
                 if (!jtSuche.getText().equals("")){
@@ -51,7 +51,7 @@ public class Suche extends Ansicht {
                     okfzsinstanz.anzeigen("personAnz");
                 }
 
-                else JOptionPane.showMessageDialog(null,"Keine Eingabe");
+                else JOptionPane.showMessageDialog(null,"Keine Eingabe","Eingabefehler", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
