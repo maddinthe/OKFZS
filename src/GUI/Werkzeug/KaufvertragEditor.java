@@ -7,7 +7,9 @@ import GUI.Ansicht;
 import GUI.OKFZS;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -28,7 +30,7 @@ public class KaufvertragEditor extends Ansicht {
     /**
      * datumsformatierer für unser verwendetes Datumsformat
      */
-    private SimpleDateFormat dateForm = new SimpleDateFormat("yyy-MM-dd");
+    private SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
 
     //todo:formatieren der anzeige
 
@@ -49,43 +51,30 @@ public class KaufvertragEditor extends Ansicht {
             kaeufer.setSelectedItem((vorgang.getKauefer() != null) ? vorgang.getKauefer() : null);
             verkaeufer.setSelectedItem((vorgang.getVerkaeufer() != null) ? vorgang.getVerkaeufer() : okfzsInstanz.getBenutzer());
 
-            //erstellen des Layouts und einfüllen der daten aus  Vorgang/Datenbank
-            this.add(new JLabel("Käufer "));
-            this.add(kaeufer);
-            this.add(new JLabel("Verkäufer"));
-            this.add(verkaeufer);
-
-            this.add(new JLabel("Verkaufspreis (€)"));
             JTextField verkaufspreis;
             if (vorgang.getvPreis() <= 0) {
                 verkaufspreis = new JTextField(Double.toString(vorgang.getvPreisPlan()), 5);
             } else
                 verkaufspreis = new JTextField(Double.toString(vorgang.getvPreis()), 5);
             this.add(verkaufspreis);
-            this.add(new JLabel("Verkaufsdatum"));
             String vkDatumString = "";
             if (vorgang.getVerkaufsDatum() != null) {
                 vkDatumString = dateForm.format(vorgang.getVerkaufsDatum());
             }
             JTextField vkDatum = new JTextField(vkDatumString, 10);
             this.add(vkDatum);
-            this.add(new JLabel("Rabattgrund"));
-            JTextArea rabatt = new JTextArea(vorgang.getRabattGrund(), 5, 20);
+            JTextArea rabatt = new JTextArea(vorgang.getRabattGrund(), 10, 20);
             this.add(rabatt);
-            this.add(new JLabel("Sonstige vereinbarungen"));
-            JTextArea vereinbar = new JTextArea(vorgang.getSonstvereinbarungen(), 5, 20);
+            JTextArea vereinbar = new JTextArea(vorgang.getSonstvereinbarungen(), 10, 20);
             this.add(vereinbar);
-            this.add(new JLabel("Tuev"));
             Date tuevDate = vorgang.getTuev();
             if (tuevDate == null) tuevDate = new Date();
             JTextField tuev = new JTextField(dateForm.format(tuevDate));
             this.add(tuev);
-            this.add(new JLabel("Kennzeichen"));
             JTextField kennz = new JTextField(vorgang.getKennzeichen(), 11);
             this.add(kennz);
             JTextField kfz = new JTextField(vorgang.getKfz().toString());
             this.add(kfz);
-            this.add(new JLabel("Entwurf"));
             JCheckBox entwurf=new JCheckBox();
             entwurf.setSelected(vorgang.getVerkaeufer()==null||vorgang.getKauefer()==null||vorgang.getVerkaufsDatum().after(new Date())||vorgang.getvPreis()<=0);
             this.add(entwurf);
@@ -134,9 +123,108 @@ public class KaufvertragEditor extends Ansicht {
             this.add(vorgDruck);
             vorgDruck.addActionListener(speichernListener);
 
+            //erstellen des Layouts und einfüllen der daten aus  Vorgang/Datenbank
+            JPanel jpMaster = this;
+            JPanel jpKvEdit = new JPanel(new GridLayout(2,3));
+
+            JPanel jpKvAngaben = new JPanel();
+            jpKvAngaben.setBorder(new TitledBorder("Personendaten für den Verkauf"));
+            jpKvAngaben.setLayout(new BoxLayout(jpKvAngaben, BoxLayout.Y_AXIS));
+
+            JPanel jpKaeufer = new JPanel(new GridLayout(2,1));
+            JLabel jlKaeufer = new JLabel("Käufer");
+            jpKaeufer.add(jlKaeufer);
+            jpKaeufer.add(kaeufer);
+
+            JPanel jpVerKaeufer = new JPanel(new GridLayout(2,1));
+            JLabel jlVerKaeufer = new JLabel("Verkäufer");
+            jpVerKaeufer.add(jlVerKaeufer);
+            jpVerKaeufer.add(verkaeufer);
+
+            JPanel jpPreisAngaben = new JPanel();
+            jpPreisAngaben.setBorder(new TitledBorder("Verkaufsdaten"));
+            jpPreisAngaben.setLayout(new BoxLayout(jpPreisAngaben, BoxLayout.Y_AXIS));
+
+            JPanel jpVerkaufspreis = new JPanel(new GridLayout(2,1));
+            JLabel jlVerkaufspreis = new JLabel("Verkaufspreis");
+            jpVerkaufspreis.add(jlVerkaufspreis);
+            jpVerkaufspreis.add(verkaufspreis);
+
+            JPanel jpVerkaufsdatum = new JPanel(new GridLayout(2,1));
+            JLabel jlVerkaufsdatum = new JLabel("Verkaufsdatum");
+            jpVerkaufsdatum.add(jlVerkaufsdatum);
+            jpVerkaufsdatum.add(vkDatum);
+
+            JPanel jpErgKFZAngaben = new JPanel();
+            jpErgKFZAngaben.setBorder(new TitledBorder("Ergänzende KFZ Daten"));
+            jpErgKFZAngaben.setLayout(new BoxLayout(jpErgKFZAngaben, BoxLayout.Y_AXIS));
+
+            JPanel jpTuevBis = new JPanel(new GridLayout(2,1));
+            JLabel jlTuevBis = new JLabel("TÜV bis:");
+            jpTuevBis.add(jlTuevBis);
+            jpTuevBis.add(tuev);
+
+            JPanel jpAktKennzeichen = new JPanel(new GridLayout(2,1));
+            JLabel jlAktKennzeichen = new JLabel("Aktuelles Kennzeichen");
+            jpAktKennzeichen.add(jlAktKennzeichen);
+            jpAktKennzeichen.add(kennz);
+
+            JPanel jpRabattGrundTitel = new JPanel();
+            jpRabattGrundTitel.setBorder(new TitledBorder("Gründe für einen Rabatt"));
+            jpRabattGrundTitel.setLayout(new BoxLayout(jpRabattGrundTitel, BoxLayout.Y_AXIS));
+
+            JPanel jpRabattGrund = new JPanel(new GridLayout(1,1));
+            jpRabattGrund.add(rabatt);
+
+            JPanel jpSonderVereinbarungTitel = new JPanel();
+            jpSonderVereinbarungTitel.setBorder(new TitledBorder("Besondere Vereinbarungen"));
+            jpSonderVereinbarungTitel.setLayout(new BoxLayout(jpSonderVereinbarungTitel, BoxLayout.Y_AXIS));
+
+            JPanel jpSonderVereinbarung = new JPanel(new GridLayout(1,1));
+            jpSonderVereinbarung.add(vereinbar);
+
+            JPanel jpAktionTitel = new JPanel();
+            jpAktionTitel.setBorder(new TitledBorder("Aktion ausführen"));
+            jpAktionTitel.setLayout(new BoxLayout(jpAktionTitel, BoxLayout.Y_AXIS));
+
+            JPanel jpAktion = new JPanel(new GridLayout(3,1));
+            JLabel jlEntwurf = new JLabel("Als Entwurf drucken");
+            jpAktion.add(speichern);
+            jpAktion.add(vorgDruck);
+            jpAktion.add(entwurf);
+            jpAktion.add(jlEntwurf);
+
+
+            jpKvAngaben.add(jpKaeufer);
+            jpKvAngaben.add(jpVerKaeufer);
+
+            jpPreisAngaben.add(jpVerkaufspreis);
+            jpPreisAngaben.add(jpVerkaufsdatum);
+
+            jpErgKFZAngaben.add(jpTuevBis);
+            jpErgKFZAngaben.add(jpAktKennzeichen);
+
+            jpRabattGrundTitel.add(jpRabattGrund);
+            jpSonderVereinbarungTitel.add(jpSonderVereinbarung);
+
+            jpAktionTitel.add(jpAktion);
+
+            jpKvEdit.add(jpKvAngaben);
+            jpKvEdit.add(jpPreisAngaben);
+            jpKvEdit.add(jpErgKFZAngaben);
+            jpKvEdit.add(jpRabattGrundTitel);
+            jpKvEdit.add(jpSonderVereinbarungTitel);
+            jpKvEdit.add(jpAktionTitel);
+
+            jpMaster.add(jpKvEdit, BorderLayout.WEST);
+
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Es ist ein fehler aufgetreten:",JOptionPane.ERROR_MESSAGE);
         }
+
+
+
 
     }
 

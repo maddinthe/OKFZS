@@ -27,8 +27,8 @@ public class AktionEditor extends Ansicht {
     /**
      * Dieser Aktionenkonstruktor stellt die Möglichkeit zur Verfügung für eine übergebene Instanz nebst KFZ eine Aktion
      * zu erstellen
-     * @param okfzsInstanz
-     * @param kfz
+     * @param okfzsInstanz - aktuelle Instanz in der die Ansicht KFZEditor angezeigt wird
+     * @param kfz - aktuelles KFZ, welches beispielsweise aus der Suche übergeben wurde
      */
     public AktionEditor(OKFZS okfzsInstanz, KFZ kfz) {
         super(okfzsInstanz);
@@ -151,8 +151,8 @@ public class AktionEditor extends Ansicht {
 
     /**
      * Aktioneneditor der die Möglichkeit bietet eine bestehende Aktion zu einem Fahrzeug zu bearbeiten
-     * @param aktion
-     * @param okfzsInstanz
+     * @param aktion - Aktion die übergeben wird um diese zu bearbeiten
+     * @param okfzsInstanz - aktuelle Instanz in der die Ansicht KFZEditor angezeigt wird
      */
 
     public AktionEditor(Aktion aktion, OKFZS okfzsInstanz) {

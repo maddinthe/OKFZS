@@ -215,12 +215,6 @@ public class OKFZS extends JFrame {
                 cards.show(anzeige, "uebersicht");
                 break;
             }
-            case "impexp": {
-                aktuelleAnsicht = new ImportExport(this);
-                anzeige.add(aktuelleAnsicht, "impexp");
-                cards.show(anzeige, "impexp");
-                break;
-            }
             case "autoAnz": {
                 java.util.List<Vorgang> vorgList = null;
                 java.util.List<KFZ> kfzList = null;
@@ -335,12 +329,7 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "statstik": {
-                java.util.List<Vorgang> vorgangList = null;
-                try {
-                    vorgangList = datenbank.VorgaengeZuVerkaeufer(benutzer);
-                } catch (SQLException e) {
-                }
-                aktuelleAnsicht = new Statistik(this, vorgangList);
+                aktuelleAnsicht = new Statistik(this);
                 anzeige.add(aktuelleAnsicht, "statstik");
                 cards.show(anzeige, "statstik");
                 break;
@@ -360,11 +349,18 @@ public class OKFZS extends JFrame {
     /**
      * Lässt eine Vorgegebene ansicht anzeigen und Setzt die OFZS eigenen variablen entsprechen
      *
-     * @param a Anzuzeigende ansicht muss instanz von PersonenEditor, KFZEditor oder Kaufvertrageditor sein
+     * @param a Anzuzeigende ansicht muss instanz von Statistik, PersonenEditor, KFZEditor oder Kaufvertrageditor sein
      */
     public void anzeigen(Ansicht a) {
         Menue menue = (Menue) getJMenuBar();
         switch (a.getClass().getSimpleName()) {
+            case "Statistik":{
+                aktuelleAnsicht = a;
+                menue.menueUmschalten("statstik");
+                anzeige.add(aktuelleAnsicht, "statstik");
+                cards.show(anzeige, "statstik");
+                break;
+            }
             case "PersonenEditor": {
                 aktuelleAnsicht = a;
                 menue.menueUmschalten("personAend");
