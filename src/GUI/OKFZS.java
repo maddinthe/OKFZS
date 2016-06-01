@@ -14,15 +14,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
 
 /**
  * Created by mtheilen on 23.05.2016.
+ * @author mtheilen
  */
+//todo:Doku
 public class OKFZS extends JFrame {
     private Datenbank datenbank;
     private Map<String, Ansicht> ansichten;
@@ -54,7 +54,36 @@ public class OKFZS extends JFrame {
                 String[] temp = read.split(":");
                 config.put(temp[0], temp[1]);
             }
-        } catch (IOException e) {/**nichts tun falls nicht da**/}
+        } catch (IOException e) {
+            JPanel panel = new JPanel();
+            JLabel label = new JLabel("Bitte DB-Server und Port angeben:");
+            JTextField server=new JTextField("localhost",20);
+            JTextField port=new JTextField("5432",5);
+            panel.add(label);
+            panel.add(server);
+            panel.add(port);
+            String[] options = new String[]{"OK", "Abbrechen"};
+            int option = JOptionPane.showOptionDialog(null, panel, "Config Anlegen",
+                    JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, options, options[1]);
+            if(option == 0) {
+                try(BufferedWriter bw=new BufferedWriter(new FileWriter(new File("OKFZS.cfg")))) {
+                    bw.append("dbhost:"+server.getText());
+                    bw.newLine();
+                    bw.append("dbport:"+port.getText());
+                    config.put("dbhost",server.getText());
+                    config.put("dbport",port.getText());
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            if(option==1){
+
+            }
+
+            }
+
+        }
         //einlesen der Config beendet
 
         //holen der DB-Instanz

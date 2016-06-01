@@ -1,14 +1,11 @@
 package GUI.Werkzeug;
 
-import Datenbank.Datenbank;
 import Datenhaltung.Erreichbarkeit;
 import Datenhaltung.Notiz;
 import Datenhaltung.Person;
 import Datenhaltung.Verkaeufer;
 import GUI.Ansicht;
 import GUI.OKFZS;
-import GUI.PersonenListe;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -169,6 +166,7 @@ public class PersonenEditor extends Ansicht {
 
 
             JPanel jpButton = new JPanel();
+            JButton jbPasswort = new JButton("Passwort zurücksetzen");
             JButton jbSpeichern = new JButton("Speichern");
             JButton jbAbbrechen = new JButton("Abbrechen");
             jpButton.add(jbSpeichern);
@@ -223,13 +221,21 @@ public class PersonenEditor extends Ansicht {
                 }
             };
             jbSpeichern.addActionListener(alSpeichern);
-
+            ActionListener alPasswort = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                      jtPasswort.setText("password");
+                }
+            };
+            jbPasswort.addActionListener(alPasswort);
 
             jpSonstigeAngaben.add(jpUst);
 
             if (okfzsInstanz.getBenutzer().istAdmin()) {
                 jpSonstigeAngaben.add(jpAnmeldename);
                 jpSonstigeAngaben.add(jpPasswort);
+                jpSonstigeAngaben.add(jbPasswort);
+                jpSonstigeAngaben.add(jpButton);
                 jpSonstigeAngaben.add(jpAktiv);
                 jpSonstigeAngaben.add(jpAdmin);
             }
@@ -248,7 +254,7 @@ public class PersonenEditor extends Ansicht {
             jpErreichbarkeit.setLayout(new BoxLayout(jpErreichbarkeit, BoxLayout.Y_AXIS));
             JPanel jpErreichbarkeiten = new JPanel(new GridLayout(1,1));
             JList<Erreichbarkeit> jlErreichbarkeitsListe = new JList<>(erreichbarkeiten.toArray(new Erreichbarkeit[erreichbarkeiten.size()]));
-            jlErreichbarkeitsListe.setPreferredSize(new Dimension(400,600));
+             jlErreichbarkeitsListe.setPreferredSize(new Dimension(500,300));
             jlErreichbarkeitsListe.setCellRenderer(new ErrListRenderer());
             JScrollPane jsErreichbarkeitsListe = new JScrollPane(jlErreichbarkeitsListe);
             jpErreichbarkeiten.add(jsErreichbarkeitsListe);
