@@ -39,6 +39,7 @@ public class KaufvertragEditor extends Ansicht {
             JComboBox<Verkaeufer> verkaeufer = new JComboBox<>(verkaeuferList.toArray(new Verkaeufer[verkaeuferList.size()]));
             kaeufer.setSelectedItem((vorgang.getKauefer() != null) ? vorgang.getKauefer() : null);
             verkaeufer.setSelectedItem((vorgang.getVerkaeufer() != null) ? vorgang.getVerkaeufer() : okfzsInstanz.getBenutzer());
+
             this.add(new JLabel("Käufer "));
             this.add(kaeufer);
             this.add(new JLabel("Verkäufer"));

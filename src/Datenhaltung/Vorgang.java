@@ -1,32 +1,30 @@
 package Datenhaltung;
-
 import java.util.Date;
 
 /**
- * Created by tkertz on 23.05.2016.
- * Finished by mtheilen on 31.05.2016
+ * by mtheilen on 31.05.2016
  */
 
 /**
  * Datenhaltungsklasse für die Vorgänge
  */
 public class Vorgang {
-    private long vid;
-    private Person kauefer;
-    private Verkaeufer verkaeufer;
-    private Verkaeufer einkauefer;
-    private KFZ kfz;
-    private double vPreis;
-    private double ePreis;
-    private double vPreisPlan;
-    private Date verkaufsDatum;
-    private String rabattGrund;
-    private String sonstvereinbarungen;
-    private Date einkaufsDatum;
-    private String schaeden;
-    private Date tuev;
-    private String kennzeichen;
-    private int kilometer;
+    private long vid;  //VorgangsID
+    private Person kauefer; //Der Käufer in diesem Vorgang
+    private Verkaeufer verkaeufer; //Der Verkäufer in diesem Vorgang
+    private Verkaeufer einkauefer; //Der Einkäufer in diesem Vorgang
+    private KFZ kfz; //Das KFZ um das es in diesem Vorgang geht, nie null
+    private double vPreis; //der Tatsächliche Verkaufspreis
+    private double ePreis; //Der Einkaufspreis nie null
+    private double vPreisPlan; //der Geplante Einkaufspreis
+    private Date verkaufsDatum; //das tatsächliche Verkuafsdatum
+    private String rabattGrund; //der Grund für einen Evtl Rabatt
+    private String sonstvereinbarungen; //Sondervereinbarungen zum Vertrag
+    private Date einkaufsDatum;  //Das Einkaufsdatum nie null
+    private String schaeden; // evtl Schäden
+    private Date tuev; //Das datum an dem die HU abläuft
+    private String kennzeichen; //das aktuelle kennzeichen des KFZ beim verkauf
+    private int kilometer; //der Kilometerstand des KFZ beim Verkauf
 
     /**
      * Minimalconstruktor für den Vorgang hier ermittelt sich der geplante Verkaufspreis automatisch genause wie das Einkaufsdatum welches auf die aktuelle zeit gesetzt wird
@@ -80,62 +78,121 @@ public class Vorgang {
         this.kilometer=kilometer;
     }
 
+    /**
+     * Liefert die VorgangsID
+     * @return Positiver long der VorgID oder 0 wenn vorgang nicht aus DB kommt
+     */
     public long getVid() {
         return vid;
     }
 
+    /**
+     * Liefert den Käufer
+     * @return Person des käufers oder NULL wenn kein Käufer eingetragen
+     */
     public Person getKauefer() {
         return kauefer;
     }
 
+    /**
+     * Liefert den Verkäufer
+     * @return Verkäufer des Verkäufers oder NULL wenn kein Veräufer eingetragen
+     */
     public Verkaeufer getVerkaeufer() {
         return verkaeufer;
     }
 
+    /**
+     * Liefert den Einkäufer
+     * @return Verkäufer des Einkäufers oder NULL wenn kein Einkäufer eingetragen
+     */
     public Verkaeufer getEinkaeufer() {
         return einkauefer;
     }
 
+    /**
+     * Liefert das zu Verkaufende KFZ
+     * @return KFZ das zu Verkaufen ist
+     */
     public KFZ getKfz() {
         return kfz;
     }
 
+    /**
+     * Liefert den Tatsächlichen verkaufspreis
+     * @return den Tatsächlichen Verkaufspreis oder 0.0 wenn keiner eingetragen ist
+     */
     public double getvPreis() {
         return vPreis;
     }
 
+    /**
+     * Liefert den Einkaufspreis
+     * @return Der Einkaufspreis
+     */
     public double getePreis() {
         return ePreis;
     }
 
+    /**
+     *  Liefert den geplanten Verkaufspreis per default ist das 1,2*ePreis
+     * @return den geplanten Verkaufspreis
+     */
     public double getvPreisPlan() {
         return vPreisPlan;
     }
 
+    /**
+     * Liefert das Tatsächliche Verkaufsdatum
+     * @return das verkaufsdatum oder NULL falls nicht eingetragen
+     */
     public Date getVerkaufsDatum() {
         return verkaufsDatum;
     }
 
+    /**
+     * Liefert den Grund für einen evtl Rabatt
+     * @return der Grund für einen Rabatt oder NULL/Leerer String falls keiner eingetragen
+     */
     public String getRabattGrund() {
         return rabattGrund;
     }
-
+    /**
+     * Liefert Sonstige vereinbarungen zum Vertrag
+     * @return iefert Sonstige vereinbarungen zum Vertrag oder NULL/Leerer String falls keine eingetragen
+     */
     public String getSonstvereinbarungen() {
         return sonstvereinbarungen;
     }
 
+    /**
+     * Liefert das Einkaufsdatum
+     * @return Einkaufsdatum
+     */
     public Date getEinkaufsDatum() {
         return einkaufsDatum;
     }
 
+    /**
+     * Liefert evtl Schäden am KFZ
+     * @return liefert evtl Schäden am KFZ oder NULL/Leerer String falls keine eingetragen
+     */
     public String getSchaeden() {
         return schaeden;
     }
 
+    /**
+     * Liefert das Datum an dem die HU abläuft
+     * @return DATE das datum an dem die HU abläuft oder NULL wenn keins eingetragen
+     */
     public Date getTuev() {
         return tuev;
     }
 
+    /**
+     * Liefert das Kennzeichen
+     * @return liefert das Kennzeichen oder NULL/Leerer String falls keine eingetragen
+     */
     public String getKennzeichen() {
         return kennzeichen;
     }
@@ -148,6 +205,10 @@ public class Vorgang {
         return vPreis - ePreis;
     }
 
+    /**
+     * Liefert den Aktuellen KM Stand
+     * @return liefert den Aktuellen KM stand oder 0 wenn keiner eingetragen
+     */
     public int getKilometer(){
         return kilometer;
     }
@@ -166,70 +227,83 @@ public class Vorgang {
         return 0;
     }
 
-    public void setVid(long vid) {
-        this.vid = vid;
-    }
-
+    /**
+     * Setzt den Käufer des KFZ
+     * @param kauefer PERSON die das KFZ kaufen Soll
+     */
     public void setKauefer(Person kauefer) {
         this.kauefer = kauefer;
     }
 
+    /**
+     * Setzt den Verkäufer
+     * @param verkaeufer VERKÄUFER der das KFZ verkauft
+     */
     public void setVerkaeufer(Verkaeufer verkaeufer) {
         this.verkaeufer = verkaeufer;
     }
 
-    public void setEinkauefer(Verkaeufer einkauefer) {
-        this.einkauefer = einkauefer;
-    }
 
-    public void setKfz(KFZ kfz) {
-        this.kfz = kfz;
-    }
-
+    /**
+     * Setzt den Tatsächelichen Verkaufspreis
+     * @param vPreis DOUBLE des Verkuafspreises in EURO
+     */
     public void setvPreis(double vPreis) {
         this.vPreis = vPreis;
     }
 
-    public void setePreis(double ePreis) {
-        this.ePreis = ePreis;
-    }
-
-    public void setvPreisPlan(double vPreisPlan) {
-        this.vPreisPlan = vPreisPlan;
-    }
-
+    /**
+     * Setzt das Verkaufsdatum
+     * @param verkaufsDatum @NotNull das datum an dem das KFZ verkauft wurde/wird
+     */
     public void setVerkaufsDatum(Date verkaufsDatum) {
         this.verkaufsDatum = verkaufsDatum;
     }
 
+    /**
+     * Der Rabattgrund
+     * @param rabattGrund STRING der Grund für einen Evtl Rabatt und ersetzt den alten
+     */
     public void setRabattGrund(String rabattGrund) {
         this.rabattGrund = rabattGrund;
     }
 
+    /**
+     * Sonstige Vereinbarungen
+     * @param sonstvereinbarungen STRING setzt evtl Sonstige vereinbarungen und ersetzt alte
+     */
     public void setSonstvereinbarungen(String sonstvereinbarungen) {
         this.sonstvereinbarungen = sonstvereinbarungen;
     }
 
-    public void setEinkaufsDatum(Date einkaufsDatum) {
-        this.einkaufsDatum = einkaufsDatum;
-    }
-
-    public void setSchaeden(String schaeden) {
-        this.schaeden = schaeden;
-    }
-
+    /**
+     * Das datum an dem Die HU des KFZ abläuft
+     * @param tuev das DATE an dem die HU des KFZ ablaufen wird/Abgelaufen ist
+     */
     public void setTuev(Date tuev) {
         this.tuev = tuev;
     }
 
+    /**
+     * das kennzeichen welches im Vertrag festgehalten wird
+     * @param kennzeichen STRING das kennzeichen welches sich am KFZ befindet
+     */
     public void setKennzeichen(String kennzeichen) {
         this.kennzeichen = kennzeichen;
     }
 
+    /**
+     * Der Kilometestand zum Verkaufstag
+     * @param kilometer der Kilometerstand des KFZ am Verkaufstag
+     */
     public void setKilometer(int kilometer){
         this.kilometer=kilometer;
     }
 
+    /**
+     * Die toString Methode für einen Vorgang
+     * @return String "100.00€, Schäden: 'getSchaenden()', 'kfz.toDetailString()'"
+     */
     public String toString() {
         return String.format("%.2f €, Schäden: %s, %s",vPreis,schaeden,kfz.toDetailString());
     }
