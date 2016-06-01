@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author mtheilen
  * by mtheilen on 01.06.2016
+ * @author Martin Theilen
  */
 public class Anmeldung extends Ansicht {
 

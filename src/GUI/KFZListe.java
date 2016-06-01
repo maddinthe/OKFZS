@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @author mtheilen
  * Created by mtheilen on 23.05.2016.
+ * @author Martin Theilen
  */
 public class KFZListe extends Ansicht {
     /**

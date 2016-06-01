@@ -4,12 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * @author mtheilen
  * Created by mtheilen on 23.05.2016.
- */
-
-/**
  * Die Oberklasse Ansicht ist dafür da damit in OKFZS nur Ansichten verwaltet werden müssen statt X unterschiedliche Klassen von JPanlels
+ * @author Martin Theilen
  */
 public class Ansicht extends JPanel{
     /**

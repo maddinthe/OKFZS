@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author mtheilen
  * Die Klasse die Für das Anzeigen der Statistik zuständig ist
+ * @author Martin Theilen
  */
 public class Statistik extends Ansicht {
     /**

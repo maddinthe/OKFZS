@@ -6,14 +6,32 @@ import java.awt.*;
 
 /**
  * Created by tkertz on 23.05.2016.
+ * @author Toni Kertz
+ * Diese Klasse stellt die Programmhilfe zur Verfügung und erweitert die Ansicht
  */
 public class Hilfe extends Ansicht{
+
+    /**
+     * Initialisierung Hilfetext zur Anmeldung
+     */
     private String hilfeAnmelden = "Um sich anzumelden nutzen Sie bitte Ihren Nutzernamen und das Passwort";
+    /**
+     * Initialisierung Hilfetext zur Fahrzeuganzeige
+     */
     private String hilfeAutos = "Lassen Sie sich alle Fahrzeuge und Daten anzeigen";
+    /**
+     * Initialisierung Hilfetext zum Personeneditor
+     */
     private String hilfePerson = "Hier legen Sie Personen an, ändern diese oder sehen ihre Daten";
+    /**
+     * Initialisierung Hilfetext Statistikanzeige
+     */
     private String hilfeStatistik ="Lassen Sie sich verschiedene Statistiken anzeigen";
 
-
+    /**
+     * Objekt Hilfe wird erstellt
+     * @param okfzsInstanz - aktuelle Instanz in der die Hilfe angezeigt wird
+     */
     public Hilfe(OKFZS okfzsInstanz){
         super(okfzsInstanz);
 
@@ -88,10 +106,6 @@ public class Hilfe extends Ansicht{
 
         //JFrame jf anzeigen
         jfHilfe.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        Hilfe hil = new Hilfe(null);
     }
 
 }

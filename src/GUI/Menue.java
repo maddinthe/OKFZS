@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author mtheilen
  * Created by mtheilen on 23.05.2016.
  * Klasse zum Anzeigen des Menüs
+ * @author Martin Theilen
  */
 public class Menue extends JMenuBar {
     /**
