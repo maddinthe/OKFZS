@@ -475,7 +475,7 @@ public class KFZEditor extends Ansicht {
             jpButton.add(jbNeueAktion);
             jpButton.add(jbAktionEdit);
             jpButton.add(jbNeueAusstattung);
-            jpButton.add(jbVerkauf);
+//            jpButton.add(jbVerkauf);
 
             jfKfzEdit.add(jpKfzWest, BorderLayout.WEST);
             jfKfzEdit.add(jpKfzCenter, BorderLayout.CENTER);
@@ -865,6 +865,7 @@ public class KFZEditor extends Ansicht {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setNeueAustattung(okfzsInstanz);
+
             }
         };
 
@@ -884,7 +885,7 @@ public class KFZEditor extends Ansicht {
         jpButton.add(jbFahrzeugBearbeiten);
         jpButton.add(jbNeueAktion);
         jpButton.add(jbNeueAusstattung);
-        jpButton.add(jbVerkauf);
+//        jpButton.add(jbVerkauf);
 
         jfKfzEdit.add(jpKfzWest, BorderLayout.WEST);
         jfKfzEdit.add(jpKfzCenter, BorderLayout.CENTER);
@@ -1193,6 +1194,7 @@ public class KFZEditor extends Ansicht {
                     e1.printStackTrace();
                 }
 
+
             }
         };
 
@@ -1214,8 +1216,11 @@ public class KFZEditor extends Ansicht {
         ActionListener alNeueAusstattung = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 setNeueAustattung(okfzsInstanz);
+
             }
+
         };
 
 
@@ -1230,7 +1235,7 @@ public class KFZEditor extends Ansicht {
         jpButton.add(jbFahrzeugBearbeiten);
         jpButton.add(jbNeueAktion);
         jpButton.add(jbNeueAusstattung);
-        jpButton.add(jbVerkauf);
+//        jpButton.add(jbVerkauf);
 
         jfKfzEdit.add(jpKfzWest, BorderLayout.WEST);
         jfKfzEdit.add(jpKfzCenter, BorderLayout.CENTER);
@@ -1280,7 +1285,6 @@ public class KFZEditor extends Ansicht {
 
                     Sonderausstattung sonderausstattung = new Sonderausstattung(jtAusstattungHinzu.getText());
                     okfzsInstanz.getDatenbank().insertOrUpdateSonderausstattung(sonderausstattung);
-                    System.out.println("test");
 
                 } catch (SQLException e1) {
                     System.out.println(e1.getMessage());

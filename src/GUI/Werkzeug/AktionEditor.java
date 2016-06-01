@@ -85,7 +85,7 @@ public class AktionEditor extends Ansicht {
 
         JPanel jpBeschreibung = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel jlBeschreibung = new JLabel("Beschreibung: * ");
-        JTextArea jtBeschreibung = new JTextArea(20, 20);
+        JTextArea jtBeschreibung = new JTextArea(2, 20);
 
         jpBeschreibung.add(jlBeschreibung);
         jpBeschreibung.add(jtBeschreibung);
@@ -133,7 +133,7 @@ public class AktionEditor extends Ansicht {
         jfAktionEdit.add(jpButtonLeisteSouth, BorderLayout.SOUTH);
 
         //JFrame jf Größe mitgeben
-        jfAktionEdit.setSize(400, 300);
+        jfAktionEdit.setSize(450, 300);
 
 
         //JFrame jf auf Bildschirm plazieren
