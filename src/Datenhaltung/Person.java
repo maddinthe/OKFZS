@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * by cdreher on 23.05.2016.
+ * @author cdreher on 23.05.2016.
  */
 
 /**
