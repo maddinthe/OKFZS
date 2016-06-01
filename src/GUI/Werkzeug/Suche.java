@@ -39,7 +39,7 @@ public class Suche extends Ansicht {
 
     /**Der öffentliche Suche-Konstruktor über den die Suche gestartet werden kann
      *
-     * @param okfzsinstanz akutelle Instanz der OKFZ
+     * @param okfzsinstanz aktuelle Instanz der OKFZ
      * @param kfzOderPerson Boolean-Flag ob nach KFZ oder Person gesucht werden soll
      */
     public Suche(OKFZS okfzsinstanz, boolean kfzOderPerson) {

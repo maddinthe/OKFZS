@@ -20,12 +20,31 @@ import java.util.List;
 
 
 /**
- * Created by cdreher on 16.05.2016.
+ * @author  cdreher on 16.05.2016
+ * Alle Konstruktoren, Methoden, Getter, Setter, Attribute
+ * die keinen  extra angegebenen Autor haben, wurden von cdreher erstellt.
  */
-//todo:stub
-public class PersonenEditor extends Ansicht {
-    Person selectedPers;
 
+/**
+ * Der Personen-Editor dient zur Bearbeitung von Personen, Erreichbarkeiten und Notizen.
+ * Hier können neue Personen, Erreichbarkeiten und Notizen hinzugefügt werden sowie neue
+ * Personen, Erreichbarkeiten und Notizen angelegt werden. Die Eingabe-Maske in der GUI der OKFZ zeigt alle
+ * Möglichkeiten zur Dateneingabe und Änderung. Der Verkaeufer kann neue Personen anlegen und alle nicht gesperrten Elemente
+ * neu zu setzen. Der Admin hat eine erweitere Ansicht, er kann Verkaeufer-Daten setzen(Anmeldename,Passwort,
+ * istAktiv und istAdmin) und hat die Möglichkeit alle Elemente zu verändern(keine gesperrten Elemente).
+ */
+public class PersonenEditor extends Ansicht {
+    /**
+     * ist die gerade in der GUI ausgewählte Person
+     */
+    private Person selectedPers;
+
+    /**Dieser Personen-Konstruktor bearbeitet eine schon vorhandene Person.
+     * Er baut auch die Ansicht für die OKFZ GUI zusammen
+     *
+     * @param okfzsInstanz aktuelle Instanz der OKFZ
+     * @param p die Übergebene Person die verändert werden soll
+     */
     public PersonenEditor(OKFZS okfzsInstanz, Person p) {
         super(okfzsInstanz);
         try {
@@ -580,7 +599,15 @@ public class PersonenEditor extends Ansicht {
 
     }
 
-    public PersonenEditor(OKFZS okfzsInstanz) throws SQLException {
+    /**Dieser Personen-Konstruktor legt eine neue Person an
+     * Er baut auch die Ansicht für die OKFZ GUI zusammen
+     * Wird eine Person angelegt("Speichern"-Button gedrückt) wechselt die Ansicht
+     * und damit auch der Konstruktor, der für das bearbeiten der Person
+     * zuständig ist.
+     *
+     * @param okfzsInstanz aktuelle Instanz der OKFZ
+     */
+    public PersonenEditor(OKFZS okfzsInstanz)  {
         super(okfzsInstanz);
         JPanel jfPersonEdit = this;
         this.setLayout(new BorderLayout());
@@ -738,13 +765,21 @@ public class PersonenEditor extends Ansicht {
 
     }
 
-
+    /**Liefert die gerade ausgewählte Person zurück
+     *
+     * @return die ausgewählte Person
+     */
     public Person getPerson() {
         return selectedPers;
     }
 
+    /** Wandelt einen String in ein SQL-fähiges Datums-Format um
+     *
+     * @param datum ist ein String in dem Format Jahr-Monat-Tag
+     * @return ein sql-formatiertes Datum
+     */
     public static java.sql.Date umwandeln(String datum) {
-        SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
             date = format.parse(datum);
@@ -757,6 +792,11 @@ public class PersonenEditor extends Ansicht {
         return sDate;
     }
 
+    /**
+     * @author mtheilen
+     * eine statische Klasse
+     */
+    //todo maddin doku
     static class ErrListRenderer extends JLabel implements ListCellRenderer<Erreichbarkeit> {
 
         @Override
