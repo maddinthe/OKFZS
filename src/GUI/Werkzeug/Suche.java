@@ -100,25 +100,25 @@ public class Suche extends Ansicht {
             switch (spalte) {
                 case ("Fin"):
                     for (KFZ kfz : kfzListe) {
-                        if (begriff.equals(kfz.getFin()))
+                        if (begriff.equalsIgnoreCase(kfz.getFin()))
                             kfzs.add(kfz);
                     }
                     break;
                 case ("Hersteller"):
                     for (KFZ kfz : kfzListe) {
-                        if (begriff.equals(kfz.getHersteller()))
+                        if (begriff.equalsIgnoreCase(kfz.getHersteller()))
                             kfzs.add(kfz);
                     }
                     break;
                 case ("Modell"):
                     for (KFZ kfz : kfzListe) {
-                        if (begriff.equals(kfz.getModell()))
+                        if (begriff.equalsIgnoreCase(kfz.getModell()))
                             kfzs.add(kfz);
                     }
                     break;
                 case ("KFZ-Brief"):
                     for (KFZ kfz : kfzListe) {
-                        if (begriff.equals(kfz.getKfzBriefNr()))
+                        if (begriff.equalsIgnoreCase(kfz.getKfzBriefNr()))
                             kfzs.add(kfz);
                     }
                     break;
@@ -130,13 +130,13 @@ public class Suche extends Ansicht {
                     break;
                 case ("Farbe"):
                     for (KFZ kfz : kfzListe) {
-                        if (begriff.equals(kfz.getFarbe()))
+                        if (begriff.equalsIgnoreCase(kfz.getFarbe()))
                             kfzs.add(kfz);
                     }
                     break;
                 case ("EZ"):
                     for (KFZ kfz : kfzListe) {
-                        if (begriff.equals(kfz.getEz().toString()))
+                        if (begriff.equalsIgnoreCase(kfz.getEz().toString()))
                             kfzs.add(kfz);
                     }
                     break;
@@ -148,7 +148,7 @@ public class Suche extends Ansicht {
                     break;
                 case ("Kraftstoff"):
                     for (KFZ kfz : kfzListe) {
-                        if (begriff.equals(kfz.getKraftstoff()))
+                        if (begriff.equalsIgnoreCase(kfz.getKraftstoff()))
                             kfzs.add(kfz);
                     }
                     break;
@@ -176,31 +176,31 @@ public class Suche extends Ansicht {
                     break;
                 case ("Anrede"):
                     for (Person person : personenListe) {
-                        if (person.getAnrede().equals(begriff))
+                        if (person.getAnrede().equalsIgnoreCase(begriff))
                             personen.add(person);
                     }
                     break;
                 case ("Name"):
                     for (Person person : personenListe) {
-                        if (person.getName().equals(begriff))
+                        if (person.getName().equalsIgnoreCase(begriff))
                             personen.add(person);
                     }
                     break;
                 case ("Vorname"):
                     for (Person person : personenListe) {
-                        if (begriff.equals(person.getVorname()))
+                        if (begriff.equalsIgnoreCase(person.getVorname()))
                             personen.add(person);
                     }
                     break;
                 case ("Geburtstag"):
                     for (Person person : personenListe) {
-                        if (person.getGeburtstag().toString().equals(begriff))
+                        if (person.getGeburtstag().toString().equalsIgnoreCase(begriff))
                             personen.add(person);
                     }
                     break;
                 case ("Anschrift"):
                     for (Person person : personenListe) {
-                        if (begriff.equals(person.getAnschrift()))
+                        if (begriff.equalsIgnoreCase(person.getAnschrift()))
                             personen.add(person);
                     }
                     break;
@@ -212,13 +212,13 @@ public class Suche extends Ansicht {
                     break;
                 case ("Ort"):
                     for (Person person : personenListe) {
-                        if (begriff.equals(person.getOrt()))
+                        if (begriff.equalsIgnoreCase(person.getOrt()))
                             personen.add(person);
                     }
                     break;
                 case ("Ust-ID"):
                     for (Person person : personenListe) {
-                        if (begriff.equals(person.getUstID()))
+                        if (begriff.equalsIgnoreCase(person.getUstID()))
                             personen.add(person);
                     }
                     break;

@@ -228,7 +228,7 @@ public class Person {
     /** Macht die Klasse Personen vergleichbar
      *
      * @param o ist ein zu vergleichendes Objekt
-     * @return true wenn o=this
+     * @return true wenn o=this, false wenn o!=this
      */
     @Override
     public boolean equals(Object o) {
