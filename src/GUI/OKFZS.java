@@ -20,6 +20,7 @@ import java.util.*;
 
 /**
  * Created by mtheilen on 23.05.2016.
+ *
  * @author mtheilen
  */
 public class OKFZS extends JFrame {
@@ -76,8 +77,8 @@ public class OKFZS extends JFrame {
         } catch (IOException e) {
             JPanel panel = new JPanel();
             JLabel label = new JLabel("Bitte DB-Server und Port angeben:");
-            JTextField server=new JTextField("localhost",20);
-            JTextField port=new JTextField("5432",5);
+            JTextField server = new JTextField("localhost", 20);
+            JTextField port = new JTextField("5432", 5);
             panel.add(label);
             panel.add(server);
             panel.add(port);
@@ -85,20 +86,20 @@ public class OKFZS extends JFrame {
             int option = JOptionPane.showOptionDialog(null, panel, "Config Anlegen",
                     JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, options, options[1]);
-            if(option == 0) {
-                try(BufferedWriter bw=new BufferedWriter(new FileWriter(new File("OKFZS.cfg")))) {
-                    bw.append("dbhost:"+server.getText());
+            if (option == 0) {
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File("OKFZS.cfg")))) {
+                    bw.append("dbhost:" + server.getText());
                     bw.newLine();
                     bw.append("dbport:" + port.getText());
                     config.put("dbhost", server.getText());
-                    config.put("dbport",port.getText());
+                    config.put("dbport", port.getText());
 
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-            if(option==1){
+                if (option == 1) {
 
-            }
+                }
 
             }
 
@@ -140,17 +141,15 @@ public class OKFZS extends JFrame {
      */
     public void beenden() {
         System.out.println("ende");
-        try {
-            datenbank.closeDBConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        datenbank.closeDBConnection();
+
         System.exit(0);
     }
 
 
     /**
      * Gibt die Datenbankinstanz zurück die die Aktuelle OKFZS instanz nutzt
+     *
      * @return Instanz von Datenbank die die Aktuelle OKFZS instanz nutzt
      */
     public Datenbank getDatenbank() {
@@ -159,6 +158,7 @@ public class OKFZS extends JFrame {
 
     /**
      * Gibt den aktuell Angemeldeten benutzer raus
+     *
      * @return Verkäufer aktuell Angemeldeter Benutzer
      */
     public Verkaeufer getBenutzer() {
@@ -167,6 +167,7 @@ public class OKFZS extends JFrame {
 
     /**
      * Setzt den aktuell angemeldeten Benutzer
+     *
      * @param benutzer Verkäufer der den Aktuell angemeldeten benutzer darstellt
      */
     public void setBenutzer(Verkaeufer benutzer) {
@@ -208,25 +209,25 @@ public class OKFZS extends JFrame {
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
-                if (vorgangList==null) System.out.println("nullliste");
+                if (vorgangList == null) System.out.println("nullliste");
                 aktuelleAnsicht = new Uebersicht(this, vorgangList);
                 anzeige.add(aktuelleAnsicht, "uebersicht");
                 cards.show(anzeige, "uebersicht");
                 break;
             }
             case "impexp": {
-                aktuelleAnsicht=new ImportExport(this);
-                anzeige.add(aktuelleAnsicht,"impexp");
-                cards.show(anzeige,"impexp");
+                aktuelleAnsicht = new ImportExport(this);
+                anzeige.add(aktuelleAnsicht, "impexp");
+                cards.show(anzeige, "impexp");
                 break;
             }
             case "autoAnz": {
                 java.util.List<Vorgang> vorgList = null;
-                java.util.List<KFZ> kfzList=null;
+                java.util.List<KFZ> kfzList = null;
                 if (aktuelleAnsicht.getClass().equals(Suche.class)) {
-                    if(((Suche) aktuelleAnsicht).getKfzs().size()>0)
-                    kfzList = ((Suche) aktuelleAnsicht).getKfzs();
-                    else{
+                    if (((Suche) aktuelleAnsicht).getKfzs().size() > 0)
+                        kfzList = ((Suche) aktuelleAnsicht).getKfzs();
+                    else {
                         anzeigen("autoAnl");
                         break;
                     }
@@ -235,14 +236,13 @@ public class OKFZS extends JFrame {
                         vorgList = datenbank.unverkaufteVorgaenge();
                     } catch (SQLException e) {
                     }
-                if(vorgList==null&&kfzList.size()==0){
+                if (vorgList == null && kfzList.size() == 0) {
                     anzeigen("autoAnl");
                     break;
                 }
-                if (vorgList!=null&&vorgList.size()>0){
+                if (vorgList != null && vorgList.size() > 0) {
                     aktuelleAnsicht = new KFZListe(this, vorgList);
-                }
-                else aktuelleAnsicht =new KFZListe(this, kfzList);
+                } else aktuelleAnsicht = new KFZListe(this, kfzList);
                 anzeige.add(aktuelleAnsicht, "autoAnz");
                 cards.show(anzeige, "autoAnz");
 
@@ -256,22 +256,19 @@ public class OKFZS extends JFrame {
             }
             case "autoAend": {
                 Vorgang v = null;
-                if (aktuelleAnsicht.getClass().equals(KFZListe.class)){
+                if (aktuelleAnsicht.getClass().equals(KFZListe.class)) {
                     v = ((KFZListe) aktuelleAnsicht).getSelectedVorg();
-                    if (v==null){
+                    if (v == null) {
                         aktuelleAnsicht = new KFZEditor(this, ((KFZListe) aktuelleAnsicht).getSelectedKFZ());
                         anzeige.add("autoAend", aktuelleAnsicht);
                         cards.show(anzeige, "autoAend");
                         break;
 
                     }
-                }
-
-
-                else if (aktuelleAnsicht.getClass().equals(KFZEditor.class)) {
+                } else if (aktuelleAnsicht.getClass().equals(KFZEditor.class)) {
                     v = ((KFZEditor) aktuelleAnsicht).getVorgang();
                     try {
-                        v=getDatenbank().einVorgang(v.getKfz());
+                        v = getDatenbank().einVorgang(v.getKfz());
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -306,7 +303,7 @@ public class OKFZS extends JFrame {
                         personList = datenbank.allePersonen();
                     } catch (SQLException e) {
                     }
-                if(personList==null||personList.size()==0){
+                if (personList == null || personList.size() == 0) {
                     anzeigen("personAnl");
                     break;
                 }
@@ -316,15 +313,10 @@ public class OKFZS extends JFrame {
                 break;
             }
             case "personAnl": {
+                aktuelleAnsicht = new PersonenEditor(this);
+                anzeige.add(aktuelleAnsicht, "personAnl");
+                cards.show(anzeige, "personAnl");
 
-                try {
-                    aktuelleAnsicht = new PersonenEditor(this);
-                    anzeige.add(aktuelleAnsicht, "personAnl");
-                    cards.show(anzeige, "personAnl");
-
-                } catch (SQLException e) {
-
-                }
 
                 break;
             }
@@ -367,27 +359,28 @@ public class OKFZS extends JFrame {
 
     /**
      * Lässt eine Vorgegebene ansicht anzeigen und Setzt die OFZS eigenen variablen entsprechen
+     *
      * @param a Anzuzeigende ansicht muss instanz von PersonenEditor, KFZEditor oder Kaufvertrageditor sein
      */
-    public void anzeigen(Ansicht a){
+    public void anzeigen(Ansicht a) {
         Menue menue = (Menue) getJMenuBar();
-        switch (a.getClass().getSimpleName()){
-            case "PersonenEditor":{
-                aktuelleAnsicht=a;
+        switch (a.getClass().getSimpleName()) {
+            case "PersonenEditor": {
+                aktuelleAnsicht = a;
                 menue.menueUmschalten("personAend");
                 anzeige.add(aktuelleAnsicht, "personAend");
                 cards.show(anzeige, "personAend");
                 break;
             }
-            case "KFZEditor":{
-                aktuelleAnsicht=a;
+            case "KFZEditor": {
+                aktuelleAnsicht = a;
                 menue.menueUmschalten("autoAend");
                 anzeige.add(aktuelleAnsicht, "autoAend");
                 cards.show(anzeige, "autoAend");
                 break;
             }
-            case "KaufvertragEditor":{
-                aktuelleAnsicht=a;
+            case "KaufvertragEditor": {
+                aktuelleAnsicht = a;
                 menue.menueUmschalten("autoVerk");
                 anzeige.add(aktuelleAnsicht, "autoVerk");
                 cards.show(anzeige, "autoVerk");
@@ -399,6 +392,7 @@ public class OKFZS extends JFrame {
 
     /**
      * Main Methode die ausschließlich new OKFZS() aufruft
+     *
      * @param args wird nicht genutzt
      */
     public static void main(String[] args) {

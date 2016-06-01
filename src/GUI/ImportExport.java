@@ -5,9 +5,17 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 /**
- * Created by tkertz on 23.05.2016.
+ * @author mtheilen
+ */
+
+/**
+ * Ansicht die das Importieren und Exportieren des datenbestandes ermöglicht
  */
 public class ImportExport extends Ansicht{
+    /**
+     * Basiskonstruktor für die Ansicht
+     * @param instanz die OKFZ instanz für die diese Ansicht arbeitet
+     */
     public ImportExport(OKFZS instanz) {
         super(instanz);
 
@@ -39,7 +47,7 @@ public class ImportExport extends Ansicht{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileChooser.getSelectedFile()))) {
-                    //todo: lesen einbauen
+                    bw.append(getAlleDaten());
                     System.out.println(bw);
 
                 } catch (IOException e1) {
@@ -52,7 +60,14 @@ public class ImportExport extends Ansicht{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try(BufferedReader br=new BufferedReader(new FileReader(fileChooser.getSelectedFile()))){
-                    //todo:schreiben einbauen
+                    String read;
+                    StringBuilder sb=new StringBuilder();
+                    while((read=br.readLine())!=null){
+                        sb.append(read);
+                        sb.append('\n');
+                    }
+                    setDaten(sb.toString());
+
                     System.out.println(br);
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -63,11 +78,22 @@ public class ImportExport extends Ansicht{
 
     }
 
-    public  String getAlleDaten(){
+    /**
+     * Ausgelagerte Methode die einen Kompletten sql dump mit insert into statements erzeugt
+     * @return String mit einem Kompletten sql dump mit insert into statements
+     */
+    private  String getAlleDaten(){
+
         return getAlleDaten();
     }
 
-    public boolean setDaten(String str){
+    /**
+     * Methode die Insert Into statements aus einem SQL dump ausführt;
+     * @param str Mehrzeiliger SQL dump der in die DB eingelesen werden soll
+     * @return erfolgsmeldung
+     */
+    private boolean setDaten(String str){
+
         return true;
     }
 }
