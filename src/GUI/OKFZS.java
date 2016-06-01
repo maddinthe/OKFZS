@@ -20,7 +20,7 @@ import java.util.*;
 
 /**
  * Created by mtheilen on 23.05.2016.
- * @author mtheilen
+ * @author Martin Theilen
  */
 public class OKFZS extends JFrame {
     /**

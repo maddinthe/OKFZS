@@ -13,9 +13,9 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
- * @author mtheilen
  * Created by mtheilen on 23.05.2016.
  * Die Übersichtsanzeige in der die Liste der von Angemeldeten benutzer Verkauften Autos angezeigt wird und aus der die KFZs Verträge und Benutzer dieser beobachtet und bearbeitet werden können
+ * @author Martin Theilen
  */
 public class Uebersicht extends Ansicht {
 

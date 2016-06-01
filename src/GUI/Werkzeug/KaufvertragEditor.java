@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * Created by mtheilen on 23.05.2016.
+ * @author Martin Theilen
  */
 public class KaufvertragEditor extends Ansicht {
     /**
