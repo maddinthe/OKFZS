@@ -1,7 +1,7 @@
 package Datenhaltung;
 
 /**
- * cdreher on 23.05.2016.
+ * @author cdreher on 23.05.2016.
  */
 
 /**
@@ -33,14 +33,14 @@ public class Erreichbarkeit {
      */
     private String details;
 
-    /**
+    /**Maximaler Konstruktor der genutzt wird um eine Erreichbarkeit aus Datensätzen aus der Datenbank zu erstellen
      *
-     * @param eid
-     * @param person
-     * @param telefonNummer
-     * @param handyNummer
-     * @param email
-     * @param details
+     * @param eid Erreichbarkeits-ID
+     * @param person eine Person
+     * @param telefonNummer eine Telefonnummer
+     * @param handyNummer eine Handynummer
+     * @param email eine E-Mail-Adresse
+     * @param details Details zu den Erreichbarkeiten
      */
     public Erreichbarkeit(long eid, Person person, String telefonNummer, String handyNummer, String email, String details) {
         this.eid = eid;
@@ -50,8 +50,16 @@ public class Erreichbarkeit {
         this.email = email;
         this.details = details;
     }
-    public Erreichbarkeit(Person person, String telefonNummer, String handyNummer, String email, String details) {
 
+    /**Konstruktor ohne EID der genutzt wird um eine Erreichbarkeit mit allen Parametern anzugeben und die Erreichbarkeit an die Datenbank zu übergeben
+     *
+     * @param person eine Person
+     * @param telefonNummer eine Telefonnummer
+     * @param handyNummer eine Handynummer
+     * @param email eine E-Mail-Adresse
+     * @param details Details
+     */
+    public Erreichbarkeit(Person person, String telefonNummer, String handyNummer, String email, String details) {
         this.person = person;
         this.telefonNummer = telefonNummer;
         this.handyNummer = handyNummer;
@@ -61,10 +69,6 @@ public class Erreichbarkeit {
 
     public long getEid() {
         return eid;
-    }
-
-    public void setEid(long eid) {
-        this.eid = eid;
     }
 
     public Person getPerson() {
