@@ -151,7 +151,7 @@ public class Datenbank {
      * @throws SQLException
      */
     private static void einlesenScript() throws SQLException {
-        try (BufferedReader br = new BufferedReader(new FileReader(Datenbank.class.getResource("dblaeuft.sql").getFile()))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(Datenbank.class.getResource("init.sql").getFile()))) {
             String sqlInstruction = "";
             String zeile;
             while ((zeile = br.readLine()) != null) {
