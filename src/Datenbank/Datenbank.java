@@ -16,18 +16,26 @@ import java.util.Date;
  */
 
 /**
- * Die Klasse Datenbank dient dazu eine Datenbank für die anzulegen
+ * Die Klasse Datenbank dient dazu eine Datenbank für die OKFZS anzulegen.
+ * Außerdem stellt Sie Methoden bereit, die die grundlegende Kommunikation zwischen Programm und Datenbank aufbaut.
+ * Weiterhin bietet Sie Methoden an, um Daten aus dem Programm in die Datenbank hinzuzufügen und Datensätze aus der
+ * Datenbank mittels Abfrage-Methoden im Programm sichtbar zu machen.
  */
 public class Datenbank {
     /**
-     *
+     *legt eine Instanz der Datenbank an
      */
     private static Datenbank datenbank;
+    /**
+     * legt eine Instanz einer Connection an
+     */
     private static Connection conn;
+    /**
+     * legt ein SimpleDateFormat mit der Struktur Jahr-Monat-Tag an
+     */
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-//    private Datenbank() {
-//    }
+
 
     public static void closeDBConnection() {
         if (conn != null) {

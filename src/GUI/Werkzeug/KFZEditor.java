@@ -20,9 +20,22 @@ import java.util.List;
 
 /**
  * Created by tkertz on 23.05.2016.
+ * @author Toni Kertz
+ * Diese Klasse stellt verschiedene Konstruktoren und Methoden zur Verfügung um ein Fahrzeug anzulegen oder zubearbeiten
  */
 public class KFZEditor extends Ansicht {
+    /**
+     *Das Atrribut Vorgang wird initialisiert um später Daten des Vorgangs an den Konstruktor zu übergeben
+     */
     private Vorgang vorgang;
+
+    /**
+     * Dieser KFZEditor-Konstruktor bekommt eine Instanz und einen Vorgang zu einem KFZ übergeben. Er bietet die Möglichkeit
+     * verschiedene Parameter eines Vorgangs zu einem KFZ aufzunehmen. Das eigentliche KFZ existiert dabei bereits und besitzt
+     * mindestens einen Einkaufspreis.
+     * @param okfzsInstanz - aktuelle Instanz in der die Ansicht KFZEditor angezeigt wird
+     * @param vorgang - aktueller Vorgang eines KFZs
+     */
     public KFZEditor(OKFZS okfzsInstanz, Vorgang vorgang) {
         super(okfzsInstanz);
         KFZ k=vorgang.getKfz();
@@ -489,6 +502,12 @@ public class KFZEditor extends Ansicht {
 
     }
 
+    /**
+     * Dieser KFZEditor-Konstruktor bekommt eine Instanz und ein KFZ übergeben. Er wird aufgerufen sollte ein Auto über die Suchfunktion
+     * in den Bearbeitungmodus übergeben werden.
+     * @param okfzsInstanz - aktuelle Instanz in der die Ansicht KFZEditor angezeigt wird
+     * @param kfz - aktuelles KFZ, welches beispielsweise aus der Suche übergeben wurde
+     */
     public KFZEditor(OKFZS okfzsInstanz, KFZ kfz) {
         super(okfzsInstanz);
         List<Sonderausstattung> ausstattungen= null;
@@ -730,7 +749,6 @@ public class KFZEditor extends Ansicht {
 
 // Actionlistener
 
-        //todo Daten der AL in DB speichern
         ActionListener alFahrzeugSave = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -752,18 +770,55 @@ public class KFZEditor extends Ansicht {
             }
         };
 
-        ActionListener alFahrzeugBearbeiten = new ActionListener() {
+        ActionListener alFahrzeugBearbeitenAdmin = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jtFin.setEditable(true);
                 jtHersteller.setEditable(true);
-                jtHersteller.setEditable(true);
+                jtModell.setEditable(true);
                 jtKfzBriefNr.setEditable(true);
                 jtLeistungInKw.setEditable(true);
                 jtFarbe.setEditable(true);
                 jtEZ.setEditable(true);
                 jtUmweltplakette.setEditable(true);
                 jtKraftstoff.setEditable(true);
+//                    jtAktionen.setEditable(true);
+                jtAktionen.setOpaque(true);
+                jtSchaeden.setEditable(true);
+                jtSchaeden.setOpaque(true);
+                jtTuev.setEditable(true);
+                jtKennzeichen.setEditable(true);
+                jtKm.setEditable(true);
+                jtEinkaeufer.setEditable(true);
+                jtEKDat.setEditable(true);
+                jtEK.setEditable(true);
+                jtVKP.setEditable(true);
+            }
+        };
+
+        ActionListener alFahrzeugBearbeitenBenutzer = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jtFin.setEditable(false);
+                jtHersteller.setEditable(false);
+                jtModell.setEditable(false);
+                jtKfzBriefNr.setEditable(false);
+                jtLeistungInKw.setEditable(false);
+                jtFarbe.setEditable(false);
+                jtEZ.setEditable(false);
+                jtUmweltplakette.setEditable(false);
+                jtKraftstoff.setEditable(false);
+//                    jtAktionen.setEditable(true);
+                jtAktionen.setOpaque(true);
+                jtSchaeden.setEditable(true);
+                jtSchaeden.setOpaque(true);
+                jtTuev.setEditable(true);
+                jtKennzeichen.setEditable(true);
+                jtKm.setEditable(true);
+                jtEinkaeufer.setEditable(true);
+                jtEKDat.setEditable(true);
+                jtEK.setEditable(true);
+                jtVKP.setEditable(true);
             }
         };
 
@@ -777,8 +832,12 @@ public class KFZEditor extends Ansicht {
 
 
         jbFahrzeugSave.addActionListener(alFahrzeugSave);
-        if(okfzsInstanz.getBenutzer().istAdmin())
-        jbFahrzeugBearbeiten.addActionListener(alFahrzeugBearbeiten);
+        if(!okfzsInstanz.getBenutzer().istAdmin()){
+            jbFahrzeugBearbeiten.addActionListener(alFahrzeugBearbeitenBenutzer);
+        }else{
+            jbFahrzeugBearbeiten.addActionListener(alFahrzeugBearbeitenAdmin);
+        }
+
 //        jbNeueAktion.addActionListener(alNeueAktion);
         jbNeueAusstattung.addActionListener(alNeueAusstattung);
 
@@ -807,6 +866,11 @@ public class KFZEditor extends Ansicht {
 
     }
 
+    /**
+     * Dieser KFZEditor-Konstruktor bekommt lediglich eine Instanz. Er dient dem Anlegen eines neuen Fahrzeugs und bietet somit alle
+     * Eingabenmöglichkeiten für ein neues KFZ und einen neuen Vorgang.
+     * @param okfzsInstanz - aktuelle Instanz in der die Ansicht KFZEditor angezeigt wird
+     */
     public KFZEditor(OKFZS okfzsInstanz) {
         super(okfzsInstanz);
         List<KFZ> kfzs= null;
@@ -1148,10 +1212,11 @@ public class KFZEditor extends Ansicht {
 
     }
 
-    public String getKFZ(String kfz) {
-        return kfz;
-    }
-
+    /**
+     * Diese Methode gibt dem Nutzer eine Möglichkeit zu der vorhandenen Sonderausstattung weitere Einträge hinzuzufügen, sollte diese nicht vorhanden
+     * sein.
+     * @param okfzsInstanz - aktuelle Instanz in der die Ansicht KFZEditor angezeigt wird
+     */
     public void setNeueAustattung(OKFZS okfzsInstanz){
         JFrame jfKfzEdit = new JFrame("Ausstattungs-Editor");
         JPanel jpKFZ = new JPanel();
@@ -1207,6 +1272,12 @@ public class KFZEditor extends Ansicht {
 
     }
 
+    /**
+     * Diese Methode wandelt einen String in das SQL Format um zur weiteren Verarbeitung innerhalb der DB
+     * @author Christian Dreher
+     * @param datum - Datum im Stringformat, welches übergeben wird
+     * @return sDate - gibt den übergebenen String als SQL Date zurück
+     */
     public static java.sql.Date umwandeln(String datum) {
         SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd");
         Date date = null;
@@ -1221,14 +1292,19 @@ public class KFZEditor extends Ansicht {
         return sDate;
     }
 
+    /**
+     * Dieser Getter liefert einen Vorgang zurück.
+     * @return - gibt den aktuellen Vorgang zurück
+     */
     public Vorgang getVorgang() {
         return vorgang;
     }
 
 
     /**
-     * Klasse ist nach Anleitung gebaut und entsprechend abgeändert.
-     * Quelle: http://blog.mynotiz.de/programmieren/java-checkbox-in-jlist-1061/
+     * Klasse ist nach Anleitung gebaut und entsprechend des eigenen Projektes abgeändert worden.
+     * Die Klasse erweitert JList und nutzt CellRenderer um später die Sonderausstattungsliste mit Checkboxen zu versehen.
+     * @author Quelle: http://blog.mynotiz.de/programmieren/java-checkbox-in-jlist-1061/
      */
 
     private class JCheckBoxList extends JList {
@@ -1297,23 +1373,12 @@ public class KFZEditor extends Ansicht {
                 this.repaint();
             }
 
-//        public void sortieren(List<Sonderausstattung> liste){
-//            Sonderausstattung[] sonderausstattungArray= liste.toArray(new Sonderausstattung[liste.size()]);
-//            JList<Sonderausstattung> sListe = new JList<>(sonderausstattungArray);
-//
-//            for (int i = 0; i < sonderausstattungArray.length; i++) {
-//                sonderausstattungArray[i].get
-//            }
-//
-//            }
-//
-//        }
-
     }
 
     /**
-     * Klasse ist nach Anleitung gebaut und entsprechend abgeändert.
-     * Quelle: http://blog.mynotiz.de/programmieren/java-checkbox-in-jlist-1061/
+     * Klasse ist nach Anleitung gebaut und entsprechend des eigenen Projektes abgeändert worden. Sie kombiniert eine Checkbox
+     * mit einem Eintrag (Objekt) und macht dieses auswählbar.
+     * @author Quelle: http://blog.mynotiz.de/programmieren/java-checkbox-in-jlist-1061/
      */
         private class JCheckboxWithObject extends JCheckBox{
             private Object object;
