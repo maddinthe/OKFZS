@@ -245,6 +245,7 @@ public class PersonenEditor extends Ansicht {
             jpErreichbarkeit.setLayout(new BoxLayout(jpErreichbarkeit, BoxLayout.Y_AXIS));
             JPanel jpErreichbarkeiten = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             JList<Erreichbarkeit> jlErreichbarkeitsListe = new JList<>(erreichbarkeiten.toArray(new Erreichbarkeit[erreichbarkeiten.size()]));
+            jlErreichbarkeitsListe.setPreferredSize(new Dimension(400,600));
             jlErreichbarkeitsListe.setCellRenderer(new ErrListRenderer());
             JScrollPane jsErreichbarkeitsListe = new JScrollPane(jlErreichbarkeitsListe);
             jpErreichbarkeiten.add(jsErreichbarkeitsListe);
@@ -762,7 +763,6 @@ public class PersonenEditor extends Ansicht {
                 setBackground(Color.WHITE);
                 setForeground(Color.BLACK);
             }
-            this.setSize(300, 300);
             return this;
         }
     }
