@@ -258,7 +258,7 @@ public class AktionEditor extends Ansicht {
     }
 
     /**
-     * Methode die das eigentliche Popup Fenster generiert und die Eingaben: Datum, Durchführender und Beschreibung ermöglicht
+     * Methode die das eigentliche Popup Fenster generiert und die Eingaben: Datum, Durchführender und Beschreibung einer Aktion ermöglicht
      */
 
     public void setNeueAktion(){
