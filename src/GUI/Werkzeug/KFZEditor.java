@@ -510,8 +510,6 @@ public class KFZEditor extends Ansicht {
      */
     public KFZEditor(OKFZS okfzsInstanz, KFZ kfz) {
         super(okfzsInstanz);
-
-
         List<Sonderausstattung> ausstattungen= null;
         List<KFZ> kfzs= null;
         try {
